@@ -1,0 +1,175 @@
+<x:config version="1.0" xmlns:x="http://www.xopus.com/xmlns/config">
+
+  <x:import src="categories_config.php"/>
+  
+  <x:nodeConfig>
+    <x:node match="name|amount|cook|remark|@servings|@preparation_time|title|step|paragraph|author">
+      <x:placeholder>{name}</x:placeholder>
+    </x:node>
+
+		<x:node match="recipe">
+			<x:role>document</x:role>
+			<x:name xml:lang="nl">Recept</x:name>
+			<x:name xml:lang="en">Recipe</x:name>
+		</x:node>
+
+		<x:node match="@id">
+			<x:role>hidden-from-ui</x:role>
+		</x:node>
+
+		<x:node match="@category_id">
+			<x:name xml:lang="nl">Categorie</x:name>
+			<x:name xml:lang="en">Category</x:name>
+			<x:lookup url="../lookup/category.php" forceLookup="true" autoOpen="true"/>
+		</x:node>
+		
+		<x:node match="title">
+			<x:role>may-split</x:role>
+			<x:name xml:lang="nl">Naam</x:name>
+			<x:name xml:lang="en">Name</x:name>
+		</x:node>
+
+		<x:node match="cook">
+			<x:role>may-split</x:role>
+			<x:role>auto-insert</x:role>
+			<x:name xml:lang="nl">De Kok</x:name>
+			<x:name xml:lang="en">The Cook</x:name>
+		</x:node>
+		
+		<x:node match="@servings">
+			<x:name xml:lang="nl">Aantal Personen</x:name>
+			<x:name xml:lang="en">Amount of servings</x:name>
+		</x:node>
+		
+		<x:node match="@preparation_time">
+			<x:name xml:lang="nl">Voorbereidingstijd</x:name>
+			<x:name xml:lang="en">Preparation Time</x:name>
+		</x:node>
+
+		<x:node match="image">
+			<x:role>image</x:role>
+			<x:name xml:lang="nl">Plaatje</x:name>
+			<x:name xml:lang="en">Image</x:name>
+		</x:node>
+
+		<x:node match="@source">
+			<x:role>imagesource</x:role>
+			<x:name xml:lang="nl">Bron</x:name>
+			<x:name xml:lang="en">Source</x:name>
+		</x:node>
+		
+		<x:node match="ingredients">
+			<x:role>list</x:role>
+			<x:role>unorderedlist</x:role>
+			<x:role>auto-insert</x:role>
+			<x:role>may-split</x:role>
+			<x:name xml:lang="nl">Ingredi&#235;nten</x:name>
+			<x:name xml:lang="en">Ingredients</x:name>
+		</x:node>
+
+		<x:node match="ingredient">
+			<x:role>listitem</x:role>
+			<x:name xml:lang="nl">Ingredi&#235;nt</x:name>
+			<x:name xml:lang="en">Ingredient</x:name>
+		</x:node>
+		
+		<x:node match="name">
+			<x:name xml:lang="nl">Naam</x:name>
+			<x:name xml:lang="en">Name</x:name>
+		</x:node>
+
+		<x:node match="amount">
+			<x:role>auto-insert</x:role>
+			<x:name xml:lang="nl">Hoeveelheid</x:name>
+			<x:name xml:lang="en">Amount</x:name>
+		</x:node>
+
+		<x:node match="remark">
+			<x:role>auto-insert</x:role>
+			<x:name xml:lang="nl">Opmerking</x:name>
+			<x:name xml:lang="en">Remark</x:name>
+		</x:node>
+
+		<x:node match="preparation">
+			<x:role>list</x:role>
+			<x:role>orderedlist</x:role>
+			<x:role>auto-insert</x:role>
+			<x:role>may-split</x:role>
+			<x:name xml:lang="nl">Bereidingswijze</x:name>
+			<x:name xml:lang="en">Preparation</x:name>
+		</x:node>
+
+		<x:node match="step">
+			<x:role>listitem</x:role>
+			<x:name xml:lang="nl">Stap</x:name>
+			<x:name xml:lang="en">Step</x:name>
+		</x:node>
+		
+		<x:node match="notes">
+			<x:name xml:lang="nl">Notities</x:name>
+			<x:name xml:lang="en">Notes</x:name>
+		</x:node>
+
+		<x:node match="note">
+			<x:name xml:lang="nl">Notitie</x:name>
+			<x:name xml:lang="en">Note</x:name>
+		</x:node>
+		
+		<x:node match="@top|@left">
+			<x:role>hidden-from-ui</x:role>
+		</x:node>
+		
+		<x:node match="author">
+			<x:name xml:lang="nl">Auteur</x:name>
+			<x:name xml:lang="en">Author</x:name>
+		</x:node>
+		
+		<x:node match="paragraph">
+			<x:role>paragraph</x:role>
+			<x:name xml:lang="nl">Paragraaf</x:name>
+			<x:name xml:lang="en">Paragraph</x:name>
+		</x:node>
+		
+		<x:node match="strong">
+			<x:role>strong</x:role>
+			<x:name xml:lang="nl">Vet</x:name>
+			<x:name xml:lang="en">Bold</x:name>
+		</x:node>
+		
+		<x:node match="emphasis">
+			<x:role>emphasis</x:role>
+			<x:name xml:lang="nl">Cursief</x:name>
+			<x:name xml:lang="en">Italic</x:name>
+		</x:node>
+		
+		<x:node match="underline">
+			<x:role>underline</x:role>
+			<x:name xml:lang="nl">Onderstreept</x:name>
+			<x:name xml:lang="en">Underline</x:name>
+		</x:node>
+		
+		<x:node match="superscript">
+			<x:role>superscript</x:role>
+			<x:name xml:lang="nl">Superscript</x:name>
+			<x:name xml:lang="en">Superscript</x:name>
+		</x:node>
+		
+  </x:nodeConfig>
+  
+  <x:overlay xmlns="http://xopus.com/2009/lui">
+    <toolbar-button id="PrintButton" available="false"/>
+    <toolbar-button id="UndoButton" available="false"/>
+    <toolbar-button id="RedoButton" available="false"/>
+ 
+   <toolbar-button id="FindReplaceButton" available="false"/>
+    <toolbar-button id="ShowPropertiesButton" available="false"/>
+    
+		<toolbar-group id="MoveGroup" available="false"/>
+		<toolbar-group id="ListGroup" available="false"/>
+  </x:overlay>
+
+	<x:miscellaneous>  
+	  <x:hideMaximizeViewportButton>true</x:hideMaximizeViewportButton>
+  </x:miscellaneous>
+  
+</x:config>

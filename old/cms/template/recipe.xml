@@ -1,0 +1,20 @@
+<recipe xml:lang="nl-NL">
+  <title></title>
+  <cook></cook>
+  <servings></servings>
+  <preparation-time></preparation-time>
+  <description>
+    <paragraph></paragraph>
+  </description>
+  <ingredients>
+    <ingredient>
+      <name></name>
+      <amount></amount>
+      <remark></remark>
+    </ingredient>
+  </ingredients>
+  <preparation>
+    <step>
+    </step>
+  </preparation>
+</recipe>

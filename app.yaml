@@ -1,0 +1,52 @@
+runtime: go
+api_version: go1
+instance_class: F1
+
+default_expiration: '1d'
+
+automatic_scaling:
+  max_concurrent_requests: 64
+  max_idle_instances: automatic
+
+handlers:
+  - url: /css/favicon\.ico
+    static_files: dist/static/favicon.ico
+    upload: favicon\.ico
+  - url: /static
+    static_dir: dist/static/
+  - url: /.*
+    script: _go_app
+    secure: always
+    redirect_http_response_code: 301
+
+skip_files:
+  - ^(.*/)?.*\.DS_Store$
+  - build/
+  - config/
+  - css/
+  - docs/
+  - node_modules/
+  - old/
+  - dev/ #used for development
+  - src/
+  - reference/
+  - parser/
+  - test/
+  - index.html
+  - README.md
+  - .babelrc
+  - .postcssrc.js
+  - .editorconfig
+  - .eslintignore
+  - .eslintrc.js
+  - .gitignore
+  - package.json
+  - yarn.lock
+  - yarn-error.log
+  - dist/static/*.less
+  - docs.sqlite
+
+env_variables:
+  ENVIRONMENT: 'master'
+  DIST_FOLDER: 'dist'
+  GAE_DATASTORE_HOST: 'moms-lost-marbles.appspot.com'

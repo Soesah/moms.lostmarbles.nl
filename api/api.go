@@ -9,7 +9,10 @@ const (
 	// MomsKind is the super ancestor of all items
 	MomsKind = "Moms"
 
-	// MomsCategoryKind is the ancestor of all Moms items
+	// MomsUserKind is the used for Users
+	MomsUserKind = "MomsUser"
+
+	// MomsCategoryKind is used for Categories
 	MomsCategoryKind = "MomsCategory"
 
 	// RecipeKind is used for Recipes
@@ -28,6 +31,11 @@ const (
 // MomsKey returns a key for Moms
 func MomsKey(ctx context.Context) *datastore.Key {
 	return datastore.NewKey(ctx, MomsKind, "moms.lostmarbles", 0, nil)
+}
+
+// UserKey returns a key for UserKey -> MomsKey
+func UserKey(ctx context.Context, ID int64) *datastore.Key {
+	return datastore.NewKey(ctx, MomsUserKind, "", ID, MomsKey(ctx))
 }
 
 // CategoryKey returns a key for CategoryKey -> MomsKey

@@ -9,11 +9,6 @@ automatic_scaling:
   max_idle_instances: automatic
 
 handlers:
-  - url: /css/favicon\.ico
-    static_files: dist/static/favicon.ico
-    upload: favicon\.ico
-  - url: /static
-    static_dir: dist/static/
   - url: /.*
     script: _go_app
     secure: always
@@ -21,30 +16,28 @@ handlers:
 
 skip_files:
   - ^(.*/)?.*\.DS_Store$
-  - build/
-  - config/
-  - css/
-  - docs/
   - node_modules/
+  - .vscode/
   - old/
+  - bin/
+  - sketch/
   - dev/ #used for development
   - src/
-  - reference/
-  - parser/
-  - test/
+  - tests/
+  - public/
   - index.html
   - README.md
-  - .babelrc
-  - .postcssrc.js
-  - .editorconfig
-  - .eslintignore
+  - babel.config.js
+  - jest.config.js
+  - postcss.config.js
   - .eslintrc.js
   - .gitignore
+  - settings.json
+  - tsconfig.json
+  - vue.config.js
   - package.json
   - yarn.lock
   - yarn-error.log
-  - dist/static/*.less
-  - docs.sqlite
 
 env_variables:
   ENVIRONMENT: 'master'

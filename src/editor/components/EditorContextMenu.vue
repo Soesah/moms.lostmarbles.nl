@@ -1,5 +1,5 @@
 <template>
-  <div>ContextMenu</div>
+  <menu>ContextMenu</menu>
 </template>
 
 <script lang="ts">

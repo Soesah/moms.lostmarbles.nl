@@ -91,6 +91,18 @@ export class SchemaDocument {
     });
   }
 
+  public isContentEditable(name: string): boolean {
+    const def = this.elementDefinitions.find(
+      (d: SchemaElement) => d.name === name,
+    );
+
+    if (def) {
+      return def.mixed || def.type === 'xs:string';
+    }
+
+    return false;
+  }
+
   private parseSubstitutionGroups(): SubstitutionGroup[] {
     const abstracts = this.getAbstractElements();
     const substitutions = this.getSubstitutionElements();

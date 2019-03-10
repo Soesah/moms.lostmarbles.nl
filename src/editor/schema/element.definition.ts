@@ -2,17 +2,6 @@ import { SchemaAttribute } from './attribute.definition';
 import { SchemaAttributeRef } from './attribute-ref.definition';
 import { SchemaElementRef } from './element-ref.definition';
 
-// const REQUIRED = 'required';
-
-interface ComplexType {
-  [index: string]: Array<SchemaElement | SchemaElementRef>;
-}
-
-enum SimpleType {
-  StringType = 'string',
-  NumberType = 'number',
-}
-
 export class SchemaElement {
   public name: string;
   public type?: string;

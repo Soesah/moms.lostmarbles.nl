@@ -25,8 +25,8 @@ enum NodeType {
 }
 
 export class SchemaParser {
+  public schema: SchemaDocument = new SchemaDocument();
   private doc: Document;
-  private schema: SchemaDocument = new SchemaDocument();
 
   constructor(schema: Document) {
     this.doc = schema;

@@ -10,6 +10,7 @@
     "app": "$(gcloud beta emulators datastore env-init) && dev_appserver.py dev/app-develop.yaml --automatic_restart=no --support_datastore_emulator=True --port 8182"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
@@ -34,5 +35,11 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "prettier": {
+    "arrowParens": "always",
+    "trailingComma": "all",
+    "semi": true,
+    "singleQuote": true
+  }
 }

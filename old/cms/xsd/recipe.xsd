@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:include schemaLocation="categories_xsd.php"/>
-  
+
   <!-- moms recipe -->
   <xs:element name="recipe">
     <xs:complexType>
@@ -15,7 +15,7 @@
         <!--xs:element ref="description" minOccurs="0"/-->
         <xs:element ref="ingredients" minOccurs="0"/>
         <xs:element ref="preparation" minOccurs="0"/>
-        <xs:element ref="notes" minOccurs="0"/>        
+        <xs:element ref="notes" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="id" type="xs:integer" use="required"/>
       <xs:attribute name="slug" type="xs:string" use="required"/>
@@ -24,7 +24,7 @@
       <xs:attribute name="category_id" type="categoryType" use="required"/>
     </xs:complexType>
   </xs:element>
-  
+
   <!-- image -->
   <xs:element name="image">
     <xs:complexType>
@@ -34,10 +34,10 @@
 
   <!-- title -->
   <xs:element name="title" type="xs:string"/>
-  
+
   <!-- servings -->
   <xs:element name="servings" type="xs:string"/>
-  
+
   <!-- cook -->
   <xs:element name="cook" type="xs:string"/>
 
@@ -46,7 +46,7 @@
 
   <!-- description -->
   <xs:element name="description" type="block-type"/>
-  
+
   <!-- ingredients -->
   <xs:element name="ingredients">
     <xs:complexType>
@@ -90,8 +90,8 @@
         <xs:element ref="note" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
-  </xs:element>  
-  
+  </xs:element>
+
   <xs:element name="note">
     <xs:complexType>
       <xs:sequence>
@@ -140,7 +140,7 @@
   </xs:complexType>
 
   <xs:element name="inline.abstract" abstract="true"/>
-  
+
   <!-- basic elements -->
   <xs:element name="paragraph" type="text-type" substitutionGroup="block.abstract"/>
 
@@ -156,7 +156,7 @@
   <xs:element name="strong" type="text-type" substitutionGroup="inline.abstract"/>
 
   <xs:element name="underline" type="text-type" substitutionGroup="inline.abstract"/>
-  
+
   <xs:element name="superscript" type="text-type" substitutionGroup="inline.abstract"/>
 
 </xs:schema>

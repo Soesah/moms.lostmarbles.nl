@@ -47,6 +47,10 @@ func Router() *chi.Mux {
 			r.Get("/export", handlers.ExportData)
 		})
 
+		r.Route("/editor", func(r chi.Router) {
+			r.Get("/xml/recipe.xml", handlers.XML)
+			r.Get("/xsd/recipe.xsd", handlers.XSD)
+		})
 	})
 
 	// static

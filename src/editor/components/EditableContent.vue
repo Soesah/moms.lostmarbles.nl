@@ -13,16 +13,7 @@ export default Vue.extend({
     },
   },
   render(h: CreateElement) {
-    const renderer = new VNodeRenderer(h, this.schema, {
-      recipe: 'section',
-      title: 'h1',
-      ingredients: 'ul',
-      ingredient: 'li',
-      name: 'span',
-      preparation: 'ol',
-      step: 'li',
-      p: 'p',
-    });
+    const renderer = new VNodeRenderer(h, this.schema);
 
     return renderer.xmlToVNode(this.xml.documentElement, (this as any).handler);
   },
@@ -41,6 +32,7 @@ export default Vue.extend({
   box-sizing: border-box;
   border: dashed 1px gray;
   max-width: 100%;
+  height: auto;
   min-height: 200px;
   padding: 8px;
   margin: 4px;

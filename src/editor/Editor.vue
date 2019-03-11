@@ -42,11 +42,10 @@ export default Vue.extend({
   created() {
     const editor = new Editor(
       'api/editor/xml/recipe.xml',
-      'api/editor/xsd/recipe.xsd',
     );
 
     setTimeout(() => {
-      this.doc = editor.doc;
+      this.doc = editor.xhtml;
       this.schema = editor.schema;
     }, 1000);
   },

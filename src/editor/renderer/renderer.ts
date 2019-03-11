@@ -1,30 +1,23 @@
 import { VNode, CreateElement } from 'vue';
 import { SchemaDocument } from '../schema/document.definition';
 
-export interface RendererConfig {
-  [index: string]: string;
-}
-
 export class VNodeRenderer {
   private h: CreateElement;
   private schema: SchemaDocument;
-  private config: RendererConfig;
 
   constructor(
     h: CreateElement,
     schema: SchemaDocument,
-    config: RendererConfig,
   ) {
     this.h = h;
     this.schema = schema;
-    this.config = config;
   }
 
   public xmlToVNode(xml: Element, handler: (evt: KeyboardEvent) => {}): VNode {
-    const tagName = this.config[xml.localName];
+    const tagName = xml.localName;
     const options = {
       class: {
-        editable: tagName === 'section',
+        editable: xml.parentNode instanceof Document,
       },
       domProps: {},
     };

@@ -13,3 +13,5 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="less" src="./css/less/moms.less"></style>

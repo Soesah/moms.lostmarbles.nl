@@ -1,5 +1,5 @@
 .recipe h2 {
-  font-size: 2em;
+  font-size: 1.8em;
   line-height: 2.2em;
   margin: 0.5em 0 0 0;
   color: white;
@@ -8,7 +8,7 @@
   border-bottom: solid 1px #4b5128;
 }
 .recipe h2:first-letter {
-  font-size: 3em;
+  font-size: 2em;
 }
 
 .recipe .summary {
@@ -49,18 +49,19 @@
   padding: 0.5em;
   border-bottom: solid 1px #4b5128;
   border-top: solid 1px #a2a97c;
-}
 
-.recipe .first-step {
-  border-top: none;
-}
+  &:first-child {
+    border-top: none;
+  }
 
-.recipe .last-step {
-  border-bottom: none;
-}
+  &:last-child {
+    border-bottom: none;
+  }
 
-.recipe .uneven {
-  background-color: #8a9354;
+  &:nth-child(2n) {
+    background-color: #8a9354;
+  }
+
 }
 
 .recipe-body {

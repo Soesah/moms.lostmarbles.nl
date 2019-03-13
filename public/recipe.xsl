@@ -1,45 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:editor="editor.id">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="recipe">
-		<article class="box recipe">
+		<article class="recipe">
 			<xsl:apply-templates select="title"/>
-			<article class="recipe-body">
+			<section class="recipe-body">
 				<xsl:apply-templates select="." mode="summary"/>
 				<xsl:apply-templates select="*[not(self::title) and not(self::notes)]"/>
-			</article>
+			</section>
       <xsl:if test="@new = 1">
-      	<div class="icon icon-star-large"/>
+				<span class="icon icon-star-large"></span>
       </xsl:if>
-      <div class="icon icon-bowl2"/>
+      <span class="icon icon-bowl2"></span>
 		</article>
 		<xsl:apply-templates select="notes"/>
 	</xsl:template>
 
-	<xsl:template match="recipe/name"/>
-
-	<xsl:template match="recipe/title">
+	<xsl:template match="title">
 		<h2>
 			<xsl:apply-templates select="node()"/>
 		</h2>
 	</xsl:template>
 
 	<xsl:template match="recipe" mode="summary">
-		<section class="summary" category="{@category_id}">
-      <div class="servings">
-        <div class="icon icon-person"/>
-        <xsl:value-of select="@servings"/>
-        <xsl:if test="@servings != ''">
-          <xsl:choose>
-            <xsl:when test="@servings = 1"> Persoon</xsl:when>
-            <xsl:otherwise> Personen</xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
-      </div>
-      <div class="preparation-time">
-        <div class="icon icon-clock"/>
-        <xsl:value-of select="@preparation_time"/>
-      </div>
+		<section class="summary">
+			<xsl:apply-templates select="@servings"/>
+			<xsl:apply-templates select="@preparation_time"/>
 		</section>
 		<p class="summary-text">
 			<xsl:apply-templates select="@category_id" mode="text"/>
@@ -70,6 +56,26 @@
 	  </p>
 	</xsl:template>
 
+	<xsl:template match="@servings">
+		<div class="servings">
+			<span class="icon icon-person"></span>
+			<xsl:value-of select="."/>
+			<xsl:if test=". != ''">
+				<xsl:choose>
+					<xsl:when test=". = 1"> Persoon</xsl:when>
+					<xsl:otherwise> Personen</xsl:otherwise>
+				</xsl:choose>
+			</xsl:if>
+		</div>
+	</xsl:template>
+
+	<xsl:template match="@preparation_time">
+   <div class="preparation-time">
+			<span class="icon icon-clock"></span>
+			<xsl:value-of select="."/>
+		</div>
+	</xsl:template>
+
 	<xsl:template match="@category_id" mode="text">
 		<span>
 			<xsl:text>Een </xsl:text>
@@ -87,10 +93,12 @@
 	</xsl:template>
 
 	<xsl:template match="ingredients">
-		<h4>Ingredi&#235;nten</h4>
-		<ul>
-			<xsl:apply-templates select="node()"/>
-		</ul>
+		<section>
+			<h4>Ingredi&#235;nten</h4>
+			<ul>
+				<xsl:apply-templates select="node()"/>
+			</ul>
+		</section>
 	</xsl:template>
 
 	<xsl:template match="ingredient">
@@ -124,50 +132,43 @@
 	</xsl:template>
 
 	<xsl:template match="preparation">
-		<h4>Bereidingswijze</h4>
-		<ol>
-			<xsl:apply-templates select="node()"/>
-		</ol>
+		<section>
+			<h4>Bereidingswijze</h4>
+			<ol>
+				<xsl:apply-templates select="node()"/>
+			</ol>
+		</section>
 	</xsl:template>
 
 	<xsl:template match="step">
-		<li>
-			<xsl:attribute name="class">
-        <xsl:text>step </xsl:text>
-        <xsl:if test="count(preceding-sibling::step) mod 2 = 1">uneven</xsl:if>
-        <xsl:if test="not(preceding-sibling::step)"> first-step</xsl:if>
-        <xsl:if test="not(following-sibling::step)"> last-step</xsl:if>
-      </xsl:attribute>
+		<li class="step">
  			<xsl:apply-templates select="node()"/>
 		</li>
 	</xsl:template>
 
 	<xsl:template match="image">
-		<img class="image" src="img/recipe_large/{@source}" alt="{@source}"/>
+		<div class="image">
+			<img src="img/recipe_large/{@source}" alt="{@source}"/>
+		</div>
 	</xsl:template>
 
 	<xsl:template match="notes">
-		<section id="notes">
+		<section class="notes">
       <xsl:attribute name="class">
         <xsl:text>box form notes-box </xsl:text>
         <xsl:if test="not(note)">no-notes</xsl:if>
       </xsl:attribute>
 			<h3>Notities</h3>
 			<xsl:apply-templates select="node()"/>
-			<div class="icon icon-beans"/>
+			<span class="icon icon-beans"></span>
 		</section>
 	</xsl:template>
 
 	<xsl:template match="note">
-		<section>
-			<xsl:attribute name="class">
-        <xsl:text>note </xsl:text>
-        <xsl:if test="not(preceding-sibling::note)">first-note</xsl:if>
-        <xsl:if test="not(following-sibling::*)"> last-note</xsl:if>
-      </xsl:attribute>
+		<div class="note">
 			<xsl:apply-templates select="author"/>
 			<xsl:apply-templates select="node()[not(self::author)]"/>
-		</section>
+		</div>
 	</xsl:template>
 
 	<xsl:template match="author">

@@ -1,7 +1,9 @@
 <template>
   <div class="editor">
     <editor-toolbar></editor-toolbar>
-    <editable-content v-if="doc" :xml="doc" :schema="schema"></editable-content>
+    <section class="box">
+      <editable-content v-if="doc" :xml="doc" :schema="schema"></editable-content>
+    </section>
     <editor-context-menu></editor-context-menu>
   </div>
 </template>
@@ -47,7 +49,7 @@ export default Vue.extend({
     setTimeout(() => {
       this.doc = editor.xhtml;
       this.schema = editor.schema;
-    }, 1000);
+    }, 100);
   },
   components: {
     EditorToolbar,

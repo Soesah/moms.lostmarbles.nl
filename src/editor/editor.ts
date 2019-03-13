@@ -15,15 +15,32 @@ export class Editor {
     this.init(path);
   }
 
+  public getXML() {
+    return this.enricher.getXML(this.doc);
+  }
+
   private async init(path: string) {
     const xml = await this.http.getDocument(path);
     const xsd = await this.http.getDocument('./recipe.xsd');
     const xsl = await this.http.getDocument('./recipe.xsl');
+    const exsl = await this.http.getDocument('./editor-xsl-transform.xsl');
 
     this.doc = this.enricher.getEnrichedXML(xml);
-    this.processor.importStylesheet(xsl);
 
+    const p = new XSLTProcessor();
+    p.importStylesheet(exsl);
+    const enrichedXsl = p.transformToDocument(xsl);
+
+    if (!this.xhtml) {
+      throw new Error('Error enriching XSL');
+    }
+
+    this.processor.importStylesheet(enrichedXsl);
     this.xhtml = this.processor.transformToDocument(this.doc);
+
+    if (!this.xhtml) {
+      throw new Error('Error transforming XML');
+    }
 
     const parser = new SchemaParser(xsd);
     this.schema = parser.schema;

@@ -8,9 +8,7 @@
         <xs:element ref="image" minOccurs="0"/>
         <xs:element ref="title"/>
         <xs:element ref="cook" minOccurs="0"/>
-        <!--xs:element ref="servings" minOccurs="0"/>
-        <xs:element ref="preparation-time" minOccurs="0"/-->
-        <!--xs:element ref="description" minOccurs="0"/-->
+        <xs:element ref="description" minOccurs="0"/>
         <xs:element ref="ingredients" minOccurs="0"/>
         <xs:element ref="preparation" minOccurs="0"/>
         <xs:element ref="notes" minOccurs="0"/>
@@ -33,14 +31,8 @@
   <!-- title -->
   <xs:element name="title" type="xs:string"/>
 
-  <!-- servings -->
-  <xs:element name="servings" type="xs:string"/>
-
   <!-- cook -->
   <xs:element name="cook" type="xs:string"/>
-
-  <!-- time of preparation -->
-  <xs:element name="preparation-time" type="xs:string"/>
 
   <!-- description -->
   <xs:element name="description" type="block-type"/>

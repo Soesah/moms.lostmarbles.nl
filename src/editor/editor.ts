@@ -4,7 +4,7 @@ import { SchemaDocument } from './schema/document.definition';
 import { XMLEnricher } from './document/enricher';
 
 export class Editor {
-  public doc: Document = new Document();
+  public xml: Document = new Document();
   public xhtml: Document = new Document();
   public schema: SchemaDocument = new SchemaDocument();
   private http: HTTPService = new HTTPService();
@@ -16,7 +16,7 @@ export class Editor {
   }
 
   public getXML() {
-    return this.enricher.getXML(this.doc);
+    return this.enricher.getXML(this.xml);
   }
 
   private async init(path: string) {
@@ -25,7 +25,7 @@ export class Editor {
     const xsl = await this.http.getDocument('./recipe.xsl');
     const exsl = await this.http.getDocument('./editor-xsl-transform.xsl');
 
-    this.doc = this.enricher.getEnrichedXML(xml);
+    this.xml = this.enricher.getEnrichedXML(xml);
 
     const p = new XSLTProcessor();
     p.importStylesheet(exsl);
@@ -36,7 +36,7 @@ export class Editor {
     }
 
     this.processor.importStylesheet(enrichedXsl);
-    this.xhtml = this.processor.transformToDocument(this.doc);
+    this.xhtml = this.processor.transformToDocument(this.xml);
 
     if (!this.xhtml) {
       throw new Error('Error transforming XML');

@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="recipe">
-		<article class="recipe">
+		<article class="box recipe">
 			<xsl:apply-templates select="title"/>
 			<section class="recipe-body">
 				<xsl:apply-templates select="." mode="summary"/>

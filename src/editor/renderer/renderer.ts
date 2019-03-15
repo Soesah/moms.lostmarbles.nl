@@ -1,18 +1,24 @@
 import { VNode, CreateElement } from 'vue';
 import { SchemaDocument } from '../schema/document.definition';
+import { getElementByXpath } from '../util/dom.util';
 
 export class VNodeRenderer {
   private h: CreateElement;
+  private xml: Document;
   private schema: SchemaDocument;
 
-  constructor(h: CreateElement, schema: SchemaDocument) {
+  constructor(h: CreateElement, xml: Document, schema: SchemaDocument) {
     this.h = h;
+    this.xml = xml;
     this.schema = schema;
   }
 
-  public xmlToVNode(xml: Element, handler: (evt: KeyboardEvent) => {}): VNode {
-    const tagName = xml.localName;
-    const className = xml.getAttribute ? xml.getAttribute('class') : null;
+  public nodeToVNode(
+    node: Element,
+    handler: (evt: KeyboardEvent) => {},
+  ): VNode {
+    const tagName = node.localName;
+    const className = node.getAttribute ? node.getAttribute('class') : null;
     const classes: any = {};
     if (className) {
       classes[className] = true;
@@ -26,31 +32,38 @@ export class VNodeRenderer {
       attrs: {},
     };
 
-    if (this.schema.isContentEditable(xml.localName)) {
-      Object.assign(options.domProps, {
-        contentEditable: true,
-      });
-      Object.assign(options, {
-        on: {
-          keydown: handler,
-        },
-      });
-    }
-
-    const children = [...xml.childNodes].map((child: ChildNode) => {
+    const children = [...node.childNodes].map((child: ChildNode) => {
       if (child && child.nodeType === 7) {
         const nodeId = child.textContent ? child.textContent : '';
         Object.assign(options.attrs, {
           'data-editor-node-id': nodeId,
         });
+
+        if (nodeId && this.isContentEditable(nodeId)) {
+          Object.assign(options.domProps, {
+            contentEditable: true,
+          });
+          Object.assign(options, {
+            on: {
+              keydown: handler,
+            },
+          });
+        }
         return undefined;
       }
 
       return child.nodeType === 3
         ? child.textContent
-        : this.xmlToVNode(child as Element, handler);
+        : this.nodeToVNode(child as Element, handler);
     });
 
     return this.h(tagName, options, children);
+  }
+
+  private isContentEditable(nodeId: string): boolean {
+    const node = getElementByXpath(this.xml, `//*[@*[. = "${nodeId}"]]`);
+    const nodeName = node.nodeName;
+
+    return this.schema.isContentEditable(nodeName);
   }
 }

@@ -1,7 +1,7 @@
 <xsl:stylesheet
   version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:editor="https://does-not-matter-right-now/editor">
+  xmlns:editor="https://www.front-crafter.nl/jigsaw">
 
   <xsl:output method="xml" indent="no"/>
 
@@ -27,7 +27,7 @@
   <xsl:template match="xsl:stylesheet" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:element name="xsl:stylesheet" namespace="http://www.w3.org/1999/XSL/Transform">
       <!-- <xsl:attribute name="test">test</xsl:attribute> -->
-      <xsl:attribute name="editor:editor" namespace="https://does-not-matter-right-now/editor">https://does-not-matter-right-now/editor</xsl:attribute>
+      <xsl:attribute name="editor:editor" namespace="https://www.front-crafter.nl/jigsaw">https://www.front-crafter.nl/jigsaw</xsl:attribute>
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates select="node()"/>
     </xsl:element>

@@ -1,11 +1,10 @@
 import { NodeType } from './document.info';
 import { UUIDUtil } from '../util/uuid.util';
 
-export const EDITOR_NAMESPACE = 'https://does-not-matter-right-now/editor';
+export const EDITOR_NAMESPACE = 'https://www.front-crafter.nl/jigsaw';
 
 // add a uuid as @xml:editor-id to the node.
 export class XMLEnricher {
-
   public getEnrichedXML(xml: Document): Document {
     this.enrichNode(xml.documentElement);
 
@@ -31,7 +30,8 @@ export class XMLEnricher {
       node.removeAttributeNS(EDITOR_NAMESPACE, 'node-id');
     }
 
-    node.childNodes.forEach((child: Node) => this.cleanEnrichedNode(child as Element));
-
+    node.childNodes.forEach((child: Node) =>
+      this.cleanEnrichedNode(child as Element),
+    );
   }
 }

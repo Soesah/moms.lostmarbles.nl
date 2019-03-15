@@ -1,9 +1,7 @@
 <template>
   <div class="editor">
     <editor-toolbar></editor-toolbar>
-    <section class="box">
-      <editable-content v-if="doc" :xml="doc" :schema="schema"></editable-content>
-    </section>
+    <editable-content v-if="xmlDocument" :xml="xmlDocument" :xhtml="xhtml" :schema="schema"></editable-content>
     <editor-context-menu></editor-context-menu>
   </div>
 </template>
@@ -28,7 +26,8 @@ const props = {
 };
 
 interface EditorState {
-  doc: Document | null;
+  xmlDocument: Document | null;
+  xhtml: Document | null;
   schema: SchemaDocument | null;
 }
 
@@ -37,17 +36,17 @@ export default Vue.extend({
   props,
   data(): EditorState {
     return {
-      doc: null,
+      xmlDocument: null,
+      xhtml: null,
       schema: null,
     };
   },
   created() {
-    const editor = new Editor(
-      'api/editor/xml/recipe.xml',
-    );
+    const editor = new Editor('api/editor/xml/recipe.xml');
 
     setTimeout(() => {
-      this.doc = editor.xhtml;
+      this.xmlDocument = editor.xml;
+      this.xhtml = editor.xhtml;
       this.schema = editor.schema;
     }, 100);
   },

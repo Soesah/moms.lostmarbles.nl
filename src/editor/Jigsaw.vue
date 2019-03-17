@@ -1,8 +1,8 @@
 <template>
-  <div class="editor">
-    <editor-toolbar></editor-toolbar>
-    <editable-content v-if="xmlDocument" :xml="xmlDocument" :xhtml="xhtml" :schema="schema"></editable-content>
-    <editor-context-menu></editor-context-menu>
+  <div class="editor" v-if="ready">
+    <editor-toolbar :editor="editor"></editor-toolbar>
+    <editable-content :editor="editor"></editable-content>
+    <editor-context-menu :editor="editor"></editor-context-menu>
   </div>
 </template>
 
@@ -19,36 +19,36 @@ const props = {
     type: String,
     required: true,
   },
-  xsd: {
+  stylesheet: {
+    type: String,
+    required: true,
+  },
+  schema: {
     type: String,
     required: true,
   },
 };
 
 interface EditorState {
-  xmlDocument: Document | null;
-  xhtml: Document | null;
-  schema: SchemaDocument | null;
+  editor: Editor | null;
+  ready: boolean;
 }
 
 export default Vue.extend({
-  name: 'Editor',
+  name: 'Jigsaw',
   props,
   data(): EditorState {
     return {
-      xmlDocument: null,
-      xhtml: null,
-      schema: null,
+      editor: null,
+      ready: false,
     };
   },
   created() {
-    const editor = new Editor('api/editor/xml/recipe.xml');
+    this.editor = new Editor(this.xml, this.stylesheet, this.schema);
 
-    setTimeout(() => {
-      this.xmlDocument = editor.xml;
-      this.xhtml = editor.xhtml;
-      this.schema = editor.schema;
-    }, 100);
+    this.editor.on('initialized', (evt) => {
+      this.ready = true;
+    });
   },
   components: {
     EditorToolbar,

@@ -6,33 +6,18 @@ import { getElementByXpath } from '@/editor/util/dom.util';
 export default Vue.extend({
   name: 'EditableContent',
   props: {
-    xml: {
-      type: Document,
-    },
-    xhtml: {
-      type: Document,
-    },
-    schema: {
+    editor: {
       type: Object,
     },
   },
   render(h: CreateElement) {
-    const renderer = new VNodeRenderer(h, this.xml, this.schema);
+    const renderer = this.editor.getRenderer(h);
+    const xhtml = this.editor.getXHTML();
+    const handler = this.editor.handleDomEvent;
 
-    return renderer.nodeToVNode(
-      this.xhtml.documentElement,
-      (this as any).handler,
-    );
+    return renderer.nodeToVNode(xhtml.documentElement, handler);
   },
-  methods: {
-    handler(evt: KeyboardEvent) {
-      const el = evt.target;
-      const id = (el as Element).getAttribute('data-editor-node-id');
-
-      evt.preventDefault();
-      evt.stopPropagation();
-    },
-  },
+  methods: {},
 });
 </script>
 

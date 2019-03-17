@@ -18,6 +18,11 @@ import { toolbarConfig } from './toolbar.config';
 
 export default Vue.extend({
   name: 'EditorToolbar',
+  props: {
+    editor: {
+      type: Object,
+    },
+  },
   data() {
     return {
       config: toolbarConfig,

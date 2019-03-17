@@ -27,7 +27,7 @@ export default Vue.extend({
   methods: {
     handler(evt: KeyboardEvent) {
       const el = evt.target;
-      const id = (<Element>el).getAttribute('data-editor-node-id');
+      const id = (el as Element).getAttribute('data-editor-node-id');
 
       evt.preventDefault();
       evt.stopPropagation();

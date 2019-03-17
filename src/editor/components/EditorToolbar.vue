@@ -1,37 +1,26 @@
 <template>
   <nav class="toolbar">
-    <template v-for="item in items">
-      <a
-        href="#"
-        class="toolbar-item"
-        :key="item.label"
-        @click.prevent="activate(item.f)"
-        v-text="item.label"
-      ></a>
+    <template v-for="group in config">
+      <div class="toolbar-group" :key="group.name">
+        <template v-for="item in group.items">
+          <a href="#" class="toolbar-item" :key="item.label" @click.prevent="activate(item.f)">
+            <span :class="`icon-${item.icon}`"></span>
+          </a>
+        </template>
+      </div>
     </template>
   </nav>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import { toolbarConfig } from './toolbar.config';
+
 export default Vue.extend({
   name: 'EditorToolbar',
   data() {
     return {
-      items: [
-        {
-          label: 'Emphasis',
-          f: 'insertEmphasis',
-        },
-        {
-          label: 'Italic',
-          f: 'insertItalic',
-        },
-        {
-          label: 'Underline',
-          f: 'insertUnderline',
-        },
-      ],
+      config: toolbarConfig,
     };
   },
   methods: {
@@ -41,31 +30,55 @@ export default Vue.extend({
   },
 });
 </script>
-<style scoped>
+<style scoped lang="less">
 .toolbar {
   box-sizing: border-box;
   display: flex;
-  border: solid 1px gray;
-  border-bottom-color: black;
-  border-right-color: black;
-  background-color: lemonchiffon;
+  background-color: rgb(121, 156, 187);
   border-radius: 2px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 12px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: calc(100% + 40px);
+    content: '';
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    height: 100%;
+    z-index: -1;
+  }
 }
-.toolbar-item {
-  padding: 4px;
-  text-align: center;
-  border: solid 1px gray;
-  border-bottom-color: black;
-  border-right-color: black;
+
+.toolbar-group {
+  display: flex;
+  margin: 3px 2px 2px;
+  padding-right: 2px;
+  border: solid 1px rgb(87, 123, 156);
+  border-top-color: rgb(142, 177, 204);
+  border-left-color: rgb(142, 177, 204);
   border-radius: 2px;
-  margin: 2px;
+}
+
+.toolbar-item {
+  padding: 2px 2px 0;
+  text-align: center;
+  border-radius: 2px;
+  margin: 3px 2px 2px;
   margin-right: 0px;
-  color: black;
+  color: white;
+  background: rgb(87, 123, 156);
+  font-size: 17px;
+  line-height: 17px;
   text-decoration: none;
 }
 .toolbar-item:hover {
-  color: gray;
+  opacity: 0.5;
 }
 </style>

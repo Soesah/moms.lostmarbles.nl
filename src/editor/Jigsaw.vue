@@ -29,7 +29,7 @@ const props = {
   },
 };
 
-interface EditorState {
+interface JigsawState {
   editor: Editor | null;
   ready: boolean;
 }
@@ -37,7 +37,7 @@ interface EditorState {
 export default Vue.extend({
   name: 'Jigsaw',
   props,
-  data(): EditorState {
+  data(): JigsawState {
     return {
       editor: null,
       ready: false,

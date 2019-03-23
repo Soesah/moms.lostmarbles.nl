@@ -43,6 +43,9 @@ export class Editor extends EventEmitter {
     const el = evt.target;
     const id = (el as Element).getAttribute('data-editor-node-id');
 
+    // find node in XML
+    // trigger
+
     evt.preventDefault();
     evt.stopPropagation();
   }

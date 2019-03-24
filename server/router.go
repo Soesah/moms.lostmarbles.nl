@@ -20,25 +20,26 @@ func Router() *chi.Mux {
 
 		r.Route("/recipe", func(r chi.Router) {
 			r.Get("/", handlers.GetRecipeList)
-			r.Put("/", handlers.CreateRecipe)
-			r.Get("/{id}", handlers.GetRecipe)
-			r.Post("/{id}", handlers.UpdateRecipe)
+			r.Post("/", handlers.CreateRecipe)
+			r.Get("/{slug}", handlers.GetRecipe)
+			r.Get("/{id}/xml", handlers.GetRecipeXML)
+			r.Put("/{id}", handlers.UpdateRecipe)
 			r.Delete("/{id}", handlers.DeleteRecipe)
 		})
 
 		r.Route("/category", func(r chi.Router) {
 			r.Get("/", handlers.GetCategoryList)
-			r.Put("/", handlers.CreateCategory)
+			r.Post("/", handlers.CreateCategory)
 			r.Get("/{id}", handlers.GetCategory)
-			r.Post("/{id}", handlers.UpdateCategory)
+			r.Put("/{id}", handlers.UpdateCategory)
 			r.Delete("/{id}", handlers.DeleteCategory)
 		})
 
 		r.Route("/user", func(r chi.Router) {
 			r.Get("/", handlers.GetUserList)
-			r.Put("/", handlers.CreateUser)
+			r.Post("/", handlers.CreateUser)
 			r.Get("/{id}", handlers.GetUser)
-			r.Post("/{id}", handlers.UpdateUser)
+			r.Put("/{id}", handlers.UpdateUser)
 			r.Delete("/{id}", handlers.DeleteUser)
 		})
 

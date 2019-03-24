@@ -24,6 +24,12 @@ func GetRecipe(w http.ResponseWriter, r *http.Request) {
 	httpext.SuccessAPI(w, "ok")
 }
 
+// GetRecipeXML returns a recipe's xml
+func GetRecipeXML(w http.ResponseWriter, r *http.Request) {
+
+	httpext.SuccessAPI(w, "ok")
+}
+
 // UpdateRecipe updates a recipe
 func UpdateRecipe(w http.ResponseWriter, r *http.Request) {
 

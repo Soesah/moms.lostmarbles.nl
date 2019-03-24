@@ -43,7 +43,10 @@ func Router() *chi.Mux {
 		})
 
 		r.Route("/system", func(r chi.Router) {
-			r.Post("/import", handlers.ImportData)
+			r.Post("/import/users", handlers.ImportUsers)
+			r.Post("/import/categories", handlers.ImportCategories)
+			r.Post("/import/recipes", handlers.ImportRecipes)
+			r.Post("/import/changelog", handlers.ImportChangelog)
 			r.Get("/export", handlers.ExportData)
 		})
 

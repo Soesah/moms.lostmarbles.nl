@@ -1,5 +1,12 @@
 package models
 
+import (
+	"encoding/xml"
+	"regexp"
+	"strconv"
+	"strings"
+)
+
 // Recipe is a recipe
 type Recipe struct {
 	ID               int64        `json:"id"`
@@ -10,22 +17,57 @@ type Recipe struct {
 	Servings         string       `json:"servings,omitempty"`
 	PreparationTime  string       `json:"preparation_time,omitempty"`
 	Ingredients      []Ingredient `json:"ingredients"`
-	Steps            []string     `json:"steps"`
-	Notes            []Note       `json:"notes"`
 	XML              string       `json:"xml,omitempty"`
 	CreationDate     string       `json:"creation_date"`
 	ModificationDate string       `json:"modification_date"`
 }
 
-// Ingredient is an ingredient of a recipe
-type Ingredient struct {
-	Amount string `json:"amount"`
-	Name   string `json:"name"`
-	Remark string `json:"remark"`
+// GetXML returns a string of XML for the recipe
+func (recipe Recipe) GetXML() string {
+
+	id := strconv.Itoa(int(recipe.ID))
+	categoryID := strconv.Itoa(int(recipe.CategoryID))
+
+	return strings.Join([]string{
+		"<recipe ",
+		"id=\"", id, "\" ",
+		"category_id=\"", categoryID, "\" ",
+		"language=\"", recipe.Language, "\" ",
+		"slug=\"", recipe.Slug, "\" ",
+		"name=\"", recipe.Name, "\" ",
+		"servings=\"", recipe.Servings, "\" ",
+		"preparation_time=\"", recipe.PreparationTime, "\" ",
+		"creation_date=\"", recipe.CreationDate, "\" ",
+		"modification_date=\"", recipe.ModificationDate, "\" ",
+		">",
+		recipe.XML,
+		"</recipe>"},
+		"")
 }
 
-// Note is a note that goes with a recipe
-type Note struct {
-	Name     string `json:"name"`
-	MarkDown string `json:"mark_down"`
+// GetIngredients returns a struct for the recipes ingredients
+func (recipe Recipe) GetIngredients() ([]Ingredient, error) {
+	recipeXML := recipe.GetXML()
+	r, _ := regexp.Compile("<ingredients>(.*)</ingredients>")
+	ingredientsXML := r.FindString(recipeXML)
+	var ingredients Ingredients
+	err := xml.Unmarshal([]byte(ingredientsXML), &ingredients)
+	if err != nil {
+		return ingredients.Ingredients, err
+	}
+	return ingredients.Ingredients, nil
+}
+
+// Ingredients is a list of ingredients
+type Ingredients struct {
+	XMLName     xml.Name     `xml:"ingredients"`
+	Ingredients []Ingredient `xml:"ingredient"`
+}
+
+// Ingredient is an ingredient of a recipe
+type Ingredient struct {
+	XMLName xml.Name `xml:"ingredient"`
+	Amount  string   `xml:"amount"`
+	Name    string   `xml:"name"`
+	Remark  string   `xml:"remark"`
 }

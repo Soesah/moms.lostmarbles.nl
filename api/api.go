@@ -16,16 +16,13 @@ const (
 	MomsCategoryKind = "MomsCategory"
 
 	// RecipeKind is used for Recipes
-	RecipeKind = "Recipe"
+	RecipeKind = "MomsRecipe"
 
 	// IngredientKind is used for Ingredients
-	IngredientKind = "Ingredient"
-
-	// NoteKind is used for Notes
-	NoteKind = "Note"
+	IngredientKind = "MomsIngredient"
 
 	// ChangeLogKind is used for Recipes
-	ChangeLogKind = "ChangeLog"
+	ChangeLogKind = "MomsChangeLog"
 )
 
 // MomsKey returns a key for Moms
@@ -53,12 +50,7 @@ func IngredientKey(ctx context.Context, name string, RecipeID int64, CategoryID 
 	return datastore.NewKey(ctx, IngredientKind, name, 0, RecipeKey(ctx, RecipeID, CategoryID))
 }
 
-// NoteKey returns a key for Note -> Recipe -> CategoryKey -> MomsKey
-func NoteKey(ctx context.Context, name string, RecipeID int64, CategoryID int64) *datastore.Key {
-	return datastore.NewKey(ctx, NoteKind, name, 0, RecipeKey(ctx, RecipeID, CategoryID))
-}
-
 // ChangeLogKey returns a key for ChangeLog -> MomsKey
-func ChangeLogKey(ctx context.Context, ID string, CategoryID string) *datastore.Key {
-	return datastore.NewKey(ctx, ChangeLogKind, ID, 0, MomsKey(ctx))
+func ChangeLogKey(ctx context.Context, ID int64) *datastore.Key {
+	return datastore.NewKey(ctx, ChangeLogKind, "", ID, MomsKey(ctx))
 }

@@ -58,9 +58,9 @@
 
   <xs:element name="amount" type="xs:string"/>
 
-  <xs:element name="name" type="text-type" />
+  <xs:element name="name" type="xs:string" />
 
-  <xs:element name="remark" type="text-type" />
+  <xs:element name="remark" type="xs:string" />
 
   <!-- preparation -->
   <xs:element name="preparation">
@@ -134,9 +134,9 @@
   <!-- basic elements -->
   <xs:element name="paragraph" type="text-type" substitutionGroup="block.abstract"/>
 
-  <xs:element name="list" type="list-type"  substitutionGroup="block.abstract"/>
+  <xs:element name="list" type="list-type" substitutionGroup="block.abstract"/>
 
-  <xs:element name="ordered-list" type="list-type"  substitutionGroup="block.abstract"/>
+  <xs:element name="ordered-list" type="list-type" substitutionGroup="block.abstract"/>
 
   <xs:element name="item" type="text-type"/>
 

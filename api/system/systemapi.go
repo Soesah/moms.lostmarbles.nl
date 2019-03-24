@@ -1,6 +1,7 @@
 package system
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/Soesah/moms.lostmarbles.nl/api"
@@ -10,25 +11,39 @@ import (
 )
 
 // ImportRecipes is used to import recipes
-func ImportRecipes(r *http.Request, recipes []models.Recipe) error {
+func ImportRecipes(recipes []models.Recipe, r *http.Request) error {
 	var keys []*datastore.Key
+	var ingredientKeys []*datastore.Key
+	var ingredients []models.Ingredient
 	ctx := appengine.NewContext(r)
 
 	for _, recipe := range recipes {
 		keys = append(keys, api.RecipeKey(ctx, recipe.ID, recipe.CategoryID))
+		recipeIngredients, err := recipe.GetIngredients()
+		if err != nil {
+			return errors.New("Error parsing ingredients " + err.Error())
+		}
+		for _, ingredient := range recipeIngredients {
+			ingredientKeys = append(ingredientKeys, api.IngredientKey(ctx, ingredient.Name, recipe.ID, recipe.CategoryID))
+			ingredients = append(ingredients, ingredient)
+		}
 	}
 
-	_, err := datastore.PutMulti(ctx, keys, &recipes)
-
+	_, err := datastore.PutMulti(ctx, keys, recipes)
 	if err != nil {
-		return err
+		return errors.New("Error saving recipes " + err.Error())
+	}
+
+	_, err = datastore.PutMulti(ctx, ingredientKeys, ingredients)
+	if err != nil {
+		return errors.New("Error saving ingredients " + err.Error())
 	}
 
 	return nil
 }
 
 // ImportCategories is used to import categories
-func ImportCategories(r *http.Request, categories []models.Category) error {
+func ImportCategories(categories []models.Category, r *http.Request) error {
 	var keys []*datastore.Key
 	ctx := appengine.NewContext(r)
 
@@ -36,7 +51,7 @@ func ImportCategories(r *http.Request, categories []models.Category) error {
 		keys = append(keys, api.CategoryKey(ctx, category.ID))
 	}
 
-	_, err := datastore.PutMulti(ctx, keys, &categories)
+	_, err := datastore.PutMulti(ctx, keys, categories)
 
 	if err != nil {
 		return err
@@ -46,7 +61,7 @@ func ImportCategories(r *http.Request, categories []models.Category) error {
 }
 
 // ImportUsers is used to import users
-func ImportUsers(r *http.Request, users []models.User) error {
+func ImportUsers(users []models.User, r *http.Request) error {
 	var keys []*datastore.Key
 	ctx := appengine.NewContext(r)
 
@@ -54,7 +69,25 @@ func ImportUsers(r *http.Request, users []models.User) error {
 		keys = append(keys, api.UserKey(ctx, user.ID))
 	}
 
-	_, err := datastore.PutMulti(ctx, keys, &users)
+	_, err := datastore.PutMulti(ctx, keys, users)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ImportChangelog is used to import changelog
+func ImportChangelog(changelogs []models.ChangeLog, r *http.Request) error {
+	var keys []*datastore.Key
+	ctx := appengine.NewContext(r)
+
+	for _, changelog := range changelogs {
+		keys = append(keys, api.ChangeLogKey(ctx, changelog.ID))
+	}
+
+	_, err := datastore.PutMulti(ctx, keys, changelogs)
 
 	if err != nil {
 		return err

@@ -16,8 +16,8 @@ type Recipe struct {
 	Name             string       `json:"name"`
 	Servings         string       `json:"servings,omitempty"`
 	PreparationTime  string       `json:"preparation_time,omitempty"`
-	Ingredients      []Ingredient `json:"ingredients"`
-	XML              string       `json:"xml,omitempty"`
+	Ingredients      []Ingredient `json:"ingredients,omitempty"`
+	XML              string       `json:"xml,omitempty" datastore:",noindex"`
 	CreationDate     string       `json:"creation_date"`
 	ModificationDate string       `json:"modification_date"`
 }
@@ -27,12 +27,13 @@ func (recipe Recipe) GetXML() string {
 
 	id := strconv.Itoa(int(recipe.ID))
 	categoryID := strconv.Itoa(int(recipe.CategoryID))
+	r, _ := regexp.Compile("\n")
 
 	return strings.Join([]string{
 		"<recipe ",
 		"id=\"", id, "\" ",
 		"category_id=\"", categoryID, "\" ",
-		"language=\"", recipe.Language, "\" ",
+		"xml:lang=\"", recipe.Language, "\" ",
 		"slug=\"", recipe.Slug, "\" ",
 		"name=\"", recipe.Name, "\" ",
 		"servings=\"", recipe.Servings, "\" ",
@@ -40,7 +41,7 @@ func (recipe Recipe) GetXML() string {
 		"creation_date=\"", recipe.CreationDate, "\" ",
 		"modification_date=\"", recipe.ModificationDate, "\" ",
 		">",
-		recipe.XML,
+		string(r.ReplaceAll([]byte(recipe.XML), []byte(""))),
 		"</recipe>"},
 		"")
 }
@@ -66,8 +67,8 @@ type Ingredients struct {
 
 // Ingredient is an ingredient of a recipe
 type Ingredient struct {
-	XMLName xml.Name `xml:"ingredient"`
-	Amount  string   `xml:"amount"`
-	Name    string   `xml:"name"`
-	Remark  string   `xml:"remark"`
+	XMLName xml.Name `json:"-" xml:"ingredient"`
+	Amount  string   `json:"amount" xml:"amount"`
+	Name    string   `json:"name" xml:"name"`
+	Remark  string   `json:"remark" xml:"remark"`
 }

@@ -21,7 +21,7 @@ func ImportRecipes(recipes []models.Recipe, r *http.Request) error {
 		keys = append(keys, api.RecipeKey(ctx, recipe.ID, recipe.CategoryID))
 		recipeIngredients, err := recipe.GetIngredients()
 		if err != nil {
-			return errors.New("Error parsing ingredients " + err.Error())
+			return errors.New("Error parsing ingredients for recipe " + recipe.Name + ":" + err.Error())
 		}
 		for _, ingredient := range recipeIngredients {
 			ingredientKeys = append(ingredientKeys, api.IngredientKey(ctx, ingredient.Name, recipe.ID, recipe.CategoryID))

@@ -3,13 +3,20 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/Soesah/moms.lostmarbles.nl/api/recipe"
 	"github.com/Soesah/moms.lostmarbles.nl/server/httpext"
 )
 
 // GetRecipeList returns a list of recipes
 func GetRecipeList(w http.ResponseWriter, r *http.Request) {
+	recipes, err := recipe.GetRecipeList(r)
 
-	httpext.SuccessAPI(w, "ok")
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", recipes)
 }
 
 // CreateRecipe creates a recipe

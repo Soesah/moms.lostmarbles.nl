@@ -5,6 +5,9 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
+
+	"github.com/Soesah/moms.lostmarbles.nl/api/util"
 )
 
 // Recipe is a recipe
@@ -18,8 +21,8 @@ type Recipe struct {
 	PreparationTime  string       `json:"preparation_time,omitempty"`
 	Ingredients      []Ingredient `json:"ingredients,omitempty"`
 	XML              string       `json:"xml,omitempty" datastore:",noindex"`
-	CreationDate     string       `json:"creation_date"`
-	ModificationDate string       `json:"modification_date"`
+	CreationDate     time.Time    `json:"creation_date"`
+	ModificationDate time.Time    `json:"modification_date"`
 }
 
 // GetXML returns a string of XML for the recipe
@@ -38,8 +41,8 @@ func (recipe Recipe) GetXML() string {
 		"name=\"", recipe.Name, "\" ",
 		"servings=\"", recipe.Servings, "\" ",
 		"preparation_time=\"", recipe.PreparationTime, "\" ",
-		"creation_date=\"", recipe.CreationDate, "\" ",
-		"modification_date=\"", recipe.ModificationDate, "\" ",
+		"creation_date=\"", recipe.CreationDate.Format(util.RFC3339Format), "\" ",
+		"modification_date=\"", recipe.ModificationDate.Format(util.RFC3339Format), "\" ",
 		">",
 		string(r.ReplaceAll([]byte(recipe.XML), []byte(""))),
 		"</recipe>"},
@@ -71,4 +74,13 @@ type Ingredient struct {
 	Amount  string   `json:"amount" xml:"amount"`
 	Name    string   `json:"name" xml:"name"`
 	Remark  string   `json:"remark" xml:"remark"`
+}
+
+// RecipeItem is used for the recipe list
+type RecipeItem struct {
+	ID         int64  `json:"id"`
+	CategoryID int64  `json:"category_id"`
+	Slug       string `json:"slug"`
+	Name       string `json:"name"`
+	IsNew      bool   `json:"is_new"`
 }

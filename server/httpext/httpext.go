@@ -27,6 +27,13 @@ func SuccessDataAPI(w http.ResponseWriter, message string, data interface{}) {
 	JSON(w, response)
 }
 
+// SuccessXMLAPI returns an xml response
+func SuccessXMLAPI(w http.ResponseWriter, xml string) {
+	xmlData := []byte(xml)
+	w.Header().Add("Content-Type", "application/xml")
+	w.Write(xmlData)
+}
+
 // SuccessAPI returns a json response, with a message
 func SuccessAPI(w http.ResponseWriter, message string) {
 	response := Response{

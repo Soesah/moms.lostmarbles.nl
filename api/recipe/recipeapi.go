@@ -43,22 +43,23 @@ func CreateRecipe() {
 }
 
 // GetRecipe returns a recipe
-func GetRecipe(id int64, r *http.Request) (models.Recipe, error) {
+func GetRecipe(ID int64, categoryID int64, r *http.Request) (models.Recipe, error) {
 	var recipe models.Recipe
-	// ctx := appengine.NewContext(r)
-	// key := api.RecipeKey(ctx, id)
+	ctx := appengine.NewContext(r)
+	key := api.RecipeKey(ctx, ID, categoryID)
 
-	// err := datastore.Get(ctx, key, &recipe)
-	// if err != nil {
-	// 	return recipe, err
-	// }
+	err := datastore.Get(ctx, key, &recipe)
+
+	if err != nil {
+		return recipe, err
+	}
 
 	return recipe, nil
 }
 
 // UpdateRecipe updates a recipe
 func UpdateRecipe() {
-
+	// changelog
 }
 
 // DeleteRecipe deletes a recipe

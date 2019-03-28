@@ -1,15 +1,17 @@
 <template>
   <div id="app">
-    <jigsaw xml="api/editor/xml/recipe.xml" schema="./recipe.xsd" stylesheet="./recipe.xsl"></jigsaw>
+    <page-title></page-title>
+    <router-view></router-view>
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import Jigsaw from '@/editor/Jigsaw.vue';
+import PageTitle from '@/components/common/PageTitle.vue';
 
 export default Vue.extend({
+  name: 'MomsRecipeApp',
   components: {
-    Jigsaw,
+    PageTitle,
   },
 });
 </script>

@@ -1,6 +1,8 @@
 package recipe
 
 import (
+	"context"
+	"errors"
 	"net/http"
 	"time"
 
@@ -57,9 +59,67 @@ func GetRecipe(ID int64, categoryID int64, r *http.Request) (models.Recipe, erro
 	return recipe, nil
 }
 
+// UpdateIngredients updates ingredients for the recipe
+func UpdateIngredients(ctx context.Context, recipe models.Recipe) error {
+	var ingredients []models.Ingredient
+	var ingredientKeys []*datastore.Key
+
+	err := DeleteIngredients(ctx, recipe)
+	if err != nil {
+		return err
+	}
+
+	recipeIngredients, err := recipe.GetIngredients()
+	if err != nil {
+		return errors.New("Error parsing ingredients for recipe " + recipe.Name + ":" + err.Error())
+	}
+
+	for _, ingredient := range recipeIngredients {
+		ingredientKeys = append(ingredientKeys, api.IngredientKey(ctx, ingredient.Name, recipe.ID, recipe.CategoryID))
+		ingredients = append(ingredients, ingredient)
+	}
+
+	_, err = datastore.PutMulti(ctx, ingredientKeys, ingredients)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// DeleteIngredients deletes ingredients of a recipe
+func DeleteIngredients(ctx context.Context, recipe models.Recipe) error {
+	var ingredients []models.Ingredient
+	key := api.RecipeKey(ctx, recipe.ID, recipe.CategoryID)
+
+	q := datastore.NewQuery(api.IngredientKind).Ancestor(key)
+	keys, err := q.GetAll(ctx, &ingredients)
+	if err != nil {
+		return err
+	}
+
+	err = datastore.DeleteMulti(ctx, keys)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // UpdateRecipe updates a recipe
-func UpdateRecipe() {
+func UpdateRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) {
 	// changelog
+	ctx := appengine.NewContext(r)
+	key := api.RecipeKey(ctx, recipe.ID, recipe.CategoryID)
+
+	UpdateIngredients(ctx, recipe)
+
+	_, err := datastore.Put(ctx, key, &recipe)
+	if err != nil {
+		return recipe, err
+	}
+
+	return recipe, nil
 }
 
 // DeleteRecipe deletes a recipe

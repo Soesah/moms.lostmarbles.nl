@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -72,8 +73,17 @@ func GetRecipeXML(w http.ResponseWriter, r *http.Request) {
 
 // UpdateRecipe updates a recipe
 func UpdateRecipe(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var update models.Recipe
+	err := decoder.Decode(&update)
+	rec, err := recipe.UpdateRecipe(update, r)
 
-	httpext.SuccessAPI(w, "ok")
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", rec)
 }
 
 // DeleteRecipe deletes a recipe

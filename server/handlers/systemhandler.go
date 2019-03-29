@@ -98,3 +98,9 @@ func ExportData(w http.ResponseWriter, r *http.Request) {
 
 	httpext.SuccessAPI(w, "ok")
 }
+
+// ClearAll is used to export data
+func ClearAll(w http.ResponseWriter, r *http.Request) {
+
+	httpext.SuccessAPI(w, "ok")
+}

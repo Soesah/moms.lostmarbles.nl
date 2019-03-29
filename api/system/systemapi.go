@@ -109,3 +109,48 @@ func ExportData() (Export, error) {
 
 	return export, nil
 }
+
+// ClearAll clears all
+func ClearAll(r *http.Request) error {
+
+	ctx := appengine.NewContext(r)
+
+	var recipes []models.Recipe
+	var changes []models.ChangeLog
+	var categories []models.Category
+	var ingredients []models.Ingredient
+
+	q := datastore.NewQuery(api.RecipeKind)
+	keys, err := q.GetAll(ctx, &recipes)
+	if err != nil {
+		return err
+	}
+	err = datastore.DeleteMulti(ctx, keys)
+
+	q = datastore.NewQuery(api.ChangeLogKind)
+	keys, err = q.GetAll(ctx, &changes)
+	if err != nil {
+		return err
+	}
+	err = datastore.DeleteMulti(ctx, keys)
+
+	q = datastore.NewQuery(api.MomsCategoryKind)
+	keys, err = q.GetAll(ctx, &categories)
+	if err != nil {
+		return err
+	}
+	err = datastore.DeleteMulti(ctx, keys)
+
+	q = datastore.NewQuery(api.IngredientKind)
+	keys, err = q.GetAll(ctx, &ingredients)
+	if err != nil {
+		return err
+	}
+	err = datastore.DeleteMulti(ctx, keys)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

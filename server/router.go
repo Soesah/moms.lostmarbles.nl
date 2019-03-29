@@ -54,6 +54,7 @@ func Router() *chi.Mux {
 			r.Post("/import/recipes", handlers.ImportRecipes)
 			r.Post("/import/changelog", handlers.ImportChangelog)
 			r.Get("/export", handlers.ExportData)
+			r.Get("/clearall", handlers.ClearAll)
 		})
 
 		r.Route("/editor", func(r chi.Router) {

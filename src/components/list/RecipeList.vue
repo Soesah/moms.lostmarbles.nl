@@ -3,7 +3,7 @@
     <h2>Recepten</h2>
     <ol>
       <li v-for="recipe in filteredRecipes" :key="recipe.id">
-        <router-link :to="`recipe/${recipe.slug}`" v-text="recipe.name"></router-link>
+        <router-link :to="`/recipe/${recipe.slug}`" v-text="recipe.name"></router-link>
       </li>
     </ol>
   </section>

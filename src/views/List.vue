@@ -17,8 +17,16 @@ export default {
     Categories,
     RecipeList,
   },
+  created() {
+    window.setTimeout(() => this.update(), 250);
+  },
   watch: {
     $route() {
+      this.update();
+    },
+  },
+  methods: {
+    update() {
       const slug = this.$route.params.slug;
       this.$store.dispatch('selectCategoryBySlug', slug);
     },

@@ -21,6 +21,14 @@ export default new Router({
       component: List,
     },
     {
+      path: '/list/search/:value',
+      component: List,
+    },
+    {
+      path: '/list/category/:slug',
+      component: List,
+    },
+    {
       path: '/recipe/:slug',
       component: Recipe,
     },

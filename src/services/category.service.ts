@@ -10,10 +10,9 @@ const STATUS_OK = 200;
 
 export class CategoryService {
   public $http: AxiosStatic;
-  private path: string = 'api/category';
+  private path: string = '/api/category';
 
   constructor() {
-    // set up axios proxy to allow requests
     this.$http = axios;
   }
 

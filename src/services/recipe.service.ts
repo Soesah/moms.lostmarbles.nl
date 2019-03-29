@@ -10,10 +10,9 @@ const STATUS_OK = 200;
 
 export class RecipeService {
   public $http: AxiosStatic;
-  private path: string = 'api/recipe';
+  private path: string = '/api/recipe';
 
   constructor() {
-    // set up axios proxy to allow requests
     this.$http = axios;
   }
 

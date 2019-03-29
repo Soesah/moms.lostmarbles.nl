@@ -102,5 +102,12 @@ func ExportData(w http.ResponseWriter, r *http.Request) {
 // ClearAll is used to export data
 func ClearAll(w http.ResponseWriter, r *http.Request) {
 
-	httpext.SuccessAPI(w, "ok")
+	err := system.ClearAll(r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessAPI(w, "Cleared all")
 }

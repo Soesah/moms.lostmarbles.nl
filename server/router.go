@@ -29,7 +29,7 @@ func Router() *chi.Mux {
 
 		r.Route("/changes", func(r chi.Router) {
 			r.Get("/latest", handlers.GetLatestChanges)
-			r.Get("/{id}/{category_id}", handlers.GetRecipeChanges)
+			r.Get("/{id}", handlers.GetRecipeChanges)
 		})
 
 		r.Route("/category", func(r chi.Router) {

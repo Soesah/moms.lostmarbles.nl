@@ -50,7 +50,12 @@ func IngredientKey(ctx context.Context, name string, RecipeID int64, CategoryID 
 	return datastore.NewKey(ctx, IngredientKind, name, 0, RecipeKey(ctx, RecipeID, CategoryID))
 }
 
-// ChangeLogKey returns a key for ChangeLog -> MomsKey
-func ChangeLogKey(ctx context.Context, ID int64) *datastore.Key {
-	return datastore.NewKey(ctx, ChangeLogKind, "", ID, MomsKey(ctx))
+// RecipeChangeKey returns a key for RecipeChangeKey -> MomsKey
+func RecipeChangeKey(ctx context.Context, ID int64) *datastore.Key {
+	return datastore.NewKey(ctx, RecipeKind, "", ID, MomsKey(ctx))
+}
+
+// ChangeLogKey returns a key for ChangeLog -> RecipeChangeKey -> MomsKey
+func ChangeLogKey(ctx context.Context, ID int64, recipeID int64) *datastore.Key {
+	return datastore.NewKey(ctx, ChangeLogKind, "", ID, RecipeChangeKey(ctx, recipeID))
 }

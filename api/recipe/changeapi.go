@@ -15,9 +15,9 @@ func GetLatestChanges(r *http.Request) ([]models.ChangeLog, error) {
 	ctx := appengine.NewContext(r)
 	var changes []models.ChangeLog
 
-	threeMonthsAgo := time.Now().Add(-24 * 356 * time.Hour)
+	threeMonthsAgo := time.Now().Add(-24 * 30 * 6 * time.Hour)
 
-	q := datastore.NewQuery(api.ChangeLogKind).Order("Date").Filter("Date >", threeMonthsAgo)
+	q := datastore.NewQuery(api.ChangeLogKind).Order("-Date").Filter("Date >", threeMonthsAgo)
 
 	_, err := q.GetAll(ctx, &changes)
 
@@ -29,9 +29,9 @@ func GetLatestChanges(r *http.Request) ([]models.ChangeLog, error) {
 }
 
 // GetRecipeChanges returns the latest changes for a recipe
-func GetRecipeChanges(id int64, categoryID int64, r *http.Request) ([]models.ChangeLog, error) {
+func GetRecipeChanges(id int64, r *http.Request) ([]models.ChangeLog, error) {
 	ctx := appengine.NewContext(r)
-	key := api.RecipeKey(ctx, id, categoryID)
+	key := api.RecipeChangeKey(ctx, id)
 	var changes []models.ChangeLog
 
 	q := datastore.NewQuery(api.ChangeLogKind).Ancestor(key).Order("Date")

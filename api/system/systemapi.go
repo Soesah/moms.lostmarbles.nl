@@ -84,7 +84,7 @@ func ImportChangelog(changelogs []models.ChangeLog, r *http.Request) error {
 	ctx := appengine.NewContext(r)
 
 	for _, changelog := range changelogs {
-		keys = append(keys, api.ChangeLogKey(ctx, changelog.ID))
+		keys = append(keys, api.ChangeLogKey(ctx, changelog.ID, changelog.RecipeID))
 	}
 
 	_, err := datastore.PutMulti(ctx, keys, changelogs)
@@ -119,6 +119,7 @@ func ClearAll(r *http.Request) error {
 	var changes []models.ChangeLog
 	var categories []models.Category
 	var ingredients []models.Ingredient
+	var users []models.User
 
 	q := datastore.NewQuery(api.RecipeKind)
 	keys, err := q.GetAll(ctx, &recipes)
@@ -133,6 +134,9 @@ func ClearAll(r *http.Request) error {
 		return err
 	}
 	err = datastore.DeleteMulti(ctx, keys)
+	if err != nil {
+		return err
+	}
 
 	q = datastore.NewQuery(api.MomsCategoryKind)
 	keys, err = q.GetAll(ctx, &categories)
@@ -140,6 +144,19 @@ func ClearAll(r *http.Request) error {
 		return err
 	}
 	err = datastore.DeleteMulti(ctx, keys)
+	if err != nil {
+		return err
+	}
+
+	q = datastore.NewQuery(api.MomsUserKind)
+	keys, err = q.GetAll(ctx, &users)
+	if err != nil {
+		return err
+	}
+	err = datastore.DeleteMulti(ctx, keys)
+	if err != nil {
+		return err
+	}
 
 	q = datastore.NewQuery(api.IngredientKind)
 	keys, err = q.GetAll(ctx, &ingredients)

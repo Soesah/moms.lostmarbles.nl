@@ -4,6 +4,7 @@ import { CategoryService } from './services/category.service';
 import { RecipeService } from './services/recipe.service';
 import { Recipe } from '@/models/recipe.model';
 import { Category } from './models/category.model';
+import { ChangeLog } from '@/models/changes.model';
 
 const categoryService = new CategoryService();
 const recipeService = new RecipeService();
@@ -14,6 +15,7 @@ export default new Vuex.Store({
   state: {
     user: null,
     categories: [],
+    recipe: null,
     recipes: [],
     category_id: null,
     searchValue: '',
@@ -24,6 +26,9 @@ export default new Vuex.Store({
     },
     setRecipes(state, recipes) {
       state.recipes = recipes;
+    },
+    setRecipe(state, recipe) {
+      state.recipe = recipe;
     },
     selectCategory(state, category) {
       state.category_id = category ? category.id : null;
@@ -42,11 +47,27 @@ export default new Vuex.Store({
       const response = await recipeService.getList();
       commit('setRecipes', response.data);
     },
-    selectCategoryBySlug({ state, commit }, slug) {
+    async selectCategoryBySlug({ state, commit, dispatch }, slug) {
+      await dispatch('getCategories');
       const category = state.categories.find(
         (cat: Category) => cat.slug === slug,
       );
       commit('selectCategory', category);
+    },
+    async getRecipeBySlug({ state, commit, dispatch }, slug) {
+      await dispatch('getRecipes');
+      const found = (state.recipes as Recipe[]).find(
+        (rec: Recipe) => rec.slug === slug,
+      );
+      if (found) {
+        const { id, category_id } = found;
+        const response = await recipeService.get(id, category_id);
+        commit('setRecipe', response.data);
+      }
+    },
+    async getRecipeChangeLog({}, recipe: Recipe): Promise<ChangeLog[]> {
+      const data = await recipeService.getRecipeLatestChanges(recipe);
+      return data.status ? data.data : [];
     },
   },
   getters: {

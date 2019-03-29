@@ -4,7 +4,12 @@ import { ChangeLog } from '@/models/changes.model';
 
 interface RecipeResponse {
   status: boolean;
-  data: Recipe | Recipe[];
+  data: Recipe;
+}
+
+interface RecipeListResponse {
+  status: boolean;
+  data: Recipe[];
 }
 
 interface ChangeLogResponse {
@@ -18,13 +23,33 @@ export class RecipeService {
   public $http: AxiosStatic;
   private path: string = '/api/recipe';
 
+  private recipes: Recipe[] = [];
+
   constructor() {
     this.$http = axios;
   }
 
-  public async getList(): Promise<RecipeResponse> {
+  public async get(id: number, category_id: number): Promise<RecipeResponse> {
+    const response = await this.$http.get(`${this.path}/${id}/${category_id}`);
+    const status = response.status === STATUS_OK;
+    return {
+      status,
+      data: status ? response.data.data : null,
+    };
+  }
+
+  public async getList(): Promise<RecipeListResponse> {
+    if (this.recipes.length) {
+      return {
+        status: true,
+        data: this.recipes,
+      };
+    }
     const response = await this.$http.get(`${this.path}`);
     const status = response.status === STATUS_OK;
+    if (status) {
+      this.recipes = response.data.data;
+    }
     return {
       status,
       data: status ? response.data.data : [],
@@ -43,9 +68,7 @@ export class RecipeService {
   public async getRecipeLatestChanges(
     recipe: Recipe,
   ): Promise<ChangeLogResponse> {
-    const response = await this.$http.get(
-      `/api/changes/${recipe.id}/${recipe.category_id}`,
-    );
+    const response = await this.$http.get(`/api/changes/${recipe.id}`);
     const status = response.status === STATUS_OK;
     return {
       status,

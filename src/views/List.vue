@@ -18,7 +18,7 @@ export default {
     RecipeList,
   },
   created() {
-    window.setTimeout(() => this.update(), 250);
+    this.update();
   },
   watch: {
     $route() {
@@ -26,9 +26,9 @@ export default {
     },
   },
   methods: {
-    update() {
+    async update() {
       const slug = this.$route.params.slug;
-      this.$store.dispatch('selectCategoryBySlug', slug);
+      await this.$store.dispatch('selectCategoryBySlug', slug);
     },
   },
 };

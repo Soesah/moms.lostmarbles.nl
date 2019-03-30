@@ -1,5 +1,6 @@
 <template>
   <section v-if="recipe">
+    <recipe-contents :recipe="recipe"></recipe-contents>
     <recipe-changes :recipe="recipe"></recipe-changes>
   </section>
 </template>

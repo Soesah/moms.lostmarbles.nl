@@ -38,4 +38,41 @@ export class Recipe {
     this.creation_date = data.creation_date;
     this.modification_date = data.modification_date;
   }
+
+  get cook(): string {
+    const node = this.getElementsByXpath('recipe/cook')[0];
+    return node && node.textContent ? node.textContent : '';
+  }
+
+  get doc(): Document {
+    const parser = new DOMParser();
+    return parser.parseFromString(`<recipe>${this.xml}</recipe>`, 'text/xml');
+  }
+
+  private getElementsByXpath(xpath: string): Node[] {
+    const result = this.doc.evaluate(
+      xpath,
+      this.doc,
+      null,
+      XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+      null,
+    );
+    console.log(xpath);
+
+    let item = result.snapshotItem(0);
+    let items: Node[] = [item];
+
+    while (items.length < result.snapshotLength) {
+      item = result.snapshotItem(items.length);
+      items = [...items, item];
+    }
+
+    items = items.filter((node) => node);
+
+    if (items.length === 0) {
+      throw new Error(`Node not found '${xpath}'`);
+    }
+
+    return items;
+  }
 }

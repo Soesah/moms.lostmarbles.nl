@@ -61,7 +61,6 @@
   &:nth-child(2n) {
     background-color: #8a9354;
   }
-
 }
 
 .recipe-body {
@@ -86,7 +85,15 @@
 .note {
   position: relative;
   border-bottom: solid 1px #8c4d35;
-  border-top: solid 1px #de7e58;
+
+  & + .note {
+    border-top: solid 1px #de7e58;
+  }
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0.5em;
+  }
 }
 
 .author {
@@ -105,12 +112,6 @@
   border-top: solid 1px #de7e58;
 }
 
-.only-note,
-.first-note {
-  border-top: none;
-}
-
-.only-note,
-.last-note {
-  border-bottom: none;
+.changes li:first-letter {
+  text-transform: capitalize;
 }

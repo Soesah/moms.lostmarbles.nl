@@ -1,11 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { RecipeService } from './services/recipe.service';
-import { Recipe } from '@/models/recipe.model';
+import { User } from '@/models/user.model';
 import { Category } from './models/category.model';
+import { Recipe } from '@/models/recipe.model';
 import { ChangeLog } from '@/models/changes.model';
 
+const userService = new UserService();
 const categoryService = new CategoryService();
 const recipeService = new RecipeService();
 
@@ -14,6 +17,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: null,
+    users: [],
     categories: [],
     recipe: null,
     recipes: [],
@@ -21,6 +25,9 @@ export default new Vuex.Store({
     searchValue: '',
   },
   mutations: {
+    setUsers(state, users) {
+      state.users = users;
+    },
     setCategories(state, categories) {
       state.categories = categories;
     },
@@ -39,6 +46,10 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async getUsers({ commit }) {
+      const response = await userService.getList();
+      commit('setUsers', response.data);
+    },
     async getCategories({ commit }) {
       const response = await categoryService.getList();
       commit('setCategories', response.data);

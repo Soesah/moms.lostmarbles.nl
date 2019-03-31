@@ -7,12 +7,13 @@
         Een
         <span class="category">{{ category }}</span>
       </span>
-      <span>&nbsp;van {{ cook }}</span>
-      voor {{ recipe.servings }} personen. Toegevoegd op
+      <span v-if="cook" v-text="` van ${cook}`"></span>
+      <span v-if="recipe.servings !== '0'" v-text="` voor ${ recipe.servings } ${ persons }`"></span>. Toegevoegd op
+      <span class="date">{{ recipe.creation_date | longDate }}.</span>
       <span
-        class="date"
-      >{{ recipe.creation_date | longDate }}</span>
-      . De bereidingstijd bedraagt {{ recipe.preparation_time}}.
+        v-if="recipe.preparation_time"
+        v-text="` De bereidingstijd bedraagt ${ recipe.preparation_time}.`"
+      ></span>
     </p>
     <recipe-ingredients :recipe="recipe"></recipe-ingredients>
   </section>
@@ -35,12 +36,15 @@ export default {
         (cat) => cat.id === this.recipe.category_id,
       );
       if (cat) {
-        return cat.name_singular;
+        return cat.name_singular.toLowerCase();
       }
       return '';
     },
     cook() {
       return this.recipe.cook;
+    },
+    persons() {
+      return parseInt(this.recipe.servings, 10) === 1 ? 'persoon' : 'personen';
     },
   },
   components: {

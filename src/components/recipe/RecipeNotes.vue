@@ -1,5 +1,5 @@
 <template>
-  <section class="box box--tertiary">
+  <section class="box box--tertiary" v-if="recipe.notes">
     <h3>Notities</h3>
     <section class="note" v-for="(note, index) in recipe.notes" :key="index">
       <div class="author" v-text="note.author"></div>

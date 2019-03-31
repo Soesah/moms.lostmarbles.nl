@@ -53,7 +53,12 @@ export class Recipe {
   }
 
   get cook(): string {
-    const node = this.getElementsByXpath('recipe/cook')[0];
+    let node = null;
+    try {
+      node = this.getElementsByXpath('recipe/cook')[0];
+    } catch (_) {
+      // it's possible
+    }
     return node && node.textContent ? node.textContent : '';
   }
 

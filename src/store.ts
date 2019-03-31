@@ -85,7 +85,9 @@ export default new Vuex.Store({
               .indexOf(state.searchValue.toLowerCase()) !== -1,
         );
       }
-      return state.recipes;
+      return state.recipes.sort((a: Recipe, b: Recipe) =>
+        a.name > b.name ? 1 : -1,
+      );
     },
   },
 });

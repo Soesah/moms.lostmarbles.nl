@@ -1,14 +1,7 @@
 <template>
   <section class="box recipe">
     <h2 v-text="recipe.name"></h2>
-    <div class="servings">
-      <div class="icon icon-person"></div>
-      {{ recipe.servings }}
-    </div>
-    <div class="preparation-time">
-      <div class="icon icon-clock"></div>
-      {{ recipe.preparation_time}}
-    </div>
+    <recipe-summary :recipe="recipe"></recipe-summary>
     <p class="summary-text">
       <span>
         Een
@@ -25,6 +18,7 @@
   </section>
 </template>
 <script>
+import RecipeSummary from '@/components/recipe/RecipeSummary.vue';
 import RecipeIngredients from '@/components/recipe/RecipeIngredients.vue';
 
 export default {
@@ -50,6 +44,7 @@ export default {
     },
   },
   components: {
+    RecipeSummary,
     RecipeIngredients,
   },
 };

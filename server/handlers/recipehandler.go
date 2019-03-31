@@ -29,8 +29,8 @@ func CreateRecipe(w http.ResponseWriter, r *http.Request) {
 	httpext.SuccessAPI(w, "ok")
 }
 
-func getRecipe(w http.ResponseWriter, r *http.Request) (models.Recipe, error) {
-	var re models.Recipe
+func getRecipe(w http.ResponseWriter, r *http.Request) (models.RecipeJSON, error) {
+	var re models.RecipeJSON
 
 	idParam := chi.URLParam(r, "id")
 	categoryIDParam := chi.URLParam(r, "category_id")

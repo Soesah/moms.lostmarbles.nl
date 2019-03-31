@@ -6,10 +6,21 @@ export interface RecipeData {
   name: string;
   servings: string;
   preparation_time: string;
-  ingredients: any[];
+  ingredients: Ingredient[];
+  notes: Note[];
   xml: string;
   creation_date: string;
   modification_date: string;
+}
+
+export interface Ingredient {
+  amount?: string;
+  name: string;
+  remark?: string;
+}
+export interface Note {
+  author: string;
+  paragraph: string[];
 }
 
 export class Recipe {
@@ -20,7 +31,8 @@ export class Recipe {
   public name: string;
   public servings: string;
   public preparation_time: string;
-  public ingredients: any[];
+  public ingredients: Ingredient[];
+  public notes: Note[];
   public xml: string;
   public creation_date: string;
   public modification_date: string;
@@ -34,6 +46,7 @@ export class Recipe {
     this.servings = data.servings;
     this.preparation_time = data.preparation_time;
     this.ingredients = data.ingredients;
+    this.notes = data.notes;
     this.xml = data.xml;
     this.creation_date = data.creation_date;
     this.modification_date = data.modification_date;
@@ -57,7 +70,6 @@ export class Recipe {
       XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
       null,
     );
-    console.log(xpath);
 
     let item = result.snapshotItem(0);
     let items: Node[] = [item];

@@ -55,6 +55,7 @@ export default new Vuex.Store({
       commit('selectCategory', category);
     },
     async getRecipeBySlug({ state, commit, dispatch }, slug) {
+      await dispatch('getCategories');
       await dispatch('getRecipes');
       const found = (state.recipes as Recipe[]).find(
         (rec: Recipe) => rec.slug === slug,

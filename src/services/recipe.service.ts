@@ -4,7 +4,7 @@ import { ChangeLog } from '@/models/changes.model';
 
 interface RecipeResponse {
   status: boolean;
-  data: Recipe;
+  data: Recipe | null;
 }
 
 interface RecipeListResponse {
@@ -34,7 +34,7 @@ export class RecipeService {
     const status = response.status === STATUS_OK;
     return {
       status,
-      data: status ? response.data.data : null,
+      data: status ? new Recipe(response.data.data) : null,
     };
   }
 

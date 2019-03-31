@@ -2,6 +2,7 @@
   <section v-if="recipe">
     <recipe-contents :recipe="recipe"></recipe-contents>
     <recipe-changes :recipe="recipe"></recipe-changes>
+    <recipe-notes :recipe="recipe"></recipe-notes>
   </section>
 </template>
 <script>

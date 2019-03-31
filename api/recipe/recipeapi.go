@@ -45,18 +45,41 @@ func CreateRecipe() {
 }
 
 // GetRecipe returns a recipe
-func GetRecipe(ID int64, categoryID int64, r *http.Request) (models.Recipe, error) {
+func GetRecipe(ID int64, categoryID int64, r *http.Request) (models.RecipeJSON, error) {
 	var recipe models.Recipe
+	var json models.RecipeJSON
 	ctx := appengine.NewContext(r)
 	key := api.RecipeKey(ctx, ID, categoryID)
 
 	err := datastore.Get(ctx, key, &recipe)
 
 	if err != nil {
-		return recipe, err
+		return json, err
 	}
+	json = models.RecipeJSON{
+		ID:               recipe.ID,
+		CategoryID:       recipe.CategoryID,
+		Language:         recipe.Language,
+		Slug:             recipe.Slug,
+		Name:             recipe.Name,
+		Servings:         recipe.Servings,
+		PreparationTime:  recipe.PreparationTime,
+		XML:              recipe.XML,
+		CreationDate:     recipe.CreationDate,
+		ModificationDate: recipe.ModificationDate,
+	}
+	ingredients, err := json.GetIngredients()
+	if err != nil {
+		return json, err
+	}
+	notes, err := json.GetNotes()
+	if err != nil {
+		return json, err
+	}
+	json.Ingredients = ingredients
+	json.Notes = notes
 
-	return recipe, nil
+	return json, nil
 }
 
 // UpdateIngredients updates ingredients for the recipe

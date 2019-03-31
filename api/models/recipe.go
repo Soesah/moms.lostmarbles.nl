@@ -12,17 +12,16 @@ import (
 
 // Recipe is a recipe
 type Recipe struct {
-	ID               int64        `json:"id"`
-	CategoryID       int64        `json:"category_id"`
-	Language         string       `json:"language"`
-	Slug             string       `json:"slug"`
-	Name             string       `json:"name"`
-	Servings         string       `json:"servings,omitempty"`
-	PreparationTime  string       `json:"preparation_time,omitempty"`
-	Ingredients      []Ingredient `json:"ingredients,omitempty"`
-	XML              string       `json:"xml,omitempty" datastore:",noindex"`
-	CreationDate     time.Time    `json:"creation_date"`
-	ModificationDate time.Time    `json:"modification_date"`
+	ID               int64     `json:"id"`
+	CategoryID       int64     `json:"category_id"`
+	Language         string    `json:"language"`
+	Slug             string    `json:"slug"`
+	Name             string    `json:"name"`
+	Servings         string    `json:"servings"`
+	PreparationTime  string    `json:"preparation_time"`
+	XML              string    `json:"xml" datastore:",noindex"`
+	CreationDate     time.Time `json:"creation_date"`
+	ModificationDate time.Time `json:"modification_date"`
 }
 
 // GetXML returns a string of XML for the recipe
@@ -74,6 +73,19 @@ type Ingredient struct {
 	Amount  string   `json:"amount" xml:"amount"`
 	Name    string   `json:"name" xml:"name"`
 	Remark  string   `json:"remark" xml:"remark"`
+}
+
+// Notes is the list of notes of a recipe
+type Notes struct {
+	XMLName xml.Name `json:"-" xml:"notes"`
+	Notes   []Note   `xml:"note"`
+}
+
+// Note is a note of a recipe
+type Note struct {
+	XMLName   xml.Name `json:"-" xml:"note"`
+	Author    string   `json:"author" xml:"author"`
+	Paragraph []string `json:"paragraph" xml:"paragraph"`
 }
 
 // RecipeItem is used for the recipe list

@@ -28,6 +28,11 @@ export default {
   created() {
     this.update();
   },
+  watch: {
+    $route() {
+      this.update();
+    },
+  },
   methods: {
     async update() {
       this.changes = await this.$store.dispatch(

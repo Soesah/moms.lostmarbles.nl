@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 const (
 	// AdminLevel is for people who can edit recipes and users
 	AdminLevel = 100
@@ -11,10 +13,10 @@ const (
 
 // User is a user
 type User struct {
-	ID            int64  `json:"id"`
-	Name          string `json:"name"`
-	Pass          string `json:"pass"`
-	Email         string `json:"email"`
-	LastLoginDate string `json:"last_login_date,omitempty"`
-	UserLevel     int64  `json:"user_level"`
+	ID            int64     `json:"id"`
+	Name          string    `json:"name"`
+	Pass          string    `json:"-"`
+	Email         string    `json:"email"`
+	LastLoginDate time.Time `json:"last_login_date,omitempty"`
+	UserLevel     int64     `json:"user_level"`
 }

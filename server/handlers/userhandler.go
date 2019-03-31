@@ -3,13 +3,21 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/Soesah/moms.lostmarbles.nl/api/user"
 	"github.com/Soesah/moms.lostmarbles.nl/server/httpext"
 )
 
 // GetUserList returns a list of Users
 func GetUserList(w http.ResponseWriter, r *http.Request) {
 
-	httpext.SuccessAPI(w, "ok")
+	users, err := user.GetUserList(r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", users)
 }
 
 // CreateUser creates a user

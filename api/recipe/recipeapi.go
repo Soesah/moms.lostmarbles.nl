@@ -70,13 +70,13 @@ func GetRecipe(ID int64, categoryID int64, r *http.Request) (models.RecipeJSON, 
 	}
 	ingredients, err := json.GetIngredients()
 	if err != nil {
-		return json, err
-	}
-	notes, err := json.GetNotes()
-	if err != nil {
-		return json, err
+		json.Ingredients = make([]models.Ingredient, 0)
 	}
 	json.Ingredients = ingredients
+	notes, err := json.GetNotes()
+	if err != nil {
+		json.Notes = make([]models.Note, 0)
+	}
 	json.Notes = notes
 
 	return json, nil

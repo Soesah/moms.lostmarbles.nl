@@ -11,7 +11,7 @@
       voor {{ recipe.servings }} personen. Toegevoegd op
       <span
         class="date"
-      >{{ recipe.creation_date }}</span>
+      >{{ recipe.creation_date | longDate }}</span>
       . De bereidingstijd bedraagt {{ recipe.preparation_time}}.
     </p>
     <recipe-ingredients :recipe="recipe"></recipe-ingredients>

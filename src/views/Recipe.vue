@@ -24,6 +24,7 @@ export default {
   watch: {
     $route() {
       this.update();
+      document.body.scrollIntoView = 0;
     },
   },
   methods: {

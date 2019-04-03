@@ -24,7 +24,11 @@ export default {
   watch: {
     $route() {
       this.update();
-      document.body.scrollIntoView = 0;
+    },
+    recipe(recipe) {
+      const siteName = 'Moms Lost Marbles';
+      document.title = recipe ? `${recipe.name} - ${siteName}` : siteName;
+      document.body.scrollIntoView();
     },
   },
   methods: {

@@ -1,8 +1,12 @@
 <template>
-  <main>
-    <search></search>
-    <categories></categories>
-    <recipe-list></recipe-list>
+  <main class="columns">
+    <div class="column secondary">
+      <search></search>
+      <categories></categories>
+    </div>
+    <div class="column main">
+      <recipe-list></recipe-list>
+    </div>
   </main>
 </template>
 <script>

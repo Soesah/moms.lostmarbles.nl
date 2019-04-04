@@ -1,9 +1,13 @@
 <template>
-  <section v-if="recipe">
-    <recipe-contents :recipe="recipe"></recipe-contents>
-    <recipe-changes :recipe="recipe"></recipe-changes>
-    <recipe-notes :recipe="recipe"></recipe-notes>
-    <recipe-category :recipe="recipe"></recipe-category>
+  <section v-if="recipe" class="columns">
+    <div class="column main">
+      <recipe-contents :recipe="recipe"></recipe-contents>
+      <recipe-category :recipe="recipe"></recipe-category>
+    </div>
+    <div class="column aside">
+      <recipe-changes :recipe="recipe"></recipe-changes>
+      <recipe-notes :recipe="recipe"></recipe-notes>
+    </div>
   </section>
 </template>
 <script>

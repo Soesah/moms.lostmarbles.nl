@@ -6,12 +6,10 @@
   border-bottom: solid 1px #b0aa94;
 }
 
-.page-middle {
+.columns {
   max-width: 940px;
-  height: 340px;
-  margin: 0 auto;
-  padding: 2em 0 1em 0;
-  border-top: solid 1px #eee4c3;
+  margin: 0.5em auto;
+  display: flex;
 }
 
 .page-bottom {
@@ -21,32 +19,18 @@
   padding: 1em 0 2em 0;
 }
 
-.column,
-.double-column {
-  float: left;
-  margin-right: 1em;
-}
-
 .column {
-  width: 32%;
+  width: 100%;
+  flex: 1;
+  padding: 0 0.5em;
 }
-.double-column {
-  width: 64%;
+.column:first-child {
+  padding-right: 0.5em;
 }
-
-.first-column {
-  clear: left;
-}
-
-.second-column {
+.column + .column {
+  padding-left: 0.5em;
 }
 
-.last-column {
-  margin-right: 0;
-  clear: right;
-}
-
-.two-columns .double-column,
-.two-columns .first-column {
-  margin-left: 15%;
+.column.main {
+  flex: 2;
 }

@@ -22,7 +22,7 @@ export default new Vuex.Store({
     categories: [],
     recipe: null,
     recipes: [],
-    category_id: null,
+    category_id: -1,
     searchValue: '',
   },
   mutations: {
@@ -39,11 +39,10 @@ export default new Vuex.Store({
       state.recipe = recipe;
     },
     selectCategory(state, category) {
-      state.category_id = category ? category.id : null;
+      state.category_id = category ? category.id : -1;
     },
     setSearch(state, value) {
       state.searchValue = value;
-      state.category_id = null;
     },
   },
   actions: {
@@ -85,17 +84,13 @@ export default new Vuex.Store({
   },
   getters: {
     filteredRecipes: (state): Recipe[] => {
-      if (state.category_id) {
-        return state.recipes.filter(
-          (recipe: Recipe) => recipe.category_id === state.category_id,
-        );
-      } else if (state.searchValue) {
-        const spec = createRecipeSpecification(state.searchValue);
-        return state.recipes.filter(spec);
-      }
-      return state.recipes.sort((a: Recipe, b: Recipe) =>
-        a.name > b.name ? 1 : -1,
+      const spec = createRecipeSpecification(
+        state.searchValue,
+        state.category_id,
       );
+      return state.recipes
+        .filter(spec)
+        .sort((a: Recipe, b: Recipe) => (a.name > b.name ? 1 : -1));
     },
   },
 });

@@ -1,4 +1,4 @@
-import { Specification, all } from './specification';
+import { Specification, all, some } from './specification';
 import { Recipe, Ingredient } from '@/models/recipe.model';
 
 const matchName = (searchValue: string): Specification<Recipe> => {
@@ -34,9 +34,11 @@ export function createRecipeSpecification(
   category_id: number,
 ): Specification<Recipe> {
   return all<Recipe>(
-    matchName(searchValue),
     matchCategory(category_id),
-    // matchIngredientName(searchValue),
-    // matchIngredientRemark(searchValue),
+    some<Recipe>(
+      matchName(searchValue),
+      matchIngredientName(searchValue),
+      matchIngredientRemark(searchValue),
+    ),
   );
 }

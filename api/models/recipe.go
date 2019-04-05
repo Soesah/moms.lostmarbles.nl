@@ -90,9 +90,10 @@ type Note struct {
 
 // RecipeItem is used for the recipe list
 type RecipeItem struct {
-	ID         int64  `json:"id"`
-	CategoryID int64  `json:"category_id"`
-	Slug       string `json:"slug"`
-	Name       string `json:"name"`
-	IsNew      bool   `json:"is_new"`
+	ID          int64        `json:"id"`
+	CategoryID  int64        `json:"category_id"`
+	Slug        string       `json:"slug"`
+	Name        string       `json:"name"`
+	Ingredients []Ingredient `json:"ingredients"`
+	IsNew       bool         `json:"is_new"`
 }

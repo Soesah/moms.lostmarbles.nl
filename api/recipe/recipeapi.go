@@ -16,10 +16,11 @@ import (
 func GetRecipeList(r *http.Request) ([]models.RecipeItem, error) {
 	var recipes []models.Recipe
 	var items []models.RecipeItem
+
 	ctx := appengine.NewContext(r)
 
-	q := datastore.NewQuery(api.RecipeKind)
-	_, err := q.GetAll(ctx, &recipes)
+	qr := datastore.NewQuery(api.RecipeKind)
+	_, err := qr.GetAll(ctx, &recipes)
 	if err != nil {
 		return items, err
 	}
@@ -27,16 +28,36 @@ func GetRecipeList(r *http.Request) ([]models.RecipeItem, error) {
 	threemonths, _ := time.ParseDuration("2160h")
 
 	for _, recipe := range recipes {
+		ingredients, err := getRecipeIngredients(ctx, recipe)
+
+		if err != nil {
+			return items, err
+		}
+
 		items = append(items, models.RecipeItem{
-			ID:         recipe.ID,
-			CategoryID: recipe.CategoryID,
-			Slug:       recipe.Slug,
-			Name:       recipe.Name,
-			IsNew:      recipe.CreationDate.After(time.Now().Add(-threemonths)),
+			ID:          recipe.ID,
+			CategoryID:  recipe.CategoryID,
+			Slug:        recipe.Slug,
+			Name:        recipe.Name,
+			Ingredients: ingredients,
+			IsNew:       recipe.CreationDate.After(time.Now().Add(-threemonths)),
 		})
 	}
 
 	return items, nil
+}
+
+func getRecipeIngredients(ctx context.Context, recipe models.Recipe) ([]models.Ingredient, error) {
+	var ingredients []models.Ingredient
+	recipeKey := api.RecipeKey(ctx, recipe.ID, recipe.CategoryID)
+
+	q := datastore.NewQuery(api.IngredientKind).Ancestor(recipeKey)
+	_, err := q.GetAll(ctx, &ingredients)
+	if err != nil {
+		return ingredients, err
+	}
+
+	return ingredients, nil
 }
 
 // CreateRecipe creates a recipe

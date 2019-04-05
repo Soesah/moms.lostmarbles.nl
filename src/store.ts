@@ -92,5 +92,11 @@ export default new Vuex.Store({
         .filter(spec)
         .sort((a: Recipe, b: Recipe) => (a.name > b.name ? 1 : -1));
     },
+    categoryName: (state): string | null => {
+      const category = state.categories.find(
+        (cat: Category) => cat.id === state.category_id,
+      );
+      return category ? (category as Category).name_plural : null;
+    },
   },
 });

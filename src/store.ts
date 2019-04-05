@@ -7,6 +7,7 @@ import { User } from '@/models/user.model';
 import { Category } from './models/category.model';
 import { Recipe } from '@/models/recipe.model';
 import { ChangeLog } from '@/models/changes.model';
+import { Menu, MenuItem, MenuGroup } from './models/menu.model';
 import { createRecipeSpecification } from './specification/recipe.specification';
 
 const userService = new UserService();
@@ -24,6 +25,13 @@ export default new Vuex.Store({
     recipes: [],
     category_id: -1,
     searchValue: '',
+    menu: new Menu([
+      {
+        label: 'Uitloggen',
+        target: '/logout',
+        group: MenuGroup.User,
+      },
+    ]),
   },
   mutations: {
     setUsers(state, users) {
@@ -43,6 +51,12 @@ export default new Vuex.Store({
     },
     setSearch(state, value) {
       state.searchValue = value;
+    },
+    addMenuItems(state, items: MenuItem[]) {
+      state.menu.addItems(...items);
+    },
+    removeMenuGroup(state, group: MenuGroup) {
+      state.menu.removeGroup(group);
     },
   },
   actions: {

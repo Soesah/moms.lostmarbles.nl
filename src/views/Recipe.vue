@@ -4,7 +4,8 @@
       <recipe-contents :recipe="recipe"></recipe-contents>
       <recipe-category :recipe="recipe"></recipe-category>
     </div>
-    <div class="column aside">
+    <div class="column">
+      <page-menu></page-menu>
       <recipe-changes :recipe="recipe"></recipe-changes>
       <recipe-notes :recipe="recipe"></recipe-notes>
     </div>
@@ -16,6 +17,8 @@ import RecipeChanges from '@/components/recipe/RecipeChanges';
 import RecipeContents from '@/components/recipe/RecipeContents';
 import RecipeNotes from '@/components/recipe/RecipeNotes';
 import RecipeCategory from '@/components/recipe/RecipeCategory';
+import PageMenu from '@/components/common/PageMenu';
+import { MenuGroup } from '../models/menu.model';
 
 export default {
   name: 'Recipe',
@@ -24,6 +27,17 @@ export default {
   },
   created() {
     this.update();
+
+    this.$store.commit('addMenuItems', [
+      {
+        label: 'Terug naar de lijst',
+        target: '/list',
+        group: MenuGroup.Recipe,
+      },
+    ]);
+  },
+  destroyed() {
+    this.$store.commit('removeMenuGroup', MenuGroup.Recipe);
   },
   watch: {
     $route() {
@@ -46,6 +60,7 @@ export default {
     RecipeContents,
     RecipeNotes,
     RecipeCategory,
+    PageMenu,
   },
 };
 </script>

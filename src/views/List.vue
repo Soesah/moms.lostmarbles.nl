@@ -1,11 +1,14 @@
 <template>
   <main class="columns">
-    <div class="column secondary">
+    <div class="column">
       <search></search>
       <categories></categories>
     </div>
-    <div class="column main">
+    <div class="column">
       <recipe-list></recipe-list>
+    </div>
+    <div class="column">
+      <page-menu></page-menu>
     </div>
   </main>
 </template>
@@ -13,6 +16,7 @@
 import Search from '@/components/list/Search.vue';
 import Categories from '@/components/list/Categories.vue';
 import RecipeList from '@/components/list/RecipeList.vue';
+import PageMenu from '@/components/common/PageMenu.vue';
 
 export default {
   name: 'List',
@@ -20,6 +24,7 @@ export default {
     Search,
     Categories,
     RecipeList,
+    PageMenu,
   },
   created() {
     this.update();

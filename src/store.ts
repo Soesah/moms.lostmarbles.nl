@@ -7,6 +7,7 @@ import { User } from '@/models/user.model';
 import { Category } from './models/category.model';
 import { Recipe } from '@/models/recipe.model';
 import { ChangeLog } from '@/models/changes.model';
+import { createRecipeSpecification } from './specification/recipe.specification';
 
 const userService = new UserService();
 const categoryService = new CategoryService();
@@ -89,12 +90,8 @@ export default new Vuex.Store({
           (recipe: Recipe) => recipe.category_id === state.category_id,
         );
       } else if (state.searchValue) {
-        return state.recipes.filter(
-          (recipe: Recipe) =>
-            recipe.name
-              .toLowerCase()
-              .indexOf(state.searchValue.toLowerCase()) !== -1,
-        );
+        const spec = createRecipeSpecification(state.searchValue);
+        return state.recipes.filter(spec);
       }
       return state.recipes.sort((a: Recipe, b: Recipe) =>
         a.name > b.name ? 1 : -1,

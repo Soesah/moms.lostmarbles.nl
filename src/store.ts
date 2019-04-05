@@ -28,7 +28,7 @@ export default new Vuex.Store({
     menu: new Menu([
       {
         label: 'Uitloggen',
-        target: '/logout',
+        target: '/user/logout',
         group: MenuGroup.User,
       },
     ]),

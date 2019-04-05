@@ -1,5 +1,6 @@
 export enum MenuGroup {
   User,
+  List,
   Recipe,
 }
 
@@ -29,7 +30,7 @@ export class Menu {
   }
 
   public addItems(...items: MenuItem[]) {
-    this.items = [...this.items, ...items];
+    this.items = [...items, ...this.items];
   }
 
   public removeGroup(group: MenuGroup) {

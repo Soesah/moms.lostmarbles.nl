@@ -69,7 +69,7 @@ export class Editor extends EventEmitter {
   }
 
   private async enrichStylesheet(xsl: Document): Promise<Document> {
-    const exsl = await this.http.getDocument('./editor-xsl-transform.xsl');
+    const exsl = await this.http.getDocument('/editor-xsl-transform.xsl');
     const p = new XSLTProcessor();
     p.importStylesheet(exsl);
     return p.transformToDocument(xsl);

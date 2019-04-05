@@ -29,6 +29,10 @@ export default new Router({
       component: List,
     },
     {
+      path: 'recipe/new/edit',
+      component: EditRecipe,
+    },
+    {
       path: '/recipe/:slug',
       component: Recipe,
     },

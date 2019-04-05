@@ -17,6 +17,7 @@ import Search from '@/components/list/Search.vue';
 import Categories from '@/components/list/Categories.vue';
 import RecipeList from '@/components/list/RecipeList.vue';
 import PageMenu from '@/components/common/PageMenu.vue';
+import { MenuGroup } from '../models/menu.model';
 
 export default {
   name: 'List',
@@ -28,6 +29,17 @@ export default {
   },
   created() {
     this.update();
+
+    this.$store.commit('addMenuItems', [
+      {
+        label: 'Nieuw recept toevoegen',
+        target: '/recipe/new/edit',
+        group: MenuGroup.List,
+      },
+    ]);
+  },
+  destroyed() {
+    this.$store.commit('removeMenuGroup', MenuGroup.List);
   },
   watch: {
     $route() {

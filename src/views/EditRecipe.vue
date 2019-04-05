@@ -1,6 +1,6 @@
 <template>
   <section>
-    <jigsaw xml="api/editor/xml/recipe.xml" schema="./recipe.xsd" stylesheet="./recipe.xsl"></jigsaw>
+    <jigsaw xml="/api/editor/xml/recipe.xml" schema="/recipe.xsd" stylesheet="/recipe.xsl"></jigsaw>
   </section>
 </template>
 <script>

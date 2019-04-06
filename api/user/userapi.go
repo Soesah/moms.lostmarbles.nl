@@ -25,8 +25,17 @@ func GetUserList(r *http.Request) ([]models.User, error) {
 }
 
 // CreateUser creates a user
-func CreateUser() {
+func CreateUser(user models.User, r *http.Request) (models.User, error) {
+	ctx := appengine.NewContext(r)
+	key := api.UserKey(ctx, user.ID)
 
+	_, err := datastore.Put(ctx, key, &user)
+
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
 }
 
 // GetUser returns a user
@@ -35,8 +44,17 @@ func GetUser() {
 }
 
 // UpdateUser updates a user
-func UpdateUser() {
+func UpdateUser(user models.User, r *http.Request) (models.User, error) {
+	ctx := appengine.NewContext(r)
+	key := api.UserKey(ctx, user.ID)
 
+	_, err := datastore.Put(ctx, key, &user)
+
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
 }
 
 // DeleteUser deletes a user

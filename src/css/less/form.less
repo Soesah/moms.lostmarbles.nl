@@ -28,7 +28,8 @@ input,
 button,
 select,
 textarea {
-  width: 170px;
+  box-sizing: border-box;
+  width: 174px;
   margin: 0;
   font-family: Carme, sans-serif;
   font-size: 1em;
@@ -38,13 +39,18 @@ textarea {
   border: solid 2px black;
 }
 
+select {
+  height: 33.5px;
+  width: 174px;
+}
+
 button {
   color: White;
   font-weight: bold;
   background-color: #8c330f;
   cursor: pointer;
   cursor: hand;
-  width: 178px;
+  width: 174px;
 }
 
 button:hover {

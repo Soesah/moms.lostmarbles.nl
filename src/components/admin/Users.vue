@@ -3,6 +3,11 @@
     <h2>Gebruikers</h2>
 
     <ul class="items">
+      <li class="item header">
+        <div>Naam</div>
+        <div>Laatste inlog datum</div>
+        <div>Type</div>
+      </li>
       <li v-for="user in users" :key="user.id" class="item">
         <a class="user" @click.prevent="choose(user)">
           <div>{{ user.name }}</div>
@@ -40,6 +45,15 @@ export default {
 };
 </script>
 <style lang="less">
+.header {
+  display: flex;
+  font-size: 1.1em;
+
+  div {
+    width: 100%;
+  }
+}
+
 .user {
   border: none;
   display: flex;

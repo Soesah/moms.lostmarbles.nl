@@ -20,7 +20,7 @@ export default new Vuex.Store({
   state: {
     user: null,
     edit_user: null,
-    users: [],
+    users: [] as User[],
     categories: [],
     recipe: null,
     recipes: [],
@@ -35,8 +35,12 @@ export default new Vuex.Store({
     ]),
   },
   mutations: {
-    setUsers(state, users) {
+    setUsers(state, users: User[]) {
       state.users = users;
+    },
+    updateUser(state, user: User) {
+      const index = state.users.findIndex((u: User) => u.id === user.id);
+      state.users.splice(index, 1, user);
     },
     setEditUser(state, user) {
       state.edit_user = user;
@@ -67,6 +71,13 @@ export default new Vuex.Store({
     async getUsers({ commit }) {
       const response = await userService.getList();
       commit('setUsers', response.data);
+    },
+    async saveUser({ commit }, user) {
+      const response = await userService.update(user);
+      if (response.status) {
+        commit('updateUser', response.data);
+      }
+      commit('setEditUser', null);
     },
     async getCategories({ commit }) {
       const response = await categoryService.getList();

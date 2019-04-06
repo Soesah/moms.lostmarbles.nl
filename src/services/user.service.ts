@@ -1,6 +1,11 @@
 import axios, { AxiosStatic } from 'axios';
 import { User, UserData } from '@/models/user.model';
 
+interface UserResponse {
+  status: boolean;
+  data: User | null;
+}
+
 interface UserListResponse {
   status: boolean;
   data: User[];
@@ -16,6 +21,25 @@ export class UserService {
 
   constructor() {
     this.$http = axios;
+  }
+
+  public async create(user: User): Promise<UserResponse> {
+    user.id = this.getNewId();
+    const response = await this.$http.post(`${this.path}`, user);
+    const status = response.status === STATUS_OK;
+    return {
+      status,
+      data: status ? new User(response.data.data) : null,
+    };
+  }
+
+  public async update(user: User): Promise<UserResponse> {
+    const response = await this.$http.put(`${this.path}/${user.id}`, user);
+    const status = response.status === STATUS_OK;
+    return {
+      status,
+      data: status ? new User(response.data.data) : null,
+    };
   }
 
   public async getList(): Promise<UserListResponse> {
@@ -34,5 +58,12 @@ export class UserService {
       status,
       data: status ? response.data.data.map((u: UserData) => new User(u)) : [],
     };
+  }
+
+  private getNewId(): number {
+    return this.users.reduce(
+      (id: number, u: User) => (id > u.id ? id : u.id + 1),
+      -1,
+    );
   }
 }

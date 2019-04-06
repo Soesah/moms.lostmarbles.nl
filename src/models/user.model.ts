@@ -26,4 +26,8 @@ export class User {
     this.last_login_date = data.last_login_date;
     this.user_level = data.user_level;
   }
+
+  public clone() {
+    return new User(Object.assign({}, this));
+  }
 }

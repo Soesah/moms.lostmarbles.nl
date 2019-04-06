@@ -1,15 +1,15 @@
 <template>
-  <section v-if="recipe" class="columns">
-    <div class="column main">
+  <main v-if="recipe" class="columns">
+    <section class="column main">
       <recipe-contents :recipe="recipe"></recipe-contents>
       <recipe-category :recipe="recipe"></recipe-category>
-    </div>
-    <div class="column">
+    </section>
+    <section class="column">
       <page-menu></page-menu>
       <recipe-changes :recipe="recipe"></recipe-changes>
       <recipe-notes :recipe="recipe"></recipe-notes>
-    </div>
-  </section>
+    </section>
+  </main>
 </template>
 <script>
 import { mapState } from 'vuex';

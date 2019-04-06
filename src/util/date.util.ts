@@ -31,3 +31,11 @@ export const longDate = (date: Date): string => {
 
   return `${DAYS[dayOfTheWeek]} ${day} ${MONTHS[month]} ${year}`;
 };
+
+export const simpleDate = (date: Date): string => {
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  return `${day} ${MONTHS[month]} ${year}`;
+};

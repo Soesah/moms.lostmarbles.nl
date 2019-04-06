@@ -2,6 +2,7 @@ export enum MenuGroup {
   User,
   List,
   Recipe,
+  Admin,
 }
 
 export interface MenuItemData {

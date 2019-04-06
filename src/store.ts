@@ -19,6 +19,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: null,
+    edit_user: null,
     users: [],
     categories: [],
     recipe: null,
@@ -36,6 +37,9 @@ export default new Vuex.Store({
   mutations: {
     setUsers(state, users) {
       state.users = users;
+    },
+    setEditUser(state, user) {
+      state.edit_user = user;
     },
     setCategories(state, categories) {
       state.categories = categories;

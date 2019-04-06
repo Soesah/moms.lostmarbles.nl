@@ -1,15 +1,15 @@
 <template>
   <main class="columns">
-    <div class="column">
+    <section class="column">
       <search></search>
       <categories></categories>
-    </div>
-    <div class="column">
+    </section>
+    <section class="column">
       <recipe-list></recipe-list>
-    </div>
-    <div class="column">
+    </section>
+    <section class="column">
       <page-menu></page-menu>
-    </div>
+    </section>
   </main>
 </template>
 <script>
@@ -34,6 +34,11 @@ export default {
       {
         label: 'Nieuw recept toevoegen',
         target: '/recipe/new/edit',
+        group: MenuGroup.List,
+      },
+      {
+        label: 'Gebruikers beheren',
+        target: '/admin/',
         group: MenuGroup.List,
       },
     ]);

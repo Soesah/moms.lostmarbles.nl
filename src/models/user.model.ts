@@ -1,3 +1,9 @@
+export enum UserLevel {
+  Guest = 0,
+  User = 50,
+  Admin = 100,
+}
+
 export interface UserData {
   id: number;
   name: string;
@@ -11,7 +17,7 @@ export class User {
   public name: string;
   public email: string;
   public last_login_date: string;
-  public user_level: number;
+  public user_level: UserLevel;
 
   constructor(data: UserData) {
     this.id = data.id;

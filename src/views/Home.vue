@@ -1,15 +1,15 @@
 <template>
-  <section class="columns">
-    <div class="column">
+  <main class="columns">
+    <section class="column">
       <login></login>
-    </div>
-    <div class="column">
+    </section>
+    <section class="column">
       <new-recipes></new-recipes>
-    </div>
-    <div class="column">
+    </section>
+    <section class="column">
       <latest-change></latest-change>
-    </div>
-  </section>
+    </section>
+  </main>
 </template>
 <script>
 import Login from '@/components/user/Login';

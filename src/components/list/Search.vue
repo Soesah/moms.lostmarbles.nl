@@ -2,7 +2,7 @@
   <section class="box box--tertiary">
     <form @submit.prevent="update">
       <h2>Zoeken</h2>
-      <p>U kunt zoeken naar een recept. Type hieronder een waarde.</p>
+      <p>Zoek hier op de naam, een ingrediënt of iets dergelijks</p>
       <div class="form-item">
         <label for="focus">Zoekwaarde</label>
         <input
@@ -10,7 +10,7 @@
           name="search"
           v-model="searchValue"
           @input="update"
-          placeholder="(zoekwaarde)"
+          placeholder="(ei, boerenkool, kip)"
         >
       </div>
     </form>

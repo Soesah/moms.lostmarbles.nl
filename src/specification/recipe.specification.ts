@@ -29,10 +29,10 @@ const matchIngredientRemark = (searchValue: string): Specification<Recipe> => {
     );
 };
 
-export function createRecipeSpecification(
+export const createRecipeSpecification = (
   searchValue: string,
   category_id: number,
-): Specification<Recipe> {
+): Specification<Recipe> => {
   return all<Recipe>(
     matchCategory(category_id),
     some<Recipe>(
@@ -41,4 +41,4 @@ export function createRecipeSpecification(
       matchIngredientRemark(searchValue),
     ),
   );
-}
+};

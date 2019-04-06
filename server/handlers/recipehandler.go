@@ -46,6 +46,18 @@ func getRecipe(w http.ResponseWriter, r *http.Request) (models.RecipeJSON, error
 	return re, nil
 }
 
+// GetNewRecipes returns the last two created recipes
+func GetNewRecipes(w http.ResponseWriter, r *http.Request) {
+	recipes, err := recipe.GetNewRecipes(r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", recipes)
+}
+
 // GetRecipe returns a recipe
 func GetRecipe(w http.ResponseWriter, r *http.Request) {
 

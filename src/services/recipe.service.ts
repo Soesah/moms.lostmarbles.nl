@@ -1,5 +1,5 @@
 import axios, { AxiosStatic } from 'axios';
-import { Recipe } from '@/models/recipe.model';
+import { Recipe, RecipeData } from '@/models/recipe.model';
 import { ChangeLog } from '@/models/changes.model';
 
 interface RecipeResponse {
@@ -10,6 +10,11 @@ interface RecipeResponse {
 interface RecipeListResponse {
   status: boolean;
   data: Recipe[];
+}
+
+interface ChangeResponse {
+  status: boolean;
+  data: ChangeLog | null;
 }
 
 interface ChangeLogResponse {
@@ -52,16 +57,29 @@ export class RecipeService {
     }
     return {
       status,
-      data: status ? response.data.data : [],
+      data: status
+        ? response.data.data.map((d: RecipeData) => new Recipe(d))
+        : [],
     };
   }
 
-  public async getLatestChanges(): Promise<ChangeLogResponse> {
+  public async getNewRecipes(): Promise<RecipeListResponse> {
+    const response = await this.$http.get(`${this.path}/new`);
+    const status = response.status === STATUS_OK;
+    return {
+      status,
+      data: status
+        ? response.data.data.map((d: RecipeData) => new Recipe(d))
+        : [],
+    };
+  }
+
+  public async getLatestChange(): Promise<ChangeResponse> {
     const response = await this.$http.get(`/api/changes/latest`);
     const status = response.status === STATUS_OK;
     return {
       status,
-      data: status ? response.data.data : [],
+      data: status ? new ChangeLog(response.data.data) : null,
     };
   }
 

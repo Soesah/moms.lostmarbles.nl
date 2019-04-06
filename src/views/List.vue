@@ -13,10 +13,10 @@
   </main>
 </template>
 <script>
-import Search from '@/components/list/Search.vue';
-import Categories from '@/components/list/Categories.vue';
-import RecipeList from '@/components/list/RecipeList.vue';
-import PageMenu from '@/components/common/PageMenu.vue';
+import Search from '@/components/list/Search';
+import Categories from '@/components/list/Categories';
+import RecipeList from '@/components/list/RecipeList';
+import PageMenu from '@/components/common/PageMenu';
 import { MenuGroup } from '../models/menu.model';
 
 export default {

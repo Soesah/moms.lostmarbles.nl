@@ -72,6 +72,10 @@ export default new Vuex.Store({
       const response = await recipeService.getList();
       commit('setRecipes', response.data);
     },
+    async getNewRecipes() {
+      const response = await recipeService.getNewRecipes();
+      return response.status ? response.data : [];
+    },
     async selectCategoryBySlug({ state, commit, dispatch }, slug) {
       await dispatch('getCategories');
       const category = state.categories.find(
@@ -91,6 +95,10 @@ export default new Vuex.Store({
         commit('setRecipe', response.data);
       }
     },
+    async getLatestChange(): Promise<ChangeLog | null> {
+      const data = await recipeService.getLatestChange();
+      return data.status ? data.data : null;
+    },
     async getRecipeChangeLog({}, recipe: Recipe): Promise<ChangeLog[]> {
       const data = await recipeService.getRecipeLatestChanges(recipe);
       return data.status ? data.data : [];
@@ -106,11 +114,18 @@ export default new Vuex.Store({
         .filter(spec)
         .sort((a: Recipe, b: Recipe) => (a.name > b.name ? 1 : -1));
     },
-    categoryName: (state): string | null => {
+    categoryName: (state) => (
+      category_id: number = state.category_id,
+      plural: boolean = true,
+    ) => {
       const category = state.categories.find(
-        (cat: Category) => cat.id === state.category_id,
+        (cat: Category) => cat.id === category_id,
       );
-      return category ? (category as Category).name_plural : null;
+      return category
+        ? plural
+          ? (category as Category).name_plural
+          : (category as Category).name_singular
+        : null;
     },
   },
 });

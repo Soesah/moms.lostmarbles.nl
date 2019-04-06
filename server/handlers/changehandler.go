@@ -9,10 +9,10 @@ import (
 	"github.com/go-chi/chi"
 )
 
-// GetLatestChanges returns the latest changes
-func GetLatestChanges(w http.ResponseWriter, r *http.Request) {
+// GetLatestChange returns the last change
+func GetLatestChange(w http.ResponseWriter, r *http.Request) {
 
-	changes, err := recipe.GetLatestChanges(r)
+	changes, err := recipe.GetLatestChange(r)
 
 	if err != nil {
 		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)

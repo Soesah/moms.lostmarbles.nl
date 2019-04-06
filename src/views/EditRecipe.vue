@@ -4,7 +4,7 @@
   </section>
 </template>
 <script>
-import Jigsaw from '@/editor/Jigsaw.vue';
+import Jigsaw from '@/editor/Jigsaw';
 
 export default {
   name: 'EditRecipe',

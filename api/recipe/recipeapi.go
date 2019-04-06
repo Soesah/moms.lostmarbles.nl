@@ -60,6 +60,22 @@ func getRecipeIngredients(ctx context.Context, recipe models.Recipe) ([]models.I
 	return ingredients, nil
 }
 
+// GetNewRecipes returns the latest two recipe
+func GetNewRecipes(r *http.Request) ([]models.Recipe, error) {
+	ctx := appengine.NewContext(r)
+	var recipes []models.Recipe
+
+	q := datastore.NewQuery(api.RecipeKind).Order("-CreationDate")
+
+	_, err := q.GetAll(ctx, &recipes)
+
+	if err != nil {
+		return recipes, err
+	}
+
+	return recipes[0:2], nil
+}
+
 // CreateRecipe creates a recipe
 func CreateRecipe() {
 

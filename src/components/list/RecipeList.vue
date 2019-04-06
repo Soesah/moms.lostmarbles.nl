@@ -1,6 +1,6 @@
 <template>
   <section class="box">
-    <h2>{{ categoryName || 'Recepten'}}</h2>
+    <h2>{{ categoryName() || 'Recepten'}}</h2>
     <ol>
       <li v-for="recipe in filteredRecipes" :key="recipe.id">
         <router-link :to="`/recipe/${recipe.slug}`" v-text="recipe.name"></router-link>

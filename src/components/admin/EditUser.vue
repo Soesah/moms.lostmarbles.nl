@@ -2,25 +2,11 @@
   <section class="box box--tertiary" v-if="user">
     <a @click.prevent="close()" class="box__close">𝖷</a>
     <form @submit.prevent="submit">
-      <h2>Edit User</h2>
+      <h2>Gebruiker wijzigen</h2>
       <p class="description">Wijzig de details van de gebruiker</p>
-      <div class="form-item">
-        <label for="focus">Naam</label>
-        <input type="text" placeholder="(naam)" v-model="user.name">
-      </div>
-      <div class="form-item">
-        <label for="focus">Email</label>
-        <input type="text" placeholder="(email)" v-model="user.email">
-      </div>
-      <div class="form-item">
-        <label for="focus">Type</label>
-        <select v-model="user.user_level">
-          <option value="0">Gast Gebruiker</option>
-          <option value="50">Gebruiker</option>
-          <option value="100">Administrator</option>
-        </select>
-      </div>
+      <user-fields :user="user"></user-fields>
       <div class="form-buttons">
+        <label></label>
         <button type="submit">Wijzigen</button>
       </div>
     </form>
@@ -36,6 +22,7 @@
 </template>
 <script>
 import { mapState } from 'vuex';
+import UserFields from '@/components/admin/UserFields';
 
 export default {
   name: 'EditUser',
@@ -47,18 +34,27 @@ export default {
   computed: {
     ...mapState(['edit_user']),
   },
+  created() {
+    this.update();
+  },
   watch: {
-    edit_user(value) {
-      this.user = value.clone();
+    edit_user() {
+      this.update();
     },
   },
   methods: {
+    update() {
+      this.user = this.edit_user.clone();
+    },
     close(user) {
       this.$store.commit('setEditUser', null);
     },
     submit() {
       this.$store.dispatch('saveUser', this.user);
     },
+  },
+  components: {
+    UserFields,
   },
 };
 </script>

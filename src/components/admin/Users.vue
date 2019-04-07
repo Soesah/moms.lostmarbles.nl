@@ -39,6 +39,9 @@ export default {
       }
     },
     choose(user) {
+      if (this.$route.params.action) {
+        this.$router.push('/admin');
+      }
       this.$store.commit('setEditUser', user);
     },
   },

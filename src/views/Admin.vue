@@ -15,8 +15,9 @@ import Users from '@/components/admin/Users';
 import AddUser from '@/components/admin/AddUser';
 import EditUser from '@/components/admin/EditUser';
 import PageMenu from '@/components/common/PageMenu';
-import { MenuGroup } from '../models/menu.model';
+import { MenuGroup } from '@/models/menu.model';
 import { mapState } from 'vuex';
+import { User } from '@/models/user.model';
 
 export default {
   name: 'Admin',
@@ -37,10 +38,26 @@ export default {
       },
     ]);
     this.$store.dispatch('getUsers');
+    this.verifyAddUser();
+  },
+  watch: {
+    $route() {
+      this.verifyAddUser();
+    },
   },
   destroyed() {
     this.$store.commit('removeMenuGroup', MenuGroup.Admin);
     this.$store.commit('removeMenuGroup', MenuGroup.Recipe);
+  },
+  methods: {
+    verifyAddUser() {
+      if (this.$route.params.action === 'add-user') {
+        const newUser = new User({
+          id: -1,
+        });
+        this.$store.commit('setEditUser', newUser);
+      }
+    },
   },
   components: {
     Users,

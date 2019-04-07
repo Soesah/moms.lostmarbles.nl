@@ -44,5 +44,9 @@ export default new Router({
       path: '/admin',
       component: Admin,
     },
+    {
+      path: '/admin/:action',
+      component: Admin,
+    },
   ],
 });

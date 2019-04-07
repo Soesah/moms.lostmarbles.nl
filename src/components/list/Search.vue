@@ -4,7 +4,7 @@
       <h2>Zoeken</h2>
       <p>Zoek hier op de naam, een ingrediënt of iets dergelijks</p>
       <div class="form-item">
-        <label for="focus">Zoekwaarde</label>
+        <label for="focus">Zoeken</label>
         <input
           type="text"
           name="search"

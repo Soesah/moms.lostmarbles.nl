@@ -110,6 +110,16 @@ func GetRecipe(ID int64, categoryID int64, r *http.Request) (models.RecipeJSON, 
 		json.Ingredients = make([]models.Ingredient, 0)
 	}
 	json.Ingredients = ingredients
+	cook, err := json.GetCook()
+	if err != nil {
+		json.Cook = ""
+	}
+	json.Cook = cook
+	steps, err := json.GetSteps()
+	if err != nil {
+		json.Steps = make([]models.Step, 0)
+	}
+	json.Steps = steps
 	notes, err := json.GetNotes()
 	if err != nil {
 		json.Notes = make([]models.Note, 0)

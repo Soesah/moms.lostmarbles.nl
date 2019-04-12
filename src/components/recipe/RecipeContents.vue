@@ -16,11 +16,13 @@
       ></span>
     </p>
     <recipe-ingredients :recipe="recipe"></recipe-ingredients>
+    <recipe-steps :recipe="recipe"></recipe-steps>
   </section>
 </template>
 <script>
 import RecipeSummary from '@/components/recipe/RecipeSummary.vue';
 import RecipeIngredients from '@/components/recipe/RecipeIngredients.vue';
+import RecipeSteps from '@/components/recipe/RecipeSteps.vue';
 
 export default {
   name: 'RecipeContents',
@@ -50,6 +52,7 @@ export default {
   components: {
     RecipeSummary,
     RecipeIngredients,
+    RecipeSteps,
   },
 };
 </script>

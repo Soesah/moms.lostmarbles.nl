@@ -61,6 +61,12 @@ func (recipe Recipe) GetIngredients() ([]Ingredient, error) {
 	return ingredients.Ingredients, nil
 }
 
+// Cook is the cook of a recipe
+type Cook struct {
+	XMLName xml.Name `json:"-" xml:"cook"`
+	Value   string   `xml:",chardata"`
+}
+
 // Ingredients is a list of ingredients
 type Ingredients struct {
 	XMLName     xml.Name     `xml:"ingredients"`
@@ -73,6 +79,18 @@ type Ingredient struct {
 	Amount  string   `json:"amount" xml:"amount"`
 	Name    string   `json:"name" xml:"name"`
 	Remark  string   `json:"remark" xml:"remark"`
+}
+
+// Preparation is a list of ingredients
+type Preparation struct {
+	XMLName xml.Name `xml:"preparation"`
+	Steps   []Step   `xml:"step"`
+}
+
+// Step is as preparation step of a recipe
+type Step struct {
+	XMLName  xml.Name `json:"-" xml:"step"`
+	Contents string   `xml:",innerxml" json:"contents"`
 }
 
 // Notes is the list of notes of a recipe

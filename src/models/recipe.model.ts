@@ -4,11 +4,12 @@ export interface RecipeData {
   language: string;
   slug: string;
   name: string;
+  cook: string;
   servings: string;
   preparation_time: string;
   ingredients: Ingredient[];
+  steps: Step[];
   notes: Note[];
-  xml: string;
   creation_date: string;
   modification_date: string;
 }
@@ -17,6 +18,9 @@ export interface Ingredient {
   amount?: string;
   name: string;
   remark?: string;
+}
+export interface Step {
+  step: string;
 }
 export interface Note {
   author: string;
@@ -29,11 +33,12 @@ export class Recipe {
   public language: string;
   public slug: string;
   public name: string;
+  public cook: string;
   public servings: string;
   public preparation_time: string;
   public ingredients: Ingredient[];
+  public steps: Step[];
   public notes: Note[];
-  public xml: string;
   public creation_date: string;
   public modification_date: string;
 
@@ -43,53 +48,13 @@ export class Recipe {
     this.language = data.language;
     this.slug = data.slug;
     this.name = data.name;
+    this.cook = data.cook;
     this.servings = data.servings;
     this.preparation_time = data.preparation_time;
     this.ingredients = data.ingredients;
+    this.steps = data.steps;
     this.notes = data.notes;
-    this.xml = data.xml;
     this.creation_date = data.creation_date;
     this.modification_date = data.modification_date;
-  }
-
-  get cook(): string {
-    let node = null;
-    try {
-      node = this.getElementsByXpath('recipe/cook')[0];
-    } catch (_) {
-      // it's possible
-    }
-    return node && node.textContent ? node.textContent : '';
-  }
-
-  get doc(): Document {
-    const parser = new DOMParser();
-    return parser.parseFromString(`<recipe>${this.xml}</recipe>`, 'text/xml');
-  }
-
-  private getElementsByXpath(xpath: string): Node[] {
-    const result = this.doc.evaluate(
-      xpath,
-      this.doc,
-      null,
-      XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
-      null,
-    );
-
-    let item = result.snapshotItem(0);
-    let items: Node[] = [item];
-
-    while (items.length < result.snapshotLength) {
-      item = result.snapshotItem(items.length);
-      items = [...items, item];
-    }
-
-    items = items.filter((node) => node);
-
-    if (items.length === 0) {
-      throw new Error(`Node not found '${xpath}'`);
-    }
-
-    return items;
   }
 }

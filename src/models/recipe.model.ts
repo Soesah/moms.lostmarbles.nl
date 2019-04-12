@@ -20,7 +20,7 @@ export interface Ingredient {
   remark?: string;
 }
 export interface Step {
-  step: string;
+  contents: string;
 }
 export interface Note {
   author: string;
@@ -52,7 +52,7 @@ export class Recipe {
     this.servings = data.servings;
     this.preparation_time = data.preparation_time;
     this.ingredients = data.ingredients;
-    this.steps = data.steps;
+    this.steps = data.steps || [];
     this.notes = data.notes;
     this.creation_date = data.creation_date;
     this.modification_date = data.modification_date;

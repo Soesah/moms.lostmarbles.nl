@@ -34,12 +34,23 @@ func GetRecipeList(r *http.Request) ([]models.RecipeItem, error) {
 			return items, err
 		}
 
+		recipeJSON := models.RecipeJSON{
+			XML: recipe.XML,
+		}
+
+		steps, err := recipeJSON.GetSteps()
+
+		if err != nil {
+			return items, err
+		}
+
 		items = append(items, models.RecipeItem{
 			ID:          recipe.ID,
 			CategoryID:  recipe.CategoryID,
 			Slug:        recipe.Slug,
 			Name:        recipe.Name,
 			Ingredients: ingredients,
+			Steps:       steps,
 			IsNew:       recipe.CreationDate.After(time.Now().Add(-threemonths)),
 		})
 	}

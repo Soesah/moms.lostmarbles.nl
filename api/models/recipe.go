@@ -113,5 +113,6 @@ type RecipeItem struct {
 	Slug        string       `json:"slug"`
 	Name        string       `json:"name"`
 	Ingredients []Ingredient `json:"ingredients"`
+	Steps       []Step       `json:"steps"`
 	IsNew       bool         `json:"is_new"`
 }

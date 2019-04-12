@@ -1,5 +1,6 @@
 import { Specification, all, some } from './specification';
 import { Recipe, Ingredient } from '@/models/recipe.model';
+import { Step } from '../models/recipe.model';
 
 const matchName = (searchValue: string): Specification<Recipe> => {
   return (input: Recipe): boolean =>
@@ -29,6 +30,15 @@ const matchIngredientRemark = (searchValue: string): Specification<Recipe> => {
     );
 };
 
+const matchSteps = (searchValue: string): Specification<Recipe> => {
+  return (input: Recipe): boolean =>
+    input.steps.some((step: Step) =>
+      step.contents
+        ? step.contents.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1
+        : false,
+    );
+};
+
 export const createRecipeSpecification = (
   searchValue: string,
   category_id: number,
@@ -39,6 +49,7 @@ export const createRecipeSpecification = (
       matchName(searchValue),
       matchIngredientName(searchValue),
       matchIngredientRemark(searchValue),
+      matchSteps(searchValue),
     ),
   );
 };

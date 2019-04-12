@@ -24,6 +24,9 @@ export default {
       searchValue: '',
     };
   },
+  created() {
+    this.searchValue = this.$store.state.searchValue;
+  },
   methods: {
     update() {
       this.$store.commit('setSearch', this.searchValue);

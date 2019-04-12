@@ -49,6 +49,7 @@ func GetRecipeList(r *http.Request) ([]models.RecipeItem, error) {
 			CategoryID:  recipe.CategoryID,
 			Slug:        recipe.Slug,
 			Name:        recipe.Name,
+			Cook:        recipeJSON.GetCook(),
 			Ingredients: ingredients,
 			Steps:       steps,
 			IsNew:       recipe.CreationDate.After(time.Now().Add(-threemonths)),
@@ -121,11 +122,7 @@ func GetRecipe(ID int64, categoryID int64, r *http.Request) (models.RecipeJSON, 
 		json.Ingredients = make([]models.Ingredient, 0)
 	}
 	json.Ingredients = ingredients
-	cook, err := json.GetCook()
-	if err != nil {
-		json.Cook = ""
-	}
-	json.Cook = cook
+	json.Cook = json.GetCook()
 	steps, err := json.GetSteps()
 	if err != nil {
 		json.Steps = make([]models.Step, 0)

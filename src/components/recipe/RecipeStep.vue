@@ -13,8 +13,6 @@ export default {
   render(h) {
     const contents = getInlineElements(this.step);
 
-    console.log(contents);
-
     return h('li', [
       ...contents.map((d) =>
         typeof d === 'string' ? d : h(d.tag, [d.contents]),

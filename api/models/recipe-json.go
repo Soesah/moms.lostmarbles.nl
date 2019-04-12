@@ -53,16 +53,16 @@ func (recipe RecipeJSON) GetXML() string {
 }
 
 // GetCook returns a struct for the recipes ingredients
-func (recipe RecipeJSON) GetCook() (string, error) {
+func (recipe RecipeJSON) GetCook() string {
 	recipeXML := recipe.GetXML()
 	r, _ := regexp.Compile("<cook>(.*)</cook>")
 	cookXML := r.FindString(recipeXML)
 	var cook Cook
 	err := xml.Unmarshal([]byte(cookXML), &cook)
 	if err != nil {
-		return cook.Value, err
+		return ""
 	}
-	return cook.Value, nil
+	return cook.Value
 }
 
 // GetIngredients returns a struct for the recipes ingredients

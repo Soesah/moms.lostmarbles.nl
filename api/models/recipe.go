@@ -112,6 +112,7 @@ type RecipeItem struct {
 	CategoryID  int64        `json:"category_id"`
 	Slug        string       `json:"slug"`
 	Name        string       `json:"name"`
+	Cook        string       `json:"cook"`
 	Ingredients []Ingredient `json:"ingredients"`
 	Steps       []Step       `json:"steps"`
 	IsNew       bool         `json:"is_new"`

@@ -7,6 +7,11 @@ const matchName = (searchValue: string): Specification<Recipe> => {
     input.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1;
 };
 
+const matchCook = (searchValue: string): Specification<Recipe> => {
+  return (input: Recipe): boolean =>
+    input.cook.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1;
+};
+
 const matchCategory = (category_id: number): Specification<Recipe> => {
   return (input: Recipe): boolean =>
     category_id > -1 ? input.category_id === category_id : true;
@@ -47,6 +52,7 @@ export const createRecipeSpecification = (
     matchCategory(category_id),
     some<Recipe>(
       matchName(searchValue),
+      matchCook(searchValue),
       matchIngredientName(searchValue),
       matchIngredientRemark(searchValue),
       matchSteps(searchValue),

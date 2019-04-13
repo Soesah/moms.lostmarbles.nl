@@ -10,7 +10,7 @@
           van {{ recipe.cook }}{{ servings(recipe) }}. Toegevoegd op
           <span
             class="date"
-          >donderdag 20 december 2018</span>
+          >{{ recipe.creation_date | longDate }}</span>
         </p>
       </li>
     </ol>

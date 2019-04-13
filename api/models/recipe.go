@@ -108,12 +108,13 @@ type Note struct {
 
 // RecipeItem is used for the recipe list
 type RecipeItem struct {
-	ID          int64        `json:"id"`
-	CategoryID  int64        `json:"category_id"`
-	Slug        string       `json:"slug"`
-	Name        string       `json:"name"`
-	Cook        string       `json:"cook"`
-	Ingredients []Ingredient `json:"ingredients"`
-	Steps       []Step       `json:"steps"`
-	IsNew       bool         `json:"is_new"`
+	ID           int64        `json:"id"`
+	CategoryID   int64        `json:"category_id"`
+	Slug         string       `json:"slug"`
+	Name         string       `json:"name"`
+	Cook         string       `json:"cook"`
+	Ingredients  []Ingredient `json:"ingredients"`
+	Steps        []Step       `json:"steps"`
+	CreationDate time.Time    `json:"creation_date"`
+	IsNew        bool         `json:"is_new"`
 }

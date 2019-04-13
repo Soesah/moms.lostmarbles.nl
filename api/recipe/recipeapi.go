@@ -73,8 +73,9 @@ func getRecipeIngredients(ctx context.Context, recipe models.Recipe) ([]models.I
 }
 
 // GetNewRecipes returns the latest two recipe
-func GetNewRecipes(r *http.Request) ([]models.Recipe, error) {
+func GetNewRecipes(r *http.Request) ([]models.RecipeItem, error) {
 	ctx := appengine.NewContext(r)
+	var items []models.RecipeItem
 	var recipes []models.Recipe
 
 	q := datastore.NewQuery(api.RecipeKind).Order("-CreationDate")
@@ -82,10 +83,30 @@ func GetNewRecipes(r *http.Request) ([]models.Recipe, error) {
 	_, err := q.GetAll(ctx, &recipes)
 
 	if err != nil {
-		return recipes, err
+		return items, err
 	}
 
-	return recipes[0:2], nil
+	for _, recipe := range recipes[0:2] {
+
+		recipeJSON := models.RecipeJSON{
+			XML: recipe.XML,
+		}
+
+		if err != nil {
+			return items, err
+		}
+
+		items = append(items, models.RecipeItem{
+			ID:           recipe.ID,
+			CategoryID:   recipe.CategoryID,
+			Slug:         recipe.Slug,
+			Name:         recipe.Name,
+			CreationDate: recipe.CreationDate,
+			Cook:         recipeJSON.GetCook(),
+		})
+	}
+
+	return items, nil
 }
 
 // CreateRecipe creates a recipe

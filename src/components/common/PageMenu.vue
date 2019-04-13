@@ -2,7 +2,7 @@
   <nav class="box box--tertiary">
     <h2>Opties</h2>
     <ul>
-      <li v-for="option in menu.items" :key="option.label">
+      <li v-for="option in menu" :key="`${option.label}-${option.group}`">
         <router-link :to="option.target" v-text="option.label"></router-link>
       </li>
     </ul>

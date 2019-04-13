@@ -23,36 +23,42 @@ import { AuthLevel } from '../models/auth.model';
 export default {
   name: 'Admin',
   computed: {
-    ...mapState(['edit_user']),
+    ...mapState(['edit_user', 'auth']),
   },
   created() {
-    this.$store.commit('addMenuItems', [
-      {
-        label: 'Gebruiker toevoegen',
-        target: '/admin/add-user',
-        group: MenuGroup.Admin,
-        level: AuthLevel.Admin,
-      },
-      {
-        label: 'Terug naar de lijst',
-        target: '/list',
-        group: MenuGroup.Recipe,
-        level: AuthLevel.Cook,
-      },
-    ]);
+    this.updateMenu();
     this.$store.dispatch('getUsers');
     this.verifyAddUser();
   },
   watch: {
+    auth() {
+      this.updateMenu();
+    },
     $route() {
       this.verifyAddUser();
     },
   },
   destroyed() {
     this.$store.commit('removeMenuGroup', MenuGroup.Admin);
-    this.$store.commit('removeMenuGroup', MenuGroup.Recipe);
   },
   methods: {
+    updateMenu() {
+      this.$store.commit('removeMenuGroup', MenuGroup.Admin);
+      this.$store.commit('addMenuItems', [
+        {
+          label: 'Gebruiker toevoegen',
+          target: '/admin/add-user',
+          group: MenuGroup.Admin,
+          level: AuthLevel.Admin,
+        },
+        {
+          label: 'Terug naar de lijst',
+          target: '/list',
+          group: MenuGroup.Admin,
+          level: AuthLevel.Cook,
+        },
+      ]);
+    },
     verifyAddUser() {
       if (this.$route.params.action === 'add-user') {
         const newUser = new User({

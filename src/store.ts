@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuex, { ActionContext } from 'vuex';
+import Vuex from 'vuex';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
@@ -8,7 +8,7 @@ import { User } from '@/models/user.model';
 import { Category } from './models/category.model';
 import { Recipe } from '@/models/recipe.model';
 import { ChangeLog } from '@/models/changes.model';
-import { Menu, MenuItem, MenuGroup } from './models/menu.model';
+import { MenuItem, MenuGroup } from './models/menu.model';
 import { createRecipeSpecification } from './specification/recipe.specification';
 import { Auth, AuthLevel, defaultAuth } from '@/models/auth.model';
 
@@ -31,14 +31,14 @@ export default new Vuex.Store({
     recipes: [],
     category_id: -1,
     searchValue: '',
-    menu: new Menu([
+    menu: [
       {
         label: 'Uitloggen',
         target: '/user/logout',
         group: MenuGroup.User,
         level: AuthLevel.Cook,
       },
-    ]),
+    ],
   },
   mutations: {
     setAuth(state, auth: Auth) {
@@ -73,10 +73,13 @@ export default new Vuex.Store({
       state.searchValue = value;
     },
     addMenuItems(state, items: MenuItem[]) {
-      state.menu.addItems(state.auth, ...items);
+      state.menu = [
+        ...items.filter((item) => item.level <= state.auth.level),
+        ...state.menu,
+      ];
     },
     removeMenuGroup(state, group: MenuGroup) {
-      state.menu.removeGroup(group);
+      state.menu = [...state.menu.filter((item) => item.group !== group)];
     },
   },
   actions: {

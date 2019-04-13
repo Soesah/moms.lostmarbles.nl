@@ -20,7 +20,7 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import { UserLevel } from '../../models/user.model';
+import { AuthLevel } from '../../models/auth.model';
 
 export default {
   name: 'Users',
@@ -30,11 +30,11 @@ export default {
   methods: {
     userType(level) {
       switch (level) {
-        case UserLevel.Guest:
+        case AuthLevel.Cook:
           return 'Gast Gebruiker';
-        case UserLevel.User:
+        case AuthLevel.Chef:
           return 'Gebruiker';
-        case UserLevel.Admin:
+        case AuthLevel.Admin:
           return 'Administrator';
       }
     },

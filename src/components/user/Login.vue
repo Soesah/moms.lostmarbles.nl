@@ -5,11 +5,18 @@
       <p class="description">Om gebruik te kunnen maken van Mom's Lost Marbles dient u in te loggen.</p>
       <div class="form-item">
         <label for="focus">Naam</label>
-        <input type="text" name="user-name" id="focus" value placeholder="(naam)">
+        <input type="text" v-model="user.name" v-focus placeholder="(naam)">
       </div>
-      <!--<div class="form-item">
+      <!-- <div class="form-item">
         <label></label>
-        <input type="checkbox" id="remember" name="remember" value="remember" class="checkbox">
+        <input
+          type="checkbox"
+          id="remember"
+          v-model="remember"
+          name="remember"
+          value="remember"
+          class="checkbox"
+        >
         <label for="remember">Onthouden</label>
       </div>-->
       <div class="form-buttons">
@@ -24,10 +31,28 @@
   </section>
 </template>
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'Login',
+  data() {
+    return {
+      user: {
+        name: '',
+      },
+      // remember: false,
+    };
+  },
+  computed: {
+    ...mapState(['redirect']),
+  },
   methods: {
-    submit() {},
+    async submit() {
+      const status = await this.$store.dispatch('loginUser', this.user);
+
+      if (status) {
+        this.$router.push(this.redirect ? this.redirect : '/list');
+      }
+    },
   },
 };
 </script>

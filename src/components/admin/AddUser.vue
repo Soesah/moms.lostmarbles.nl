@@ -11,10 +11,10 @@
       </div>
     </form>
     <dl>
-      <dt>Gast Gebruiker</dt>
-      <dd>Een gast gebruiker kan de recepten alleen lezen.</dd>
-      <dt>Gebruiker</dt>
-      <dd>Een gebruiker kan de recepten lezen en wijzigen.</dd>
+      <dt>Kok</dt>
+      <dd>Een kok kan de recepten alleen lezen.</dd>
+      <dt>Chef</dt>
+      <dd>Een chef kan de recepten lezen en wijzigen.</dd>
       <dt>Administrator</dt>
       <dd>Een administrator kan de recepten lezen en wijzigen en ook de gebruikers beheren.</dd>
     </dl>

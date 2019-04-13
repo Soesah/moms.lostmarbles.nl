@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Soesah/docs.front-crafter.nl/server/middlewares"
 	"github.com/Soesah/moms.lostmarbles.nl/server/handlers"
+	"github.com/Soesah/moms.lostmarbles.nl/server/middlewares"
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 )
 
 // Router creates a new router with all the routes attached
@@ -17,39 +18,73 @@ func Router() *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Route("/api", func(r chi.Router) {
+		r.Use(middleware.DefaultCompress)
+		r.Use(middleware.RequestID)
+		r.Use(middleware.RealIP)
+		r.Use(middleware.Logger)
+		r.Use(middleware.Recoverer)
+		r.Use(middleware.Timeout(60 * time.Second))
+		r.Use(middleware.RedirectSlashes)
 
 		r.Route("/recipe", func(r chi.Router) {
-			r.Get("/", handlers.GetRecipeList)
 			r.Get("/new", handlers.GetNewRecipes)
-			r.Post("/", handlers.CreateRecipe)
-			r.Get("/{id}/{category_id}", handlers.GetRecipe)
-			r.Get("/{id}/{category_id}/xml", handlers.GetRecipeXML)
-			r.Put("/{id}", handlers.UpdateRecipe)
-			r.Delete("/{id}", handlers.DeleteRecipe)
+			r.Group(func(r chi.Router) {
+				r.Use(middlewares.CookContext)
+				r.Get("/", handlers.GetRecipeList)
+				r.Get("/{id}/{category_id}", handlers.GetRecipe)
+				r.Get("/{id}/{category_id}/xml", handlers.GetRecipeXML)
+				r.Group(func(r chi.Router) {
+					r.Use(middlewares.NoCache)
+					r.Use(middlewares.ChefContext)
+					r.Post("/", handlers.CreateRecipe)
+					r.Put("/{id}", handlers.UpdateRecipe)
+				})
+				r.Group(func(r chi.Router) {
+					r.Use(middlewares.NoCache)
+					r.Use(middlewares.AdminContext)
+					r.Delete("/{id}", handlers.DeleteRecipe)
+				})
+			})
 		})
 
 		r.Route("/changes", func(r chi.Router) {
 			r.Get("/latest", handlers.GetLatestChange)
-			r.Get("/{id}", handlers.GetRecipeChanges)
+			r.Group(func(r chi.Router) {
+				r.Use(middlewares.CookContext)
+				r.Get("/{id}", handlers.GetRecipeChanges)
+			})
 		})
 
 		r.Route("/category", func(r chi.Router) {
 			r.Get("/", handlers.GetCategoryList)
-			r.Post("/", handlers.CreateCategory)
-			r.Get("/{id}", handlers.GetCategory)
-			r.Put("/{id}", handlers.UpdateCategory)
-			r.Delete("/{id}", handlers.DeleteCategory)
+
+			r.Group(func(r chi.Router) {
+				r.Use(middlewares.NoCache)
+				r.Use(middlewares.ChefContext)
+				r.Post("/", handlers.CreateCategory)
+				r.Get("/{id}", handlers.GetCategory)
+				r.Put("/{id}", handlers.UpdateCategory)
+				r.Delete("/{id}", handlers.DeleteCategory)
+			})
 		})
 
 		r.Route("/user", func(r chi.Router) {
+			r.Use(middlewares.CookContext)
 			r.Get("/", handlers.GetUserList)
-			r.Post("/", handlers.CreateUser)
-			r.Get("/{id}", handlers.GetUser)
-			r.Put("/{id}", handlers.UpdateUser)
-			r.Delete("/{id}", handlers.DeleteUser)
+
+			r.Group(func(r chi.Router) {
+				r.Use(middlewares.NoCache)
+				r.Use(middlewares.AdminContext)
+				r.Post("/", handlers.CreateUser)
+				r.Get("/{id}", handlers.GetUser)
+				r.Put("/{id}", handlers.UpdateUser)
+				r.Delete("/{id}", handlers.DeleteUser)
+			})
 		})
 
 		r.Route("/system", func(r chi.Router) {
+			r.Use(middlewares.NoCache)
+			r.Use(middlewares.AdminContext)
 			r.Post("/import/users", handlers.ImportUsers)
 			r.Post("/import/categories", handlers.ImportCategories)
 			r.Post("/import/recipes", handlers.ImportRecipes)
@@ -59,7 +94,17 @@ func Router() *chi.Mux {
 		})
 
 		r.Route("/editor", func(r chi.Router) {
+			r.Use(middlewares.NoCache)
+			r.Use(middlewares.AdminContext)
 			r.Get("/xml/recipe.xml", handlers.XML)
+		})
+
+		r.Route("/auth", func(r chi.Router) {
+			r.Get("/", handlers.GetAuth)
+			r.Post("/login/name", handlers.LoginUser)
+			r.Post("/login/admin", handlers.LoginAdmin)
+			r.Get("/logout", handlers.Logout)
+			r.Get("/clear-stale-sessions", handlers.ClearStaleSessions)
 		})
 	})
 

@@ -18,6 +18,7 @@ import PageMenu from '@/components/common/PageMenu';
 import { MenuGroup } from '@/models/menu.model';
 import { mapState } from 'vuex';
 import { User } from '@/models/user.model';
+import { AuthLevel } from '../models/auth.model';
 
 export default {
   name: 'Admin',
@@ -30,11 +31,13 @@ export default {
         label: 'Gebruiker toevoegen',
         target: '/admin/add-user',
         group: MenuGroup.Admin,
+        level: AuthLevel.Admin,
       },
       {
         label: 'Terug naar de lijst',
         target: '/list',
         group: MenuGroup.Recipe,
+        level: AuthLevel.Cook,
       },
     ]);
     this.$store.dispatch('getUsers');

@@ -1,8 +1,4 @@
-export enum UserLevel {
-  Guest = 0,
-  User = 50,
-  Admin = 100,
-}
+import { AuthLevel } from './auth.model';
 
 export interface UserData {
   id: number;
@@ -17,7 +13,7 @@ export class User {
   public name: string;
   public email: string;
   public last_login_date: string;
-  public user_level: UserLevel;
+  public user_level: AuthLevel;
 
   constructor(data: UserData) {
     this.id = data.id;

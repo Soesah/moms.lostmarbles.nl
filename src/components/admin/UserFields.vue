@@ -11,8 +11,8 @@
     <div class="form-item">
       <label for="focus">Type</label>
       <select v-model="user.user_level">
-        <option value="0">Gast Gebruiker</option>
-        <option value="50">Gebruiker</option>
+        <option value="0">Kok</option>
+        <option value="50">Chef</option>
         <option value="100">Administrator</option>
       </select>
     </div>

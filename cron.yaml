@@ -1,0 +1,4 @@
+cron:
+  - description: 'Clear stale sessions'
+    url: /api/auth/clear-stale-sessions
+    schedule: every 24 hours

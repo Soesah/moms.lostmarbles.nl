@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { RecipeService } from './services/recipe.service';
@@ -9,7 +10,9 @@ import { Recipe } from '@/models/recipe.model';
 import { ChangeLog } from '@/models/changes.model';
 import { Menu, MenuItem, MenuGroup } from './models/menu.model';
 import { createRecipeSpecification } from './specification/recipe.specification';
+import { Auth, AuthLevel, defaultAuth } from '@/models/auth.model';
 
+const authService = new AuthService();
 const userService = new UserService();
 const categoryService = new CategoryService();
 const recipeService = new RecipeService();
@@ -18,6 +21,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    auth: defaultAuth,
+    redirect: '',
     user: null,
     edit_user: null,
     users: [] as User[],
@@ -31,10 +36,17 @@ export default new Vuex.Store({
         label: 'Uitloggen',
         target: '/user/logout',
         group: MenuGroup.User,
+        level: AuthLevel.Cook,
       },
     ]),
   },
   mutations: {
+    setAuth(state, auth: Auth) {
+      state.auth = auth;
+    },
+    setRedirect(state, redirect: string) {
+      state.redirect = redirect;
+    },
     setUsers(state, users: User[]) {
       state.users = users;
     },
@@ -61,7 +73,7 @@ export default new Vuex.Store({
       state.searchValue = value;
     },
     addMenuItems(state, items: MenuItem[]) {
-      state.menu.addItems(...items);
+      state.menu.addItems(state.auth, ...items);
     },
     removeMenuGroup(state, group: MenuGroup) {
       state.menu.removeGroup(group);
@@ -71,6 +83,25 @@ export default new Vuex.Store({
     async getUsers({ commit }) {
       const response = await userService.getList();
       commit('setUsers', response.data);
+    },
+    async getAuth({ commit }): Promise<Auth> {
+      const response = await authService.get();
+
+      commit('setAuth', response.data);
+
+      return response.data;
+    },
+    async loginUser({ commit }, user: Auth): Promise<boolean> {
+      const response = await authService.loginName(user);
+
+      commit('setAuth', response.data);
+
+      return response.status;
+    },
+    async logoutUser({ commit }) {
+      await authService.logout();
+
+      commit('setAuth', defaultAuth);
     },
     async saveUser({ commit }, user) {
       const response = await userService.update(user);
@@ -141,6 +172,12 @@ export default new Vuex.Store({
           ? (category as Category).name_plural
           : (category as Category).name_singular
         : null;
+    },
+    isAdmin: (state) => {
+      return state.auth.level === AuthLevel.Admin;
+    },
+    isChef: (state) => {
+      return state.auth.level === AuthLevel.Chef;
     },
   },
 });

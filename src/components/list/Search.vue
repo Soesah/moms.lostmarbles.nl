@@ -9,6 +9,7 @@
           type="text"
           name="search"
           v-model="searchValue"
+          v-focus
           @input="update"
           placeholder="(ei, boerenkool, kip)"
         >

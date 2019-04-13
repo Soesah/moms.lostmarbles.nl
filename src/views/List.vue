@@ -18,6 +18,7 @@ import Categories from '@/components/list/Categories';
 import RecipeList from '@/components/list/RecipeList';
 import PageMenu from '@/components/common/PageMenu';
 import { MenuGroup } from '../models/menu.model';
+import { AuthLevel } from '../models/auth.model';
 
 export default {
   name: 'List',
@@ -35,11 +36,13 @@ export default {
         label: 'Nieuw recept toevoegen',
         target: '/recipe/new/edit',
         group: MenuGroup.List,
+        level: AuthLevel.Chef,
       },
       {
         label: 'Gebruikers beheren',
         target: '/admin/',
         group: MenuGroup.List,
+        level: AuthLevel.Admin,
       },
     ]);
   },

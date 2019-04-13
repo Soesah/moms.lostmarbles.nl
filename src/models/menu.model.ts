@@ -1,3 +1,5 @@
+import { Auth, AuthLevel } from '@/models/auth.model';
+
 export enum MenuGroup {
   User,
   List,
@@ -5,33 +7,25 @@ export enum MenuGroup {
   Admin,
 }
 
-export interface MenuItemData {
+export interface MenuItem {
   label: string;
   target: string;
   group: MenuGroup;
-}
-
-export class MenuItem {
-  public label: string;
-  public target: string;
-  public group: MenuGroup;
-
-  constructor(data: MenuItemData) {
-    this.label = data.label;
-    this.target = data.target;
-    this.group = data.group;
-  }
+  level: AuthLevel;
 }
 
 export class Menu {
   public items: MenuItem[] = [];
 
   constructor(items: MenuItem[]) {
-    this.addItems(...items);
+    this.items = items;
   }
 
-  public addItems(...items: MenuItem[]) {
-    this.items = [...items, ...this.items];
+  public addItems(auth: Auth, ...items: MenuItem[]) {
+    this.items = [
+      ...items.filter((item) => item.level <= auth.level),
+      ...this.items,
+    ];
   }
 
   public removeGroup(group: MenuGroup) {

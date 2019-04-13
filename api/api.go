@@ -9,6 +9,9 @@ const (
 	// MomsKind is the super ancestor of all items
 	MomsKind = "Moms"
 
+	// MomsSessionKind is the used for Sessions
+	MomsSessionKind = "MomsSession"
+
 	// MomsUserKind is the used for Users
 	MomsUserKind = "MomsUser"
 
@@ -28,6 +31,11 @@ const (
 // MomsKey returns a key for Moms
 func MomsKey(ctx context.Context) *datastore.Key {
 	return datastore.NewKey(ctx, MomsKind, "moms.lostmarbles", 0, nil)
+}
+
+// SessionKey returns a key for SessionKey -> MomsKey
+func SessionKey(ctx context.Context, uuid string) *datastore.Key {
+	return datastore.NewKey(ctx, MomsSessionKind, uuid, 0, MomsKey(ctx))
 }
 
 // UserKey returns a key for UserKey -> MomsKey

@@ -12,6 +12,12 @@ Vue.config.productionTip = false;
 Vue.filter('longDate', longDateFilter);
 Vue.filter('date', dateFilter);
 
+Vue.directive('focus', {
+  inserted: (el: any) => {
+    el.select();
+  },
+});
+
 new Vue({
   router,
   store,

@@ -19,6 +19,7 @@ import RecipeNotes from '@/components/recipe/RecipeNotes';
 import RecipeCategory from '@/components/recipe/RecipeCategory';
 import PageMenu from '@/components/common/PageMenu';
 import { MenuGroup } from '../models/menu.model';
+import { AuthLevel } from '../models/auth.model';
 
 export default {
   name: 'Recipe',
@@ -33,6 +34,7 @@ export default {
         label: 'Terug naar de lijst',
         target: '/list',
         group: MenuGroup.Recipe,
+        level: AuthLevel.Cook,
       },
     ]);
   },

@@ -3,7 +3,7 @@
     <h2>Categoriën</h2>
     <p>Kies een categorie, of sorteer de recepten op datum of naam.</p>
     <ul>
-      <li v-if="category_id">
+      <li v-if="category_id !== -1">
         <router-link to="/list">Alle recepten</router-link>
       </li>
       <li v-if="false">

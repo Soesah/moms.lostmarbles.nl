@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex, { ActionContext } from 'vuex';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
@@ -91,14 +91,17 @@ export default new Vuex.Store({
 
       return response.data;
     },
-    async loginUser({ commit }, user: Auth): Promise<boolean> {
-      const response = await authService.loginName(user);
+    async login(
+      { commit },
+      { type, auth }: { type: string; auth: Auth },
+    ): Promise<boolean> {
+      const response = await authService.login(auth, type);
 
       commit('setAuth', response.data);
 
       return response.status;
     },
-    async logoutUser({ commit }) {
+    async logout({ commit }) {
       await authService.logout();
 
       commit('setAuth', defaultAuth);

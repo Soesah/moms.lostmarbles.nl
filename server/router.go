@@ -84,7 +84,7 @@ func Router() *chi.Mux {
 
 		r.Route("/system", func(r chi.Router) {
 			r.Use(middlewares.NoCache)
-			r.Use(middlewares.AdminContext)
+			// r.Use(middlewares.AdminContext)
 			r.Post("/import/users", handlers.ImportUsers)
 			r.Post("/import/categories", handlers.ImportCategories)
 			r.Post("/import/recipes", handlers.ImportRecipes)
@@ -101,8 +101,7 @@ func Router() *chi.Mux {
 
 		r.Route("/auth", func(r chi.Router) {
 			r.Get("/", handlers.GetAuth)
-			r.Post("/login/name", handlers.LoginUser)
-			r.Post("/login/admin", handlers.LoginAdmin)
+			r.Post("/login/{type}", handlers.Login)
 			r.Get("/logout", handlers.Logout)
 			r.Get("/clear-stale-sessions", handlers.ClearStaleSessions)
 		})

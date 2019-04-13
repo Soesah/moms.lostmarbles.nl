@@ -3,6 +3,7 @@ package system
 import (
 	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/Soesah/moms.lostmarbles.nl/api"
 	"github.com/Soesah/moms.lostmarbles.nl/api/models"
@@ -63,13 +64,23 @@ func ImportCategories(categories []models.Category, r *http.Request) error {
 // ImportUsers is used to import users
 func ImportUsers(users []models.User, r *http.Request) error {
 	var keys []*datastore.Key
+	var storeUsers []models.User
 	ctx := appengine.NewContext(r)
 
 	for _, user := range users {
 		keys = append(keys, api.UserKey(ctx, user.ID))
+		storeUsers = append(storeUsers, models.User{
+			ID:            user.ID,
+			Name:          user.Name,
+			Search:        strings.ToLower(user.Name),
+			Password:      user.Password,
+			Email:         user.Email,
+			UserLevel:     user.UserLevel,
+			LastLoginDate: user.LastLoginDate,
+		})
 	}
 
-	_, err := datastore.PutMulti(ctx, keys, users)
+	_, err := datastore.PutMulti(ctx, keys, storeUsers)
 
 	if err != nil {
 		return err

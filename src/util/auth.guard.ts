@@ -18,33 +18,33 @@ export const verifyCook = async (to: Route, from: Route, next: any) => {
 export const verifyChef = async (to: Route, from: Route, next: any) => {
   const auth = await store.dispatch('getAuth');
 
-  if (auth.level >= AuthLevel.Chef) {
+  if (auth.authorizedLevel >= AuthLevel.Chef) {
     next();
     return;
   }
 
   store.commit('setRedirect', to.fullPath);
   next({
-    path: '/',
+    path: '/user/login/chef',
   });
 };
 
 export const verifyAdmin = async (to: Route, from: Route, next: any) => {
   const auth = await store.dispatch('getAuth');
 
-  if (auth.level >= AuthLevel.Admin) {
+  if (auth.authorizedLevel >= AuthLevel.Admin) {
     next();
     return;
   }
 
   store.commit('setRedirect', to.fullPath);
   next({
-    path: '/',
+    path: '/user/login/admin',
   });
 };
 
 export const logoutUser = async (to: Route, from: Route, next: any) => {
-  store.dispatch('logoutUser');
+  store.dispatch('logout');
   next({
     path: '/',
   });

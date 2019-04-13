@@ -1,6 +1,5 @@
 import axios, { AxiosStatic } from 'axios';
 import { Auth, defaultAuth, AuthLevel } from '@/models/auth.model';
-import { AdminAuth } from '../models/auth.model';
 
 const STATUS_OK = 200;
 
@@ -47,8 +46,8 @@ export class AuthService {
     }
   }
 
-  public async loginName(auth: Auth): Promise<AuthResponse> {
-    const response = await this.$http.post(`${this.path}/login/name`, auth);
+  public async login(auth: Auth, type: string): Promise<AuthResponse> {
+    const response = await this.$http.post(`${this.path}/login/${type}`, auth);
     const status = response.status === STATUS_OK;
 
     this.auth = status ? response.data.data : defaultAuth;
@@ -57,18 +56,6 @@ export class AuthService {
       data: this.auth,
     };
   }
-
-  public async loginAdmin(auth: AdminAuth): Promise<AuthResponse> {
-    const response = await this.$http.post(`${this.path}/login/admin`, auth);
-    const status = response.status === STATUS_OK;
-
-    this.auth = status ? response.data.data : defaultAuth;
-    return {
-      status,
-      data: this.auth,
-    };
-  }
-
   public async logout(): Promise<LogoutAuthResponse> {
     const response = await this.$http.get(`${this.path}/logout`);
     const status = response.status === STATUS_OK;

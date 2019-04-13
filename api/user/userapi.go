@@ -2,6 +2,7 @@ package user
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/Soesah/moms.lostmarbles.nl/api"
 	"github.com/Soesah/moms.lostmarbles.nl/api/models"
@@ -29,6 +30,7 @@ func CreateUser(user models.User, r *http.Request) (models.User, error) {
 	ctx := appengine.NewContext(r)
 	key := api.UserKey(ctx, user.ID)
 
+	user.Search = strings.ToLower(user.Name)
 	_, err := datastore.Put(ctx, key, &user)
 
 	if err != nil {
@@ -48,6 +50,7 @@ func UpdateUser(user models.User, r *http.Request) (models.User, error) {
 	ctx := appengine.NewContext(r)
 	key := api.UserKey(ctx, user.ID)
 
+	user.Search = strings.ToLower(user.Name)
 	_, err := datastore.Put(ctx, key, &user)
 
 	if err != nil {

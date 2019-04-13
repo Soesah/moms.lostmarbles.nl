@@ -8,6 +8,7 @@ import (
 	"github.com/Soesah/moms.lostmarbles.nl/api/auth"
 	"github.com/Soesah/moms.lostmarbles.nl/api/models"
 	"github.com/Soesah/moms.lostmarbles.nl/server/httpext"
+	"github.com/go-chi/chi"
 )
 
 // GetAuth is used to login as user
@@ -25,18 +26,27 @@ func GetAuth(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// LoginUser is used to login as user
-func LoginUser(w http.ResponseWriter, r *http.Request) {
+// Login is used to login as user
+func Login(w http.ResponseWriter, r *http.Request) {
+	loginType := chi.URLParam(r, "type")
 	decoder := json.NewDecoder(r.Body)
 
-	var data models.Auth
+	var data models.LoginData
 	err := decoder.Decode(&data)
 	if err != nil {
 		httpext.AbortAPI(w, "No name provided", http.StatusInternalServerError)
 		return
 	}
 
-	session, authentication, err := auth.LoginUser(data.Name, r)
+	var session models.Session
+	var authentication models.Auth
+
+	switch loginType {
+	case "cook":
+		session, authentication, err = auth.LoginCook(data.Name, r)
+	default:
+		session, authentication, err = auth.LoginChefOrAdmin(data.Password, r)
+	}
 
 	if err != nil {
 		httpext.AbortAPI(w, err.Error(), http.StatusForbidden)

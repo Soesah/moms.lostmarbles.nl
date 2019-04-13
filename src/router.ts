@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import Login from '@/views/Login.vue';
 import Admin from '@/views/Admin.vue';
 import Home from '@/views/Home.vue';
 import List from '@/views/List.vue';
@@ -61,6 +62,11 @@ export default new Router({
       path: '/admin/:action',
       beforeEnter: verifyAdmin,
       component: Admin,
+    },
+    {
+      path: '/user/login/:type',
+      beforeEnter: verifyCook,
+      component: Login,
     },
     {
       path: '/user/logout',

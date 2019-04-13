@@ -2,6 +2,7 @@ package auth
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/Soesah/moms.lostmarbles.nl/api"
@@ -16,18 +17,23 @@ const (
 	CookieKey = "sessionKey"
 )
 
-// LoginUser is used to login a user
-func LoginUser(name string, r *http.Request) (models.Session, models.Auth, error) {
+// LoginCook is used to login a user
+func LoginCook(name string, r *http.Request) (models.Session, models.Auth, error) {
 	ctx := appengine.NewContext(r)
 
 	// options := datastore.TransactionOptions{
 	// 	XG: true,
 	// }
 
-	var auth models.Auth
+	auth := models.Auth{
+		Name:            "",
+		Level:           models.GuestLevel,
+		AuthorizedLevel: models.GuestLevel,
+	}
+
 	var users []models.User
 
-	q := datastore.NewQuery(api.MomsUserKind).Filter("Name =", name)
+	q := datastore.NewQuery(api.MomsUserKind).Filter("Search =", strings.ToLower(name))
 
 	keys, err := q.GetAll(ctx, &users)
 
@@ -51,6 +57,8 @@ func LoginUser(name string, r *http.Request) (models.Session, models.Auth, error
 		// store level in auth, to see if further login is required later
 		auth.Name = user.Name
 		auth.Level = user.UserLevel
+		// start as a cook
+		auth.AuthorizedLevel = models.CookLevel
 
 		// update the user
 		user.LastLoginDate = time.Now()
@@ -95,10 +103,40 @@ func GetSession(r *http.Request) (models.Session, error) {
 	return session, nil
 }
 
-// LoginAdmin is used to login an admin
-func LoginAdmin(password string, r *http.Request) error {
+// LoginChefOrAdmin is used to login an admin
+func LoginChefOrAdmin(password string, r *http.Request) (models.Session, models.Auth, error) {
+	ctx := appengine.NewContext(r)
 
-	return nil
+	var auth models.Auth
+	var users []models.User
+
+	session, err := GetSession(r)
+
+	if err != nil {
+		return session, auth, err
+	}
+
+	q := datastore.NewQuery(api.MomsUserKind).Filter("Password =", password)
+
+	_, err = q.GetAll(ctx, &users)
+
+	if err != nil {
+		return session, auth, err
+	}
+
+	if len(users) == 1 {
+		user := users[0]
+
+		if session.UserID == user.ID {
+
+			// upgrade auth with full authorized level
+			auth.Name = session.UserName
+			auth.Level = session.UserLevel
+			auth.AuthorizedLevel = session.UserLevel
+		}
+	}
+
+	return session, auth, nil
 }
 
 // Logout is used to logout

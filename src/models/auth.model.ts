@@ -6,16 +6,15 @@ export enum AuthLevel {
 }
 
 export interface Auth {
+  type?: string;
   name: string;
+  password?: string;
   level: AuthLevel;
+  authorizedLevel: AuthLevel;
 }
 
 export const defaultAuth = {
   name: '',
   level: AuthLevel.Guest,
+  authorizedLevel: AuthLevel.Guest,
 };
-
-export interface AdminAuth {
-  password: string;
-  level: AuthLevel;
-}

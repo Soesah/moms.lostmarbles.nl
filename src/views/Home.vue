@@ -1,7 +1,7 @@
 <template>
   <main class="columns">
     <section class="column">
-      <login></login>
+      <login-cook></login-cook>
     </section>
     <section class="column">
       <new-recipes></new-recipes>
@@ -12,14 +12,14 @@
   </main>
 </template>
 <script>
-import Login from '@/components/user/Login';
+import LoginCook from '@/components/user/LoginCook';
 import NewRecipes from '@/components/list/NewRecipes';
 import LatestChange from '@/components/list/LatestChange';
 
 export default {
   name: 'Home',
   components: {
-    Login,
+    LoginCook,
     NewRecipes,
     LatestChange,
   },

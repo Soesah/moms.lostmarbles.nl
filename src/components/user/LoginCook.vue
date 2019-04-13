@@ -33,7 +33,7 @@
 <script>
 import { mapState } from 'vuex';
 export default {
-  name: 'Login',
+  name: 'LoginCook',
   data() {
     return {
       user: {
@@ -47,7 +47,10 @@ export default {
   },
   methods: {
     async submit() {
-      const status = await this.$store.dispatch('loginUser', this.user);
+      const status = await this.$store.dispatch('login', {
+        type: 'cook',
+        auth: this.user,
+      });
 
       if (status) {
         this.$router.push(this.redirect ? this.redirect : '/list');

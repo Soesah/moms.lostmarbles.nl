@@ -1,7 +1,7 @@
 <template>
   <main class="columns">
-    <section class="column main">
-      <jigsaw xml="/api/editor/xml/recipe.xml" schema="/recipe.xsd" stylesheet="/recipe.xsl"></jigsaw>
+    <section class="column main" v-if="xml">
+      <jigsaw :xml="xml" schema="/recipe.xsd" stylesheet="/recipe.xsl"></jigsaw>
     </section>
     <section class="column">
       <page-menu></page-menu>
@@ -19,6 +19,13 @@ export default {
   name: 'EditRecipe',
   computed: {
     ...mapState(['recipe']),
+    xml() {
+      if (this.recipe) {
+        return `/api/recipe/${this.recipe.id}/${this.recipe.category_id}/xml`;
+      }
+
+      return '';
+    },
   },
   created() {
     this.$store.commit('addMenuItems', [

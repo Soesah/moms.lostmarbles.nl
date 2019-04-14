@@ -13,21 +13,37 @@ import Jigsaw from '@/editor/Jigsaw';
 import PageMenu from '@/components/common/PageMenu';
 import { MenuGroup } from '@/models/menu.model';
 import { AuthLevel } from '../models/auth.model';
+import { mapState } from 'vuex';
 
 export default {
   name: 'EditRecipe',
+  computed: {
+    ...mapState(['recipe']),
+  },
   created() {
     this.$store.commit('addMenuItems', [
       {
         label: 'Terug naar de lijst',
         target: '/list',
-        group: MenuGroup.Recipe,
+        group: MenuGroup.Admin,
         level: AuthLevel.Cook,
       },
     ]);
   },
   destroyed() {
-    this.$store.commit('removeMenuGroup', MenuGroup.Recipe);
+    this.$store.commit('removeMenuGroup', MenuGroup.Admin);
+  },
+  watch: {
+    recipe() {
+      this.$store.commit('addMenuItems', [
+        {
+          label: 'Terug naar recept',
+          target: `/recipe/${this.recipe.slug}`,
+          group: MenuGroup.Admin,
+          level: AuthLevel.Cook,
+        },
+      ]);
+    },
   },
   components: {
     Jigsaw,

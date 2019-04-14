@@ -40,6 +40,7 @@ export default {
   },
   destroyed() {
     this.$store.commit('removeMenuGroup', MenuGroup.Recipe);
+    this.$store.commit('removeMenuGroup', MenuGroup.RecipeEdit);
   },
   watch: {
     $route() {
@@ -49,6 +50,16 @@ export default {
       const siteName = 'Moms Lost Marbles';
       document.title = recipe ? `${recipe.name} - ${siteName}` : siteName;
       document.body.scrollIntoView();
+
+      this.$store.commit('removeMenuGroup', MenuGroup.RecipeEdit);
+      this.$store.commit('addMenuItems', [
+        {
+          label: 'Recept bewerken',
+          target: `/recipe/${this.recipe.slug}/edit`,
+          group: MenuGroup.RecipeEdit,
+          level: AuthLevel.Chef,
+        },
+      ]);
     },
   },
   methods: {

@@ -4,6 +4,7 @@ export enum MenuGroup {
   User,
   List,
   Recipe,
+  RecipeEdit,
   Admin,
 }
 

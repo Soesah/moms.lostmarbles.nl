@@ -39,6 +39,7 @@ export default new Vuex.Store({
         level: AuthLevel.Cook,
       },
     ],
+    editing: false,
   },
   mutations: {
     setAuth(state, auth: Auth) {
@@ -80,6 +81,9 @@ export default new Vuex.Store({
     },
     removeMenuGroup(state, group: MenuGroup) {
       state.menu = [...state.menu.filter((item) => item.group !== group)];
+    },
+    toggleEditing(state, active: boolean) {
+      state.editing = active;
     },
   },
   actions: {

@@ -36,9 +36,11 @@ export default {
         level: AuthLevel.Cook,
       },
     ]);
+    this.$store.commit('toggleEditing', true);
   },
   destroyed() {
     this.$store.commit('removeMenuGroup', MenuGroup.Admin);
+    this.$store.commit('toggleEditing', false);
   },
   watch: {
     recipe() {

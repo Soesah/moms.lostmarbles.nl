@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{'editor-active': editing}">
     <page-title></page-title>
     <router-view></router-view>
   </div>
@@ -7,9 +7,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import PageTitle from '@/components/common/PageTitle.vue';
+import { mapState } from 'vuex';
 
 export default Vue.extend({
   name: 'MomsRecipeApp',
+  computed: {
+    ...mapState(['editing']),
+  },
   components: {
     PageTitle,
   },

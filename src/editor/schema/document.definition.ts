@@ -91,10 +91,20 @@ export class SchemaDocument {
     });
   }
 
-  public isContentEditable(name: string): boolean {
-    const def = this.elementDefinitions.find(
+  public getDefinition(name: string): SchemaElement {
+    const def = this.getElementDefinitions().find(
       (d: SchemaElement) => d.name === name,
     );
+
+    if (!def) {
+      throw new Error(`Unable to find schema definition for '${name}'`);
+    }
+
+    return def;
+  }
+
+  public isContentEditable(name: string): boolean {
+    const def = this.getDefinition(name);
 
     if (def) {
       return def.mixed || def.type === 'xs:string';

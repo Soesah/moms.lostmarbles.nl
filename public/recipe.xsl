@@ -2,18 +2,20 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="recipe">
-		<article class="box recipe">
-			<xsl:apply-templates select="title"/>
-			<section class="recipe-body">
-				<xsl:apply-templates select="." mode="summary"/>
-				<xsl:apply-templates select="*[not(self::title) and not(self::notes)]"/>
-			</section>
-      <xsl:if test="@new = 1">
-				<span class="icon icon-star-large"></span>
-      </xsl:if>
-      <span class="icon icon-bowl2"></span>
+		<article>
+			<article class="box recipe">
+				<xsl:apply-templates select="title"/>
+				<section class="recipe-body">
+					<xsl:apply-templates select="." mode="summary"/>
+					<xsl:apply-templates select="*[not(self::title) and not(self::notes)]"/>
+				</section>
+				<xsl:if test="@new = 1">
+					<span class="icon icon-star-large"></span>
+				</xsl:if>
+				<span class="icon icon-bowl2"></span>
+			</article>
+			<xsl:apply-templates select="notes"/>
 		</article>
-		<xsl:apply-templates select="notes"/>
 	</xsl:template>
 
 	<xsl:template match="title">
@@ -154,10 +156,6 @@
 
 	<xsl:template match="notes">
 		<section class="notes">
-      <xsl:attribute name="class">
-        <xsl:text>box form notes-box </xsl:text>
-        <xsl:if test="not(note)">no-notes</xsl:if>
-      </xsl:attribute>
 			<h3>Notities</h3>
 			<xsl:apply-templates select="node()"/>
 			<span class="icon icon-beans"></span>

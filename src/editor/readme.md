@@ -35,6 +35,13 @@
 - RenderNode
 - UpdateNode
 
+
+### ComplexDocument, Node, Attribute
+
+You want to keep a complex document, node, attribute, for every node in the document. This you keep with the rendered node, or find via the rendered node (uuid). The command (action) is then executed on the node with the complex node, the complex node detailing the schema, any configuration, etc.
+
+The complex node / document can then also be used to power the toolbars and menu. With the node/uuid from the current focus, you can walk up parent nodes, see if children are allowed, if buttons are active, etc.
+
 ## SMDE (Simple MarkDown Editor)
 
 - the goal is to convert html to markdown when editing, and back when rendering

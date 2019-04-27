@@ -3,6 +3,7 @@
     <editor-toolbar :editor="editor"></editor-toolbar>
     <editable-content :editor="editor"></editable-content>
     <editor-context-menu :editor="editor"></editor-context-menu>
+    <editor-node-toolbar :editor="editor"></editor-node-toolbar>
   </div>
 </template>
 
@@ -10,6 +11,7 @@
 import Vue from 'vue';
 import { Editor } from '@/editor/editor.ts';
 import EditorToolbar from '@/editor/components/EditorToolbar.vue';
+import EditorNodeToolbar from '@/editor/components/EditorNodeToolbar.vue';
 import EditableContent from '@/editor/components/EditableContent.vue';
 import EditorContextMenu from '@/editor/components/EditorContextMenu.vue';
 import { SchemaDocument } from '@/editor/schema/document.definition';
@@ -52,6 +54,7 @@ export default Vue.extend({
   },
   components: {
     EditorToolbar,
+    EditorNodeToolbar,
     EditableContent,
     EditorContextMenu,
   },

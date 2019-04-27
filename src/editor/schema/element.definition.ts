@@ -5,8 +5,8 @@ import { SchemaElementRef } from './element-ref.definition';
 export class SchemaElement {
   public name: string;
   public type?: string;
-  public minOccurs?: number;
-  public maxOccurs?: number;
+  public minOccurs: number = 1;
+  public maxOccurs: number = 1;
   public required: boolean = false;
   public mixed: boolean = false;
   public abstract: boolean = false;

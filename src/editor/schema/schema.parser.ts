@@ -4,25 +4,10 @@ import { SchemaElement } from './element.definition';
 import { SchemaElementRef } from './element-ref.definition';
 import { SchemaAttribute } from './attribute.definition';
 import { SchemaAttributeRef } from './attribute-ref.definition';
+import { NodeType } from '../document/document.info';
 
 const SCHEMA_NAMESPACE_URI = 'http://www.w3.org/2001/XMLSchema';
 const USE_REQUIRED = 'required';
-
-enum NodeType {
-  NoType,
-  ElementNode,
-  AttributeNode,
-  TextNode,
-  Cdata_sectionNode,
-  Entity_referenceNode,
-  EntityNode,
-  Processing_instructionNode,
-  CommentNode,
-  DocumentNode,
-  Document_typeNode,
-  Document_fragmentNode,
-  NotationNode,
-}
 
 export class SchemaParser {
   public schema: SchemaDocument = new SchemaDocument();
@@ -49,7 +34,7 @@ export class SchemaParser {
     const name = element.localName;
     let child: SchemaDocument | SchemaElement | SchemaComplexType = node;
 
-    if (element.nodeType === NodeType.ElementNode) {
+    if (element.nodeType === NodeType.ELEMENT) {
       switch (name) {
         case 'schema':
           break;
@@ -101,8 +86,8 @@ export class SchemaParser {
       ref: el.getAttribute('ref'),
       type: el.getAttribute('type'),
       substitutionGroup: el.getAttribute('substitutionGroup'),
-      minOccurs: el.getAttribute('minOccurs'),
-      maxOccurs: el.getAttribute('maxOccurs'),
+      minOccurs: el.getAttribute('minOccurs') || 1,
+      maxOccurs: el.getAttribute('maxOccurs') || 1,
       abstract: el.getAttribute('abstract') === 'true',
     };
 

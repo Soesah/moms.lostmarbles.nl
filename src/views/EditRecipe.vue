@@ -30,6 +30,12 @@ export default {
   created() {
     this.$store.commit('addMenuItems', [
       {
+        label: 'Stoppen met bewerken',
+        target: `/recipe/${this.$route.params.slug}`,
+        group: MenuGroup.Admin,
+        level: AuthLevel.Cook,
+      },
+      {
         label: 'Terug naar de lijst',
         target: '/list',
         group: MenuGroup.Admin,

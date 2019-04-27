@@ -1,34 +1,46 @@
 <template>
-  <nav class="toolbar">
-    <template v-for="group in config">
-      <div class="toolbar-group" :key="group.name">
-        <template v-for="item in group.items">
-          <a href="#" class="toolbar-item" :key="item.label" @click.prevent="activate(item.f)">
-            <span :class="`icon-${item.icon}`"></span>
-          </a>
-        </template>
-      </div>
+  <nav class="node-toolbar">
+    <template v-for="item in path">
+      <a href="#" class="toolbar-item" :key="item" @click.prevent>
+        <span v-text="item"></span>
+      </a>
     </template>
   </nav>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { toolbarConfig } from './toolbar.config';
+import { ComplexNode } from '../document/complex-node';
+
+interface EditorNodeToolbarState {
+  path: string[];
+}
 
 export default Vue.extend({
-  name: 'EditorToolbar',
+  name: 'EditorNodeToolbar',
   props: {
     editor: {
       type: Object,
+      required: true,
     },
   },
-  data() {
+  data(): EditorNodeToolbarState {
     return {
-      config: toolbarConfig,
+      path: [],
     };
   },
+  created() {
+    this.editor.on('changedFocus', (evt: any) => {
+      this.path = this.getPathItems(evt.data);
+    });
+  },
   methods: {
+    getPathItems(data: ComplexNode | null): string[] {
+      if (data) {
+        return data.getPath().map((n) => n.name);
+      }
+      return [];
+    },
     activate(f: string) {
       // console.log(f);
     },
@@ -36,14 +48,14 @@ export default Vue.extend({
 });
 </script>
 <style scoped lang="less">
-.toolbar {
+.node-toolbar {
   box-sizing: border-box;
   display: flex;
   background-color: rgb(121, 156, 187);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 12px;
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
   z-index: 1;

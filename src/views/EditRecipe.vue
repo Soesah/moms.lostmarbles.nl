@@ -28,6 +28,7 @@ export default {
     },
   },
   created() {
+    this.update();
     this.$store.commit('addMenuItems', [
       {
         label: 'Stoppen met bewerken',
@@ -58,6 +59,12 @@ export default {
           level: AuthLevel.Cook,
         },
       ]);
+    },
+  },
+  methods: {
+    update() {
+      const slug = this.$route.params.slug;
+      this.$store.dispatch('getRecipeBySlug', slug);
     },
   },
   components: {

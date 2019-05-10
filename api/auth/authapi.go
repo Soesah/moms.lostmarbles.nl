@@ -51,6 +51,7 @@ func LoginCook(name string, r *http.Request) (models.Session, models.Auth, error
 		session.UserID = user.ID
 		session.UserName = user.Name
 		session.UserLevel = user.UserLevel
+		session.AuthorizedLevel = models.CookLevel
 		session.UUID = sessionUUID.String()
 		session.Expires = time.Now().Add(5 * time.Hour)
 
@@ -58,7 +59,7 @@ func LoginCook(name string, r *http.Request) (models.Session, models.Auth, error
 		auth.Name = user.Name
 		auth.Level = user.UserLevel
 		// start as a cook
-		auth.AuthorizedLevel = models.CookLevel
+		auth.AuthorizedLevel = session.AuthorizedLevel
 
 		// update the user
 		user.LastLoginDate = time.Now()
@@ -130,10 +131,17 @@ func LoginChefOrAdmin(password string, r *http.Request) (models.Session, models.
 		if session.UserID == user.ID {
 
 			// upgrade auth with full authorized level
+			session.AuthorizedLevel = user.UserLevel
+
 			auth.Name = session.UserName
 			auth.Level = session.UserLevel
-			auth.AuthorizedLevel = session.UserLevel
+			auth.AuthorizedLevel = session.AuthorizedLevel
+
+			// store the session
+			skey := api.SessionKey(ctx, session.UUID)
+			_, err = datastore.Put(ctx, skey, &session)
 		}
+
 	}
 
 	return session, auth, nil

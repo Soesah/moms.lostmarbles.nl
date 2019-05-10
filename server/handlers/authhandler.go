@@ -21,8 +21,9 @@ func GetAuth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	httpext.SuccessDataAPI(w, "Ok", models.Auth{
-		Name:  session.UserName,
-		Level: session.UserLevel,
+		Name:            session.UserName,
+		Level:           session.UserLevel,
+		AuthorizedLevel: session.AuthorizedLevel,
 	})
 }
 

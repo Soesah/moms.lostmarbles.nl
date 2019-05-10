@@ -17,9 +17,10 @@ type LoginData struct {
 
 // Session is authentication data stored in the backend
 type Session struct {
-	UUID      string
-	UserName  string
-	UserID    int64
-	UserLevel int64
-	Expires   time.Time
+	UUID            string
+	UserName        string
+	UserID          int64
+	UserLevel       int64
+	AuthorizedLevel int64
+	Expires         time.Time
 }

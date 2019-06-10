@@ -1,14 +1,25 @@
 {
   "name": "moms.lostmarbles.nl",
+  "description": "Moms recipe website",
+  "author": {
+    "name": "Carl Giesberts",
+    "email": "carl@front-crafter.nl",
+    "url": "https://www.front-crafter.nl"
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "store": "gcloud beta emulators datastore start",
-    "app": "$(gcloud beta emulators datastore env-init) && dev_appserver.py dev/app-develop.yaml --automatic_restart=no --support_datastore_emulator=True --port 8182"
-  },
+    "app": "$(gcloud beta emulators datastore env-init) && dev_appserver.py dev/app-develop.yaml --automatic_restart=no --support_datastore_emulator=True --port 8182",
+    "build": "vue-cli-service build",
+    "major": "./bin/deploy.sh major",
+    "minor": "./bin/deploy.sh minor",
+    "patch": "./bin/deploy.sh patch",
+    "deploy": "yarn build && gcloud app deploy app.yaml --project moms-lost-marbles -q",
+    "update-index": "cp dev/index.yaml ./index.yaml && gcloud datastore create-indexes index.yaml --project moms-lost-marbles -q"
+},
   "dependencies": {
     "axios": "^0.18.0",
     "vue": "^2.5.17",

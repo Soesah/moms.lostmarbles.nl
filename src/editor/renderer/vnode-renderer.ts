@@ -1,6 +1,7 @@
 import { VNode, CreateElement } from 'vue';
 import { SchemaDocument } from '../schema/document.definition';
 import { getElementByXpath } from '../util/dom.util';
+import { NodeType } from '../document/document.info';
 
 export class VNodeRenderer {
   private h: CreateElement;
@@ -16,6 +17,7 @@ export class VNodeRenderer {
   public nodeToVNode(
     node: Element,
     handler: (evt: KeyboardEvent) => {},
+    parent: null | Element,
   ): VNode {
     const tagName = node.localName;
     const className = node.getAttribute ? node.getAttribute('class') : null;
@@ -30,33 +32,37 @@ export class VNodeRenderer {
       },
       domProps: {},
       attrs: {},
+      on: {},
     };
 
-    const children = [...node.childNodes].map((child: ChildNode) => {
-      if (child && child.nodeType === 7) {
-        const nodeId = child.textContent ? child.textContent : '';
-        Object.assign(options.attrs, {
-          'data-editor-node-id': nodeId,
-        });
+    const children = [...node.childNodes]
+      .map((child: ChildNode) => {
+        if (child && child.nodeType === NodeType.PROCESSING_INSTRUCTION) {
+          const nodeId = child.textContent ? child.textContent : '';
+          Object.assign(options.attrs, {
+            'data-editor-node-id': nodeId,
+          });
 
-        if (nodeId && this.isContentEditable(nodeId)) {
-          Object.assign(options.domProps, {
-            contentEditable: true,
-          });
-          Object.assign(options, {
-            on: {
-              focus: handler,
-              keydown: handler,
-            },
-          });
+          if (nodeId && this.isContentEditable(nodeId)) {
+            Object.assign(options.domProps, {
+              contentEditable: true,
+            });
+            Object.assign(options, {
+              on: {
+                // focus: handler,
+                keydown: handler,
+              },
+            });
+          }
+          return undefined;
         }
-        return undefined;
-      }
 
-      return child.nodeType === 3
-        ? child.textContent
-        : this.nodeToVNode(child as Element, handler);
-    });
+        return child.nodeType === NodeType.TEXT
+          ? child.textContent
+          : this.nodeToVNode(child as Element, handler, node);
+      })
+      .filter((n) => n);
+
 
     return this.h(tagName, options, children);
   }

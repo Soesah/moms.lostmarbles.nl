@@ -15,8 +15,14 @@ export default Vue.extend({
     const xhtml = this.editor.getXHTML();
     const handler = this.editor.handleDomEvent.bind(this.editor);
 
+    // bind to selection change
+    document.addEventListener(
+      'selectionchange',
+      this.editor.handleSelectionChange.bind(this.editor),
+    );
+
     // convert the XHTML output to VNodes so that vue can render them
-    return renderer.nodeToVNode(xhtml.documentElement, handler);
+    return renderer.nodeToVNode(xhtml.documentElement, handler, null);
   },
   methods: {},
 });

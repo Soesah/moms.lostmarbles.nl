@@ -34,11 +34,11 @@ export default {
   },
   computed: {
     category() {
-      const cat = this.$store.state.categories.find(
+      const category = this.$store.state.categories.find(
         (cat) => cat.id === this.recipe.category_id,
       );
-      if (cat) {
-        return cat.name_singular.toLowerCase();
+      if (category) {
+        return category.name_singular.toLowerCase();
       }
       return '';
     },

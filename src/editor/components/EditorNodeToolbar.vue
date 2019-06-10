@@ -90,9 +90,10 @@ export default Vue.extend({
   margin-right: 0px;
   color: white;
   background: rgb(87, 123, 156);
-  font-size: 17px;
+  font-size: 14px;
   line-height: 17px;
   text-decoration: none;
+  padding: 4px 8px;
 }
 .toolbar-item:hover {
   opacity: 0.5;

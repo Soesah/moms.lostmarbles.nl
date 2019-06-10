@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" 
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:template match="recipe">
+	<xsl:template match="recipe">
 		<article>
 			<article class="box recipe">
 				<xsl:apply-templates select="title"/>
@@ -33,21 +34,21 @@
 			<xsl:apply-templates select="@category_id" mode="text"/>
 			<xsl:apply-templates select="cook" mode="text"/>
 			<xsl:if test="@servings != 0">
-		    <xsl:text> voor </xsl:text>
-		    <xsl:value-of select="@servings"/>
-		    <xsl:choose>
-		      <xsl:when test="@servings = 1">
-		        <xsl:text> persoon</xsl:text>
-		      </xsl:when>
-		      <xsl:otherwise>
-		        <xsl:text> personen</xsl:text>
-		      </xsl:otherwise>
-		    </xsl:choose>
+				<xsl:text> voor </xsl:text>
+				<xsl:value-of select="@servings"/>
+				<xsl:choose>
+					<xsl:when test="@servings = 1">
+						<xsl:text> persoon</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text> personen</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:if>
 			<xsl:text>. </xsl:text>
 			<xsl:if test="@creation_date">
-		    <xsl:text>Toegevoegd op </xsl:text>
-		    <xsl:apply-templates select="@creation_date"/>
+				<xsl:text>Toegevoegd op </xsl:text>
+				<xsl:apply-templates select="@creation_date"/>
 				<xsl:text>. </xsl:text>
 			</xsl:if>
 			<xsl:if test="@preparation_time != ''">
@@ -55,7 +56,7 @@
 				<xsl:value-of select="@preparation_time"/>
 				<xsl:text>. </xsl:text>
 			</xsl:if>
-	  </p>
+		</p>
 	</xsl:template>
 
 	<xsl:template match="@servings">
@@ -72,7 +73,7 @@
 	</xsl:template>
 
 	<xsl:template match="@preparation_time">
-   <div class="preparation-time">
+		<div class="preparation-time">
 			<span class="icon icon-clock"></span>
 			<xsl:value-of select="."/>
 		</div>
@@ -81,7 +82,7 @@
 	<xsl:template match="@category_id" mode="text">
 		<span>
 			<xsl:text>Een </xsl:text>
-      <xsl:apply-templates select="."/>
+			<xsl:apply-templates select="."/>
 		</span>
 	</xsl:template>
 
@@ -89,8 +90,8 @@
 
 	<xsl:template match="cook" mode="text">
 		<span>
-      <xsl:text> van </xsl:text>
-      <xsl:apply-templates select="node()"/>
+			<xsl:text> van </xsl:text>
+			<xsl:apply-templates select="node()"/>
 		</span>
 	</xsl:template>
 
@@ -115,16 +116,12 @@
 		<span class="{name()}">
 			<xsl:apply-templates select="node()"/>
 		</span>
-		<xsl:text> </xsl:text>
 	</xsl:template>
 
 	<xsl:template match="ingredient/name">
 		<span class="{name()}">
 			<xsl:apply-templates select="node()"/>
 		</span>
-		<xsl:if test="following-sibling::remark">
-			<xsl:text>, </xsl:text>
-		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="ingredient/remark">
@@ -144,7 +141,7 @@
 
 	<xsl:template match="step">
 		<li class="step">
- 			<xsl:apply-templates select="node()"/>
+			<xsl:apply-templates select="node()"/>
 		</li>
 	</xsl:template>
 
@@ -181,19 +178,19 @@
 		</p>
 	</xsl:template>
 
-  <xsl:template match="description">
-    <section class="description">
-      <xsl:apply-templates select="node()"/>
-    </section>
-  </xsl:template>
+	<xsl:template match="description">
+		<section class="description">
+			<xsl:apply-templates select="node()"/>
+		</section>
+	</xsl:template>
 
-  <xsl:template match="ordered-list">
+	<xsl:template match="ordered-list">
 		<ol>
 			<xsl:apply-templates select="node()"/>
 		</ol>
 	</xsl:template>
 
-  <xsl:template match="list">
+	<xsl:template match="list">
 		<ul>
 			<xsl:apply-templates select="node()"/>
 		</ul>

@@ -119,7 +119,7 @@ export class Editor extends EventEmitter {
       .map((child: ChildNode, index: number) => {
         switch (child.nodeType) {
           case NodeType.TEXT:
-            const textNode = new ComplexText(child.textContent, complexNode);
+            const textNode = new ComplexText(child.textContent ? child.textContent : '', complexNode);
             textNode.index = index;
             return textNode;
           default:
@@ -139,7 +139,7 @@ export class Editor extends EventEmitter {
         .filter((attr: Attr) => attr.name !== 'editor:node-id')
         .map(
           (attr: Attr) =>
-            new ComplexAttribute(attr.name, ComplexAttributeType.String),
+            new ComplexAttribute(attr.name, attr.value, ComplexAttributeType.String),
         ),
     );
 

@@ -3,12 +3,12 @@ import { NodeType } from './document.info';
 
 export class ComplexText {
   public parent: ComplexNode;
-  public value: string | null;
+  public value: string = '';
   public type: NodeType = NodeType.TEXT;
 
   private siblingIndex: number = 0;
 
-  constructor(value: string | null, node: ComplexNode) {
+  constructor(value: string, node: ComplexNode) {
     this.value = value;
     this.parent = node;
   }
@@ -19,5 +19,11 @@ export class ComplexText {
 
   set index(index: number) {
     this.siblingIndex = index;
+  }
+
+  public buildXML(document: Document): Text {
+    const el = document.createTextNode(this.value);
+
+    return el;
   }
 }

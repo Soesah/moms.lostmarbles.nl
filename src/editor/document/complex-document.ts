@@ -16,4 +16,12 @@ export class ComplexDocument {
 
     return node;
   }
+
+  public getXML(): Document {
+    const document = new Document();
+
+    document.appendChild(this.root.buildXML(document));
+
+    return document;
+  }
 }

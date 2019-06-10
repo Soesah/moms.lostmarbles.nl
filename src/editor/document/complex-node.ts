@@ -91,4 +91,18 @@ export class ComplexNode {
       null,
     );
   }
+
+  public buildXML(document: Document): HTMLElement {
+    const el = document.createElement(this.name);
+
+    this.attributes.forEach((ca: ComplexAttribute) => {
+      el.setAttribute(ca.name, ca.value);
+    });
+
+    this.childNodes.forEach((cn: ComplexNodes) => {
+      el.appendChild(cn.buildXML(document));
+    });
+
+    return el;
+  }
 }

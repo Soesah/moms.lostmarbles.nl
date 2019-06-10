@@ -5,12 +5,14 @@ export enum ComplexAttributeType {
 
 export class ComplexAttribute {
   public name: string;
+  public value: string;
   public type: ComplexAttributeType;
 
   private requiredAttribute: boolean = false;
 
-  constructor(name: string, type: ComplexAttributeType) {
+  constructor(name: string, value: string, type: ComplexAttributeType) {
     this.name = name;
+    this.value = value;
     this.type = type;
   }
 

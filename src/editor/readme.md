@@ -42,6 +42,8 @@ You want to keep a complex document, node, attribute, for every node in the docu
 
 The complex node / document can then also be used to power the toolbars and menu. With the node/uuid from the current focus, you can walk up parent nodes, see if children are allowed, if buttons are active, etc.
 
+But it means that the commands modify both the XML as well as the ComplexDocument. This _adds_ a layer of complexity. It would be if the ComplexDocument is _everything_ and you can extract updated XML from it to process for re-rendering or for saving.
+
 ## SMDE (Simple MarkDown Editor)
 
 - the goal is to convert html to markdown when editing, and back when rendering

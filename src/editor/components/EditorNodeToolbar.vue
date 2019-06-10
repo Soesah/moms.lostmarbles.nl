@@ -31,7 +31,11 @@ export default Vue.extend({
   },
   created() {
     this.editor.on('changedFocus', (evt: any) => {
-      this.path = this.getPathItems(evt.data);
+      if (evt) {
+        this.path = this.getPathItems(evt.data);
+      } else {
+        this.path = [];
+      }
     });
   },
   methods: {

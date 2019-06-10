@@ -49,7 +49,6 @@ export class VNodeRenderer {
             });
             Object.assign(options, {
               on: {
-                // focus: handler,
                 keydown: handler,
               },
             });

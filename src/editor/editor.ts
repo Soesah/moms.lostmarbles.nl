@@ -50,14 +50,20 @@ export class Editor extends EventEmitter {
 
   public handleSelectionChange(evt: Event) {
     this.selection = new DOMSelection(document.getSelection());
-    const id = (this.selection.getNode() as Element).getAttribute('data-editor-node-id');
-    if (id) {
+    const el = this.selection.getNode();
+    if (el && el !== document ) {
 
-      const node = this.document.getComplexNode(id);
-      this.emit('changedFocus', node);
-    // } else {
-    //   this.emit('changedFocus', null);
+      const id = (el as Element).getAttribute('data-editor-node-id');
+      if (id) {
+
+        const node = this.document.getComplexNode(id);
+        this.emit('changedFocus', node);
+
+        return;
+      }
     }
+
+    this.emit('changedFocus', null);
   }
 
   public handleDomEvent(evt: KeyboardEvent) {

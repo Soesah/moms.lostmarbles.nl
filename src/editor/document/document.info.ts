@@ -1,3 +1,5 @@
+export const EDITOR_NAMESPACE = 'https://www.front-crafter.nl/jigsaw';
+
 export enum NodeType {
   NO_TYPE,
   ELEMENT,

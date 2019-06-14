@@ -1,7 +1,6 @@
 import { HTTPService } from './services/http.service';
 import { SchemaParser } from './schema/schema.parser';
 import { SchemaDocument } from './schema/document.definition';
-import { XMLEnricher } from './document/enricher';
 import { VNodeRenderer } from './renderer/vnode-renderer';
 import { EventEmitter } from './core/event-emitter';
 import { CreateElement } from 'vue';
@@ -20,7 +19,6 @@ export class Editor extends EventEmitter {
 
   private selection: DOMSelection = new DOMSelection(null);
   private http: HTTPService = new HTTPService();
-  private enricher: XMLEnricher = new XMLEnricher();
 
   constructor(file: string, stylesheet: string, schema: string) {
     super();
@@ -44,7 +42,7 @@ export class Editor extends EventEmitter {
     if (this.xml && this.schema) {
       return new VNodeRenderer(h, this.xml, this.schema);
     } else {
-      throw new Error('Jigsaw Renderer unabled to initialize');
+      throw new Error('Jigsaw Renderer unable to initialize');
     }
   }
 
@@ -117,11 +115,9 @@ export class Editor extends EventEmitter {
     const parser = new SchemaParser(xsd);
     this.schema = parser.schema;
 
-    // enrich the xml with uuids
-    this.xml = this.enricher.getEnrichedXML(xml);
-
     // create a complex document representation of the xml
     this.document =  new ComplexDocument(xml, this.schema);
+    this.xml = this.document.getXML(true);
 
     // enrich the xsl to output uuids
     this.enrichedXSL = await this.enrichStylesheet(xsl);

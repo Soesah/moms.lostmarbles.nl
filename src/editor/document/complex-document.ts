@@ -23,27 +23,23 @@ export class ComplexDocument {
     return node;
   }
 
-  public getXML(): Document {
+  public getXML(includeUUIDs: boolean = false): Document {
     const document = new Document();
 
-    document.appendChild(this.root.buildXML(document));
+    document.appendChild(this.root.buildXML(document, includeUUIDs));
 
     return document;
   }
+
 
   private parseComplexNode(
     node: Element,
     parent: ComplexNode | null = null,
   ): ComplexNode {
     const name = node.nodeName;
-    const uuid = node.getAttribute('editor:node-id');
     const definition = this.schema.getDefinition(name);
 
-    if (!uuid) {
-      throw new Error('Unable to parse complex node, uuid not found');
-    }
-
-    const complexNode = new ComplexNode(uuid, name, parent);
+    const complexNode = new ComplexNode(name, parent);
     const childNodes = [...node.childNodes]
       .filter(
         (child: ChildNode) =>
@@ -69,7 +65,6 @@ export class ComplexDocument {
 
     complexNode.setAttributes(
       [...node.attributes]
-        .filter((attr: Attr) => attr.name !== 'editor:node-id')
         .map(
           (attr: Attr) =>
             new ComplexAttribute(attr.name, attr.value, ComplexAttributeType.String),

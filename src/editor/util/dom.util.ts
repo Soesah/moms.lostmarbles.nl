@@ -1,4 +1,4 @@
-import { EDITOR_NAMESPACE } from '../document/enricher';
+import { EDITOR_NAMESPACE } from '../document/document.info';
 
 export const parseXMLDocument = (contents: string): Document => {
   const parser = new DOMParser();

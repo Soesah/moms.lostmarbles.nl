@@ -1,6 +1,7 @@
 import { ComplexAttribute } from './complex-attribute';
 import { ComplexText } from './complex-text';
-import { NodeType } from './document.info';
+import { NodeType, EDITOR_NAMESPACE } from './document.info';
+import { UUIDUtil } from '../util/uuid.util';
 
 type ComplexNodes = ComplexNode | ComplexText;
 
@@ -17,8 +18,8 @@ export class ComplexNode {
   private maxOccurs: number = 0;
   private isMixed: boolean = true;
 
-  constructor(uuid: string, name: string, parent: ComplexNode | null) {
-    this.uuid = uuid;
+  constructor(name: string, parent: ComplexNode | null) {
+    this.uuid = UUIDUtil.uuid4();
     this.name = name;
     this.parentNode = parent;
   }
@@ -92,15 +93,19 @@ export class ComplexNode {
     );
   }
 
-  public buildXML(document: Document): HTMLElement {
+  public buildXML(document: Document, includeUUIDs: boolean): HTMLElement {
     const el = document.createElement(this.name);
+
+    if (includeUUIDs) {
+      el.setAttributeNS(EDITOR_NAMESPACE, 'editor:node-id', this.uuid);
+    }
 
     this.attributes.forEach((ca: ComplexAttribute) => {
       el.setAttribute(ca.name, ca.value);
     });
 
     this.childNodes.forEach((cn: ComplexNodes) => {
-      el.appendChild(cn.buildXML(document));
+      el.appendChild(cn.buildXML(document, includeUUIDs));
     });
 
     return el;

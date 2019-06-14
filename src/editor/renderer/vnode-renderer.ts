@@ -2,16 +2,17 @@ import { VNode, CreateElement } from 'vue';
 import { SchemaDocument } from '../schema/document.definition';
 import { getElementByXpath } from '../util/dom.util';
 import { NodeType } from '../document/document.info';
+import { ComplexDocument } from '../document/complex-document';
 
 export class VNodeRenderer {
   private h: CreateElement;
   private xml: Document;
   private schema: SchemaDocument;
 
-  constructor(h: CreateElement, xml: Document, schema: SchemaDocument) {
+  constructor(h: CreateElement, document: ComplexDocument) {
     this.h = h;
-    this.xml = xml;
-    this.schema = schema;
+    this.xml = document.getXML(true);
+    this.schema = document.schema;
   }
 
   public nodeToVNode(

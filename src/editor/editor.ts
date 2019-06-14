@@ -1,6 +1,4 @@
 import { HTTPService } from './services/http.service';
-import { SchemaParser } from './schema/schema.parser';
-import { SchemaDocument } from './schema/document.definition';
 import { VNodeRenderer } from './renderer/vnode-renderer';
 import { EventEmitter } from './core/event-emitter';
 import { CreateElement } from 'vue';
@@ -10,11 +8,9 @@ import { KeyUtil } from './util/key.util';
 import { EditTextCommand } from './document/commands/edit-text.command';
 
 export class Editor extends EventEmitter {
-  public xml: Document | null = null;
   public document!: ComplexDocument;
   public enrichedXSL: Document | null = null;
   public xhtml: Document | null = null;
-  public schema: SchemaDocument = new SchemaDocument();
   public renderer: VNodeRenderer | null = null;
 
   private selection: DOMSelection = new DOMSelection(null);
@@ -39,8 +35,8 @@ export class Editor extends EventEmitter {
   }
 
   public getRenderer(h: CreateElement): VNodeRenderer {
-    if (this.document && this.schema) {
-      return new VNodeRenderer(h, this.document.getXML(true), this.schema);
+    if (this.document) {
+      return new VNodeRenderer(h, this.document);
     } else {
       throw new Error('Jigsaw Renderer unable to initialize');
     }
@@ -111,12 +107,8 @@ export class Editor extends EventEmitter {
     const xsl = await this.http.getDocument(stylesheet);
     const xsd = await this.http.getDocument(schema);
 
-    // parse the schema
-    const parser = new SchemaParser(xsd);
-    this.schema = parser.schema;
-
     // create a complex document representation of the xml
-    this.document =  new ComplexDocument(xml, this.schema);
+    this.document =  new ComplexDocument(xml, xsd);
 
     // enrich the xsl to output uuids
     this.enrichedXSL = await this.enrichStylesheet(xsl);

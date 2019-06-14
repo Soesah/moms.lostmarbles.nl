@@ -3,13 +3,16 @@ import { NodeType } from './document.info';
 import { ComplexText } from './complex-text';
 import { ComplexNode } from './complex-node';
 import { ComplexAttributeType, ComplexAttribute } from './complex-attribute';
+import { SchemaParser } from '../schema/schema.parser';
 
 export class ComplexDocument {
   public root: ComplexNode;
-  private schema: SchemaDocument;
+  public schema: SchemaDocument;
 
-  constructor(document: Document, schema: SchemaDocument) {
-    this.schema = schema;
+  constructor(document: Document, xsd: Document) {
+    const parser = new SchemaParser(xsd);
+
+    this.schema = parser.schema;
     this.root = this.parseComplexNode(document.documentElement);
   }
 

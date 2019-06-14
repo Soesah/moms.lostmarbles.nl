@@ -9,9 +9,9 @@ import { EditTextCommand } from './document/commands/edit-text.command';
 
 export class Editor extends EventEmitter {
   public document!: ComplexDocument;
-  public enrichedXSL: Document | null = null;
-  public xhtml: Document | null = null;
-  public renderer: VNodeRenderer | null = null;
+  public enrichedXSL!: Document;
+  public xhtml!: Document;
+  public renderer!: VNodeRenderer;
 
   private selection: DOMSelection = new DOMSelection(null);
   private http: HTTPService = new HTTPService();

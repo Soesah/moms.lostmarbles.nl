@@ -17,11 +17,11 @@ export const getElementsByXpath = (doc: Document, xpath: string): Node[] => {
   );
 
   let item = result.snapshotItem(0);
-  let items: Node[] = [item];
+  let items: Node[] = item ? [item] : [];
 
   while (items.length < result.snapshotLength) {
     item = result.snapshotItem(items.length);
-    items = [...items, item];
+    items = item ? [...items, item] : items;
   }
 
   items = items.filter((node) => node);

@@ -48,7 +48,7 @@ export default Vue.extend({
   created() {
     this.editor = new Editor(this.xml, this.stylesheet, this.schema);
 
-    this.editor.on('initialized', (evt) => {
+    this.editor.on('initialized', () => {
       this.ready = true;
     });
   },

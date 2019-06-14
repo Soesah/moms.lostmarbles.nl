@@ -11,7 +11,7 @@ interface Subscriber {
 export class EventEmitter {
   private subscribers: Subscriber[] = [];
 
-  public emit(eventName: string, data: any) {
+  public emit(eventName: string, data?: any) {
     this.subscribers
       .filter((sub: Subscriber) => sub.eventName === eventName)
       .forEach((sub: Subscriber) =>

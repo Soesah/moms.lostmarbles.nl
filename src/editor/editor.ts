@@ -26,11 +26,11 @@ export class Editor extends EventEmitter {
   }
 
   public getXHTML(): Document | null {
-    if (this.enrichedXSL && this.xml) {
+    if (this.enrichedXSL && this.document) {
       const processor = new XSLTProcessor();
 
       processor.importStylesheet(this.enrichedXSL);
-      this.xhtml = processor.transformToDocument(this.xml);
+      this.xhtml = processor.transformToDocument(this.document.getXML(true));
 
       return this.xhtml;
     } else {
@@ -39,8 +39,8 @@ export class Editor extends EventEmitter {
   }
 
   public getRenderer(h: CreateElement): VNodeRenderer {
-    if (this.xml && this.schema) {
-      return new VNodeRenderer(h, this.xml, this.schema);
+    if (this.document && this.schema) {
+      return new VNodeRenderer(h, this.document.getXML(true), this.schema);
     } else {
       throw new Error('Jigsaw Renderer unable to initialize');
     }
@@ -117,7 +117,6 @@ export class Editor extends EventEmitter {
 
     // create a complex document representation of the xml
     this.document =  new ComplexDocument(xml, this.schema);
-    this.xml = this.document.getXML(true);
 
     // enrich the xsl to output uuids
     this.enrichedXSL = await this.enrichStylesheet(xsl);
@@ -125,7 +124,7 @@ export class Editor extends EventEmitter {
       throw new Error('Error enriching XSL');
     }
 
-    this.emit('initialized', this.xml);
+    this.emit('initialized');
   }
 
   private async enrichStylesheet(xsl: Document): Promise<Document> {

@@ -2,7 +2,7 @@
   <nav class="node-toolbar">
     <template v-for="item in path">
       <a href="#" class="toolbar-item" :key="item" @click.prevent>
-        <span v-text="item"></span>
+        <span v-text="getPrettyName(item)"></span>
       </a>
     </template>
   </nav>
@@ -44,6 +44,9 @@ export default Vue.extend({
         return data.getPath().map((n) => n.name);
       }
       return [];
+    },
+    getPrettyName(node: string): string {
+      return this.editor.nodeConfig.getNodePrettyName(node);
     },
     activate(f: string) {
       // console.log(f);

@@ -3,12 +3,14 @@ import { VNodeRenderer } from './renderer/vnode-renderer';
 import { EventEmitter } from './core/event-emitter';
 import { CreateElement } from 'vue';
 import { ComplexDocument } from './document/complex-document';
+import { NodeConfiguration, NodeConfig } from './document/node-configuration';
 import { DOMSelection } from './document/selection';
 import { KeyUtil } from './util/key.util';
 import { EditTextCommand } from './document/commands/edit-text.command';
 
 export class Editor extends EventEmitter {
   public document!: ComplexDocument;
+  public nodeConfig!: NodeConfiguration;
   public enrichedXSL!: Document;
   public xhtml!: Document;
   public renderer!: VNodeRenderer;
@@ -16,9 +18,9 @@ export class Editor extends EventEmitter {
   private selection: DOMSelection = new DOMSelection(null);
   private http: HTTPService = new HTTPService();
 
-  constructor(file: string, stylesheet: string, schema: string) {
+  constructor(file: string, stylesheet: string, schema: string, config: string) {
     super();
-    this.load(file, stylesheet, schema);
+    this.load(file, stylesheet, schema, config);
   }
 
   public getXHTML(): Document | null {
@@ -102,13 +104,15 @@ export class Editor extends EventEmitter {
     }
   }
 
-  private async load(file: string, stylesheet: string, schema: string) {
+  private async load(file: string, stylesheet: string, schema: string, configfile: string) {
     const xml = await this.http.getDocument(file);
     const xsl = await this.http.getDocument(stylesheet);
     const xsd = await this.http.getDocument(schema);
+    const config = await this.http.getJSON(configfile);
 
     // create a complex document representation of the xml
     this.document =  new ComplexDocument(xml, xsd);
+    this.nodeConfig = new NodeConfiguration(config as NodeConfig[]);
 
     // enrich the xsl to output uuids
     this.enrichedXSL = await this.enrichStylesheet(xsl);

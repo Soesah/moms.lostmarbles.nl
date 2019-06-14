@@ -29,6 +29,10 @@ const props = {
     type: String,
     required: true,
   },
+  config: {
+    type: String,
+    required: true,
+  },
 };
 
 interface JigsawState {
@@ -46,7 +50,7 @@ export default Vue.extend({
     };
   },
   created() {
-    this.editor = new Editor(this.xml, this.stylesheet, this.schema);
+    this.editor = new Editor(this.xml, this.stylesheet, this.schema, this.config);
 
     this.editor.on('initialized', () => {
       this.ready = true;

@@ -1,0 +1,110 @@
+[
+  {
+    "node": "recipe",
+    "name": "Recipe"
+  },
+  {
+    "node": "image",
+    "name": "Image"
+  },
+  {
+    "node": "title",
+    "name": "Title"
+  },
+  {
+    "node": "cook",
+    "name": "Cook"
+  },
+  {
+    "node": "servings",
+    "name": "Servings"
+  },
+  {
+    "node": "preparation",
+    "name": "Preparation"
+  },
+  {
+    "node": "description",
+    "name": "Description"
+  },
+  {
+    "node": "ingredients",
+    "name": "Ingredients"
+  },
+  {
+    "node": "ingredient",
+    "name": "Ingredient"
+  },
+  {
+    "node": "amount",
+    "name": "Amount"
+  },
+  {
+    "node": "name",
+    "name": "Name"
+  },
+  {
+    "node": "remark",
+    "name": "Remark"
+  },
+  {
+    "node": "preparation",
+    "name": "Preparation"
+  },
+  {
+    "node": "step",
+    "name": "Step"
+  },
+  {
+    "node": "notes",
+    "name": "Notes"
+  },
+  {
+    "node": "note",
+    "name": "Note"
+  },
+  {
+    "node": "author",
+    "name": "Author"
+  },
+  {
+    "node": "block",
+    "name": "Block"
+  },
+  {
+    "node": "inline",
+    "name": "Inline"
+  },
+  {
+    "node": "paragraph",
+    "name": "Paragraph"
+  },
+  {
+    "node": "list",
+    "name": "List"
+  },
+  {
+    "node": "ordered",
+    "name": "Ordered"
+  },
+  {
+    "node": "item",
+    "name": "Item"
+  },
+  {
+    "node": "emphasis",
+    "name": "Emphasis"
+  },
+  {
+    "node": "strong",
+    "name": "Strong"
+  },
+  {
+    "node": "underline",
+    "name": "Underline"
+  },
+  {
+    "node": "superscript",
+    "name": "Superscript"
+  }
+]

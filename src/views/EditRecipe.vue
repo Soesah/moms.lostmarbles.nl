@@ -1,7 +1,7 @@
 <template>
   <main class="columns">
     <section class="column main" v-if="xml">
-      <jigsaw :xml="xml" schema="/recipe.xsd" stylesheet="/recipe.xsl"></jigsaw>
+      <jigsaw :xml="xml" schema="/recipe.xsd" stylesheet="/recipe.xsl" config="/config.json"></jigsaw>
     </section>
     <section class="column">
       <page-menu></page-menu>

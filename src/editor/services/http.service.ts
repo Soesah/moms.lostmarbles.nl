@@ -7,4 +7,10 @@ export class HTTPService {
 
     return parseXMLDocument(result.data);
   }
+
+  public async getJSON(filename: string): Promise<object> {
+    const result = await axios.get(filename);
+
+    return result.data;
+  }
 }

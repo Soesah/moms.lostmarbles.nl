@@ -9,7 +9,6 @@
   </main>
 </template>
 <script>
-import Jigsaw from '@/editor/Jigsaw';
 import PageMenu from '@/components/common/PageMenu';
 import { MenuGroup } from '@/models/menu.model';
 import { AuthLevel } from '../models/auth.model';
@@ -68,7 +67,6 @@ export default {
     },
   },
   components: {
-    Jigsaw,
     PageMenu,
   },
 };

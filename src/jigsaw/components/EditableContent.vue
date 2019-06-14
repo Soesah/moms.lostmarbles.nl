@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue, { CreateElement, VNode } from 'vue';
-import { VNodeRenderer } from '@/editor/renderer/vnode-renderer';
-import { getElementByXpath } from '@/editor/util/dom.util';
+import { VNodeRenderer } from '@/jigsaw/renderer/vnode-renderer';
+import { getElementByXpath } from '@/jigsaw/util/dom.util';
 
 export default Vue.extend({
   name: 'EditableContent',

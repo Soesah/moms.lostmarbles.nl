@@ -30,7 +30,7 @@ export default Vue.extend({
   },
   methods: {
     activate(commandName: string) {
-      console.log(commandName);
+      // console.log(commandName);
     },
   },
 });

@@ -9,12 +9,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Editor } from '@/editor/editor.ts';
-import EditorToolbar from '@/editor/components/EditorToolbar.vue';
-import EditorNodeToolbar from '@/editor/components/EditorNodeToolbar.vue';
-import EditableContent from '@/editor/components/EditableContent.vue';
-import EditorContextMenu from '@/editor/components/EditorContextMenu.vue';
-import { SchemaDocument } from '@/editor/schema/document.definition';
+import { Editor } from '@/jigsaw/editor.ts';
+import EditorToolbar from '@/jigsaw/components/EditorToolbar.vue';
+import EditorNodeToolbar from '@/jigsaw/components/EditorNodeToolbar.vue';
+import EditableContent from '@/jigsaw/components/EditableContent.vue';
+import EditorContextMenu from '@/jigsaw/components/EditorContextMenu.vue';
+import { SchemaDocument } from '@/jigsaw/schema/document.definition';
 
 const props = {
   xml: {
@@ -55,6 +55,10 @@ export default Vue.extend({
     this.editor.on('initialized', () => {
       this.ready = true;
     });
+
+    this.editor.on('changedFocus', (node) => {
+      this.$store.commit('jigsaw/changeNode', node)
+    })
   },
   components: {
     EditorToolbar,

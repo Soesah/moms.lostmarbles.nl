@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import axios from 'axios';
+import jigsaw from './jigsaw';
 import {
   longDateFilter,
   dateFilter,
@@ -14,6 +15,8 @@ axios.interceptors.response.use(undefined, (err) => {
   }
 });
 
+Vue.use(jigsaw, { store });
+
 Vue.config.productionTip = false;
 
 Vue.filter('longDate', longDateFilter);
@@ -24,6 +27,7 @@ Vue.directive('focus', {
     el.select();
   },
 });
+
 
 new Vue({
   router,

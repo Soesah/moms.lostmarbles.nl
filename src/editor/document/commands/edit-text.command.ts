@@ -4,6 +4,8 @@ import { NodeType } from '../document.info';
 
 export class EditTextCommand {
 
+  public static command: string = 'EditText';
+
   public execute(node: ComplexText, _: ComplexDocument, contents: string) {
     node.value = contents;
   }

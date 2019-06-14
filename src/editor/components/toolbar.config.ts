@@ -70,7 +70,7 @@ export const toolbarConfig: ToolbarConfig = [
     items: [
       {
         label: 'Add',
-        command: 'addNode',
+        command: 'ShowAddMenu',
         icon: 'add',
       },
       {

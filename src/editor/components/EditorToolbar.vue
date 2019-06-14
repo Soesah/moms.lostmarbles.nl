@@ -3,7 +3,7 @@
     <template v-for="group in config">
       <div class="toolbar-group" :key="group.name">
         <template v-for="item in group.items">
-          <a href="#" class="toolbar-item" :key="item.label" @click.prevent="activate(item.f)">
+          <a href="#" class="toolbar-item" :key="item.label" @click.prevent="activate(item.command)">
             <span :class="`icon-${item.icon}`"></span>
           </a>
         </template>
@@ -29,8 +29,8 @@ export default Vue.extend({
     };
   },
   methods: {
-    activate(f: string) {
-      // console.log(f);
+    activate(commandName: string) {
+      console.log(commandName);
     },
   },
 });

@@ -1,6 +1,7 @@
 <template>
   <section class="box">
-    <h2>{{ categoryName() || 'Recepten'}}</h2>
+    <h2>{{ categoryName() || 'Recepten'}}<span v-if="searchValue"><i> met {{ searchValue }}</i></span></h2>
+
     <p v-if="loading">De recepten worden geladen...</p>
     <ol>
       <li v-for="recipe in filteredRecipes" :key="recipe.id">
@@ -10,7 +11,7 @@
   </section>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'RecipeList',
@@ -20,6 +21,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['searchValue']),
     ...mapGetters(['categoryName']),
     ...mapGetters(['filteredRecipes']),
   },

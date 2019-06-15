@@ -44,6 +44,20 @@ But it means that the commands modify both the XML as well as the ComplexDocumen
 
 Commands should be used for everything. When the document changes, the selection/focus changes, the application should react. You should use vuex for application state. So you provide each command with document, state and selection/focus to determine whether or not the command `canExecute`. Buttons execute command and certain key actions `execute` commands. You would rather not instance commands every time. You instance them on the editor, and keep providing them with the info they need, and once more on execute.
 
+You have the Toolbar, NodeToolbar with Menu, and ContextMenu. The toolbar is populated by the config, but also by the context/
+
+### Context
+
+The context provides information about the node. The context really is a complex node.
+
+- can be deleted
+- children thaxt can be inserted
+- can be moved up/down
+- copy
+- paste
+- parents, and the nodes that can be inserted there. (this should not be shown with the NodeToolbar)
+- attribute editor option
+
 ## Update node
 
 Perhaps you can let the VNode register a listener on document to update itself....

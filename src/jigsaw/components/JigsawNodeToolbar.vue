@@ -1,56 +1,44 @@
 <template>
   <nav class="node-toolbar">
-    <template v-for="item in path">
-      <a href="#" class="toolbar-item" :key="item" @click.prevent>
+    <jigsaw-toolbar-item v-for="item in path" :key="item">
+      <a href="#" class="toolbar-item"  @click.prevent="showMenu">
         <span v-text="getPrettyName(item)"></span>
       </a>
-    </template>
+    </jigsaw-toolbar-item>
   </nav>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import JigsawToolbarItem from './JigsawToolbarItem.vue';
 import { ComplexNode } from '../document/complex-node';
-
-interface JigsawNodeToolbarState {
-  path: string[];
-}
+import { mapState } from 'vuex';
+import { JigsawState } from '../store';
 
 export default Vue.extend({
   name: 'JigsawNodeToolbar',
-  props: {
-    editor: {
-      type: Object,
-      required: true,
-    },
-  },
-  data(): JigsawNodeToolbarState {
-    return {
-      path: [],
-    };
-  },
-  created() {
-    this.editor.on('changedFocus', (evt: any) => {
-      if (evt) {
-        this.path = this.getPathItems(evt.data);
-      } else {
-        this.path = [];
-      }
-    });
-  },
-  methods: {
-    getPathItems(data: ComplexNode | null): string[] {
-      if (data) {
-        return data.getPath().map((n) => n.name);
+  computed: {
+    ...mapState('jigsaw', {
+      editor: (state: JigsawState) => state.editor,
+      context: (state: JigsawState) => state.context,
+    }),
+    path(): string[] {
+      if ((this as any).context) {
+        return (this as any).context.getPath().map((n: ComplexNode) => n.name);
       }
       return [];
-    },
+    }
+  },
+  methods: {
     getPrettyName(node: string): string {
-      return this.editor.nodeConfig.getNodePrettyName(node);
+      return (this as any).editor.nodeConfig.getNodePrettyName(node);
     },
     activate(f: string) {
       // console.log(f);
     },
+  },
+  components: {
+    JigsawToolbarItem,
   },
 });
 </script>

@@ -15,7 +15,6 @@ export class Editor extends EventEmitter {
   public xhtml!: Document;
   public renderer!: VNodeRenderer;
 
-  private selection: DOMSelection = new DOMSelection(null);
   private http: HTTPService = new HTTPService();
 
   constructor(file: string, stylesheet: string, schema: string, config: string) {
@@ -45,8 +44,11 @@ export class Editor extends EventEmitter {
   }
 
   public handleSelectionChange(evt: Event) {
-    this.selection = new DOMSelection(document.getSelection());
-    const el = this.selection.getNode();
+    const selection = new DOMSelection(document.getSelection());
+
+    this.emit('changedSelection', selection);
+
+    const el = selection.getNode();
     if (el && el !== document ) {
 
       const id = (el as Element).getAttribute('data-editor-node-id');

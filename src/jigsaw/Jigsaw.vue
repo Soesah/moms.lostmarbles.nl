@@ -1,9 +1,9 @@
 <template>
   <div class="editor" v-if="ready">
-    <jigsaw-toolbar :editor="editor"></jigsaw-toolbar>
-    <editable-content :editor="editor"></editable-content>
-    <jigsaw-context-menu :editor="editor"></jigsaw-context-menu>
-    <jigsaw-node-toolbar :editor="editor"></jigsaw-node-toolbar>
+    <jigsaw-toolbar></jigsaw-toolbar>
+    <editable-content></editable-content>
+    <jigsaw-context-menu></jigsaw-context-menu>
+    <jigsaw-node-toolbar></jigsaw-node-toolbar>
   </div>
 </template>
 
@@ -36,7 +36,6 @@ const props = {
 };
 
 interface JigsawState {
-  editor: Editor | null;
   ready: boolean;
 }
 
@@ -45,19 +44,24 @@ export default Vue.extend({
   props,
   data(): JigsawState {
     return {
-      editor: null,
       ready: false,
     };
   },
   created() {
-    this.editor = new Editor(this.xml, this.stylesheet, this.schema, this.config);
+    const editor = new Editor(this.xml, this.stylesheet, this.schema, this.config);
 
-    this.editor.on('initialized', () => {
+    // set the editor in the store
+    this.$store.commit('jigsaw/setEditor', editor);
+
+    editor.on('initialized', () => {
       this.ready = true;
     });
 
-    this.editor.on('changedFocus', (node) => {
-      this.$store.commit('jigsaw/changeNode', node)
+    editor.on('changedSelection', (selection) => {
+      this.$store.commit('jigsaw/setSelection', selection)
+    })
+    editor.on('changedFocus', (evt) => {
+      this.$store.commit('jigsaw/setContext', evt.data)
     })
   },
   components: {

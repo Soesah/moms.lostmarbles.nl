@@ -3,7 +3,7 @@
     <template v-for="group in config">
       <div class="toolbar-group" :key="group.name">
         <template v-for="item in group.items">
-          <a href="#" class="toolbar-item" :key="item.label" @click.prevent="activate(item.command)">
+          <a href="#" class="toolbar-item" :title="item.label" :key="item.label" @click.prevent="activate(item.command)">
             <span :class="`icon-${item.icon}`"></span>
           </a>
         </template>
@@ -15,14 +15,15 @@
 <script lang="ts">
 import Vue from 'vue';
 import { toolbarConfig } from './toolbar.config';
+import { mapState } from 'vuex';
+import { JigsawState } from '../store';
 
 export default Vue.extend({
   name: 'JigsawToolbar',
-  props: {
-    editor: {
-      type: Object,
-    },
-  },
+    ...mapState('jigsaw', {
+      editor: (state: JigsawState) => state.editor,
+    }),
+
   data() {
     return {
       config: toolbarConfig,

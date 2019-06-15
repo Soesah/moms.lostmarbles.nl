@@ -2,13 +2,15 @@
 import Vue, { CreateElement, VNode } from 'vue';
 import { VNodeRenderer } from '@/jigsaw/renderer/vnode-renderer';
 import { getElementByXpath } from '@/jigsaw/util/dom.util';
+import { mapState } from 'vuex';
+import { JigsawState } from '../store';
 
 export default Vue.extend({
   name: 'EditableContent',
-  props: {
-    editor: {
-      type: Object,
-    },
+  computed: {
+    ...mapState('jigsaw', {
+      editor: (state: JigsawState) => state.editor,
+    }),
   },
   render(h: CreateElement) {
     const renderer = this.editor.getRenderer(h);

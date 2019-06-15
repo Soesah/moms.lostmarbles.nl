@@ -12,19 +12,19 @@
 import Vue from 'vue';
 import { ComplexNode } from '../document/complex-node';
 
-interface EditorNodeToolbarState {
+interface JigsawNodeToolbarState {
   path: string[];
 }
 
 export default Vue.extend({
-  name: 'EditorNodeToolbar',
+  name: 'JigsawNodeToolbar',
   props: {
     editor: {
       type: Object,
       required: true,
     },
   },
-  data(): EditorNodeToolbarState {
+  data(): JigsawNodeToolbarState {
     return {
       path: [],
     };

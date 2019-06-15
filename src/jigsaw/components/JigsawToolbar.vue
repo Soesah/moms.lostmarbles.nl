@@ -17,7 +17,7 @@ import Vue from 'vue';
 import { toolbarConfig } from './toolbar.config';
 
 export default Vue.extend({
-  name: 'EditorToolbar',
+  name: 'JigsawToolbar',
   props: {
     editor: {
       type: Object,

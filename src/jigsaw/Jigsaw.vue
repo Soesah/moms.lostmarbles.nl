@@ -1,19 +1,19 @@
 <template>
   <div class="editor" v-if="ready">
-    <editor-toolbar :editor="editor"></editor-toolbar>
+    <jigsaw-toolbar :editor="editor"></jigsaw-toolbar>
     <editable-content :editor="editor"></editable-content>
-    <editor-context-menu :editor="editor"></editor-context-menu>
-    <editor-node-toolbar :editor="editor"></editor-node-toolbar>
+    <jigsaw-context-menu :editor="editor"></jigsaw-context-menu>
+    <jigsaw-node-toolbar :editor="editor"></jigsaw-node-toolbar>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { Editor } from '@/jigsaw/editor.ts';
-import EditorToolbar from '@/jigsaw/components/EditorToolbar.vue';
-import EditorNodeToolbar from '@/jigsaw/components/EditorNodeToolbar.vue';
+import JigsawToolbar from '@/jigsaw/components/JigsawToolbar.vue';
+import JigsawNodeToolbar from '@/jigsaw/components/JigsawNodeToolbar.vue';
 import EditableContent from '@/jigsaw/components/EditableContent.vue';
-import EditorContextMenu from '@/jigsaw/components/EditorContextMenu.vue';
+import JigsawContextMenu from '@/jigsaw/components/JigsawContextMenu.vue';
 import { SchemaDocument } from '@/jigsaw/schema/document.definition';
 
 const props = {
@@ -61,10 +61,10 @@ export default Vue.extend({
     })
   },
   components: {
-    EditorToolbar,
-    EditorNodeToolbar,
+    JigsawToolbar,
+    JigsawNodeToolbar,
     EditableContent,
-    EditorContextMenu,
+    JigsawContextMenu,
   },
 });
 </script>

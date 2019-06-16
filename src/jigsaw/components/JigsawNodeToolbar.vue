@@ -1,9 +1,7 @@
 <template>
   <nav class="node-toolbar">
     <jigsaw-toolbar-item v-for="item in path" :key="item">
-      <a href="#" class="toolbar-item"  @click.prevent="showMenu">
-        <span v-text="getPrettyName(item)"></span>
-      </a>
+      <span v-text="getPrettyName(item)"></span>
     </jigsaw-toolbar-item>
   </nav>
 </template>
@@ -75,22 +73,5 @@ export default Vue.extend({
   border-top-color: rgb(142, 177, 204);
   border-left-color: rgb(142, 177, 204);
   border-radius: 2px;
-}
-
-.toolbar-item {
-  padding: 2px 2px 0;
-  text-align: center;
-  border-radius: 2px;
-  margin: 3px 2px 2px;
-  margin-right: 0px;
-  color: white;
-  background: rgb(87, 123, 156);
-  font-size: 14px;
-  line-height: 17px;
-  text-decoration: none;
-  padding: 4px 8px;
-}
-.toolbar-item:hover {
-  opacity: 0.5;
 }
 </style>

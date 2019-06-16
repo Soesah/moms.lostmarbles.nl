@@ -57,8 +57,29 @@ export class ComplexNode {
   }
 
   get allowedChildren(): ComplexNode[] {
+    // requires implementation
     return [];
   }
+
+  get canBeRemoved(): boolean {
+    // requires implementation
+    return true;
+  }
+
+  get canMoveUp(): boolean {
+    // requires implementation
+    return true;
+  }
+
+  get canMoveDown(): boolean {
+    // requires implementation
+    return true;
+  }
+
+  get hasAttributes(): boolean {
+    return this.attributes.length !== 0;
+  }
+
 
   public getPath(path: ComplexNode[] = []): ComplexNode[] {
     return this.parentNode

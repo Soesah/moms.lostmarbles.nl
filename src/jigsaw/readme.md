@@ -51,7 +51,7 @@ You have the Toolbar, NodeToolbar with Menu, and ContextMenu. The toolbar is pop
 The context provides information about the node. The context really is a complex node.
 
 - can be deleted
-- children thaxt can be inserted
+- children that can be inserted
 - can be moved up/down
 - copy
 - paste

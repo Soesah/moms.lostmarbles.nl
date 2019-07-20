@@ -48,7 +48,12 @@ export default Vue.extend({
     };
   },
   created() {
-    const editor = new Editor(this.xml, this.stylesheet, this.schema, this.config);
+    const editor = new Editor(
+      this.xml,
+      this.stylesheet,
+      this.schema,
+      this.config,
+    );
 
     // set the editor in the store
     this.$store.commit('jigsaw/setEditor', editor);
@@ -58,11 +63,11 @@ export default Vue.extend({
     });
 
     editor.on('changedSelection', (selection) => {
-      this.$store.commit('jigsaw/setSelection', selection)
-    })
+      this.$store.commit('jigsaw/setSelection', selection);
+    });
     editor.on('changedFocus', (evt) => {
-      this.$store.commit('jigsaw/setContext', evt.data)
-    })
+      this.$store.commit('jigsaw/setContext', evt.data);
+    });
   },
   components: {
     JigsawToolbar,

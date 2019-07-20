@@ -43,6 +43,18 @@ export class RecipeService {
     };
   }
 
+  public async save(recipe: Recipe): Promise<RecipeResponse> {
+    const response = await this.$http.post(
+      `${this.path}/${recipe.id}/${recipe.category_id}`,
+      recipe,
+    );
+    const status = response.status === STATUS_OK;
+    return {
+      status,
+      data: status ? new Recipe(response.data.data) : null,
+    };
+  }
+
   public async getList(): Promise<RecipeListResponse> {
     if (this.recipes.length) {
       return {

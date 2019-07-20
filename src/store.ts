@@ -159,6 +159,10 @@ export default new Vuex.Store({
       const data = await recipeService.getRecipeLatestChanges(recipe);
       return data.status ? data.data : [];
     },
+    async saveRecipe({}, recipe: Recipe) {
+      const data = await recipeService.save(recipe);
+      return data.status ? data.data : null;
+    },
   },
   getters: {
     filteredRecipes: (state): Recipe[] => {

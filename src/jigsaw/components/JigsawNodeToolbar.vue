@@ -25,7 +25,7 @@ export default Vue.extend({
         return (this as any).context.getPath().map((n: ComplexNode) => n.name);
       }
       return [];
-    }
+    },
   },
   methods: {
     getPrettyName(node: string): string {

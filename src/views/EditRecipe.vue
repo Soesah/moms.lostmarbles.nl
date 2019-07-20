@@ -6,7 +6,8 @@
         schema="/recipe.xsd"
         stylesheet="/recipe.xsl"
         config="/config.json"
-        @save="saveRecipe"></jigsaw>
+        @save="saveRecipe"
+      ></jigsaw>
     </section>
     <section class="column">
       <page-menu></page-menu>
@@ -71,8 +72,8 @@ export default {
       this.$store.dispatch('getRecipeBySlug', slug);
     },
     saveRecipe(recipe) {
-
-    }
+      this.$store.dispatch('saveRecipe', recipe);
+    },
   },
   components: {
     PageMenu,

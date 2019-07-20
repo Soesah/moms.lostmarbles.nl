@@ -23,8 +23,6 @@ export class SchemaParser {
 
     this.schema.resolveComplexTypes();
     this.schema.updateTypes();
-
-    // console.log(this.schema);
   }
 
   private parseNode(

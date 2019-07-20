@@ -30,6 +30,7 @@ skip_files:
   - settings.json
   - tsconfig.json
   - vue.config.js
+  - tslint.json
   - package.json
   - yarn.lock
   - yarn-error.log

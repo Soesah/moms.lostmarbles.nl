@@ -23,6 +23,7 @@ skip_files:
   - dev/ #used for development
   - src/
   - test/
+  - source/
   - public/
   - README.md
   - .eslintrc.js
@@ -31,6 +32,7 @@ skip_files:
   - tsconfig.json
   - vue.config.js
   - tslint.json
+  - recipes.xml
   - package.json
   - yarn.lock
   - yarn-error.log

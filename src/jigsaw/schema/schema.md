@@ -2,6 +2,10 @@
 
 Parsing the schema isn't easy. Let's write down what we can say about a simple node.
 
+There is a difference between the schema by itself and a complex node, which is a node in the document, in place, which adheres to the schema.
+
+Once you are handling a node in the document, you want to know if it can `move up`, `move down`, `can be removed`, or if a child `can be inserted` before or after.
+
 ## Image
 
 - is defined a root element. It has a `complexType`
@@ -11,10 +15,12 @@ Parsing the schema isn't easy. Let's write down what we can say about a simple n
 - it is in a `sequence` and comes before `title` as the `first node`
 - that sequence though belongs to `recipe`.
 
-## title
+## Title
 
 - title is defined a root element. It is a `string`
 - it is referenced by `recipe`, after `image`
+
+## Recipe
 
 Let's try to put `recipe` in a model:
 

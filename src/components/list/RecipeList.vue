@@ -1,6 +1,11 @@
 <template>
   <section class="box">
-    <h2>{{ categoryName() || 'Recepten'}}<span v-if="searchValue"><i> met {{ searchValue }}</i></span></h2>
+    <h2>
+      {{ categoryName() || 'Recepten'}}
+      <span v-if="searchValue">
+        <i>met {{ searchValue }}</i>
+      </span>
+    </h2>
 
     <p v-if="loading">De recepten worden geladen...</p>
     <ol>

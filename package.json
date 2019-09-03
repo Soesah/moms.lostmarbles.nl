@@ -19,7 +19,7 @@
     "patch": "./bin/deploy.sh patch",
     "deploy": "yarn build && gcloud app deploy app.yaml --project moms-lost-marbles -q",
     "update-index": "cp dev/index.yaml ./index.yaml && gcloud datastore create-indexes index.yaml --project moms-lost-marbles -q"
-},
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "vue": "^2.5.17",

@@ -12,7 +12,10 @@
           v-focus
           @input="update"
           placeholder="(ei, boerenkool, kip)"
-        >
+        />
+        <button v-if="searchValue !== ''" class="search__clear-button icon-only" @click="clear()">
+          <i class="icon icon-close"></i>
+        </button>
       </div>
     </form>
   </section>
@@ -31,6 +34,10 @@ export default {
   methods: {
     update() {
       this.$store.commit('setSearch', this.searchValue);
+    },
+    clear() {
+      this.searchValue = '';
+      this.update();
     },
   },
 };

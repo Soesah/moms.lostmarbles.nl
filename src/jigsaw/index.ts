@@ -5,9 +5,14 @@ import { jigsawStore } from './store';
 
 export default {
   install(vue: VueConstructor<Vue>, { store }: { store: Store<any> }) {
-
     vue.component('jigsaw', Jigsaw);
-    store.registerModule('jigsaw', jigsawStore);
 
+    if (!store) {
+      throw new Error(
+        'No Vuex store provided. Jigsaw requires a Vuex store to work.',
+      );
+    }
+
+    store.registerModule('jigsaw', jigsawStore);
   },
 };

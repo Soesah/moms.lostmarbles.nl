@@ -3,6 +3,8 @@ interface ToolbarItem {
   icon: string;
   command: string;
   showLabel?: boolean;
+  children?: ToolbarItem[];
+  dynamicChildren?: boolean;
 }
 
 interface ToolbarGroup {
@@ -37,11 +39,13 @@ export const toolbarConfig: ToolbarConfig = [
         label: 'Add',
         command: 'ShowAddMenu',
         icon: 'add',
+        dynamicChildren: true,
       },
       {
         label: 'Remove',
         command: 'removeNode',
         icon: 'remove',
+        dynamicChildren: true,
       },
     ],
   },
@@ -77,11 +81,41 @@ export const toolbarConfig: ToolbarConfig = [
         label: 'Move up',
         command: 'moveUp',
         icon: 'chevron_up',
+        dynamicChildren: true,
       },
       {
         label: 'Move down',
         command: 'moveDown',
         icon: 'chevron_down',
+        dynamicChildren: true,
+      },
+    ],
+  },
+];
+
+export const nodeToolbarConfig: ToolbarConfig = [
+  {
+    name: 'Move',
+    items: [
+      {
+        label: 'Move up',
+        command: 'moveUp',
+        icon: 'chevron_up',
+      },
+      {
+        label: 'Move down',
+        command: 'moveDown',
+        icon: 'chevron_down',
+      },
+    ],
+  },
+  {
+    name: 'Element',
+    items: [
+      {
+        label: 'Remove',
+        command: 'removeNode',
+        icon: 'remove',
       },
     ],
   },

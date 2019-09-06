@@ -5,33 +5,31 @@
     </jigsaw-toolbar-item>
   </nav>
 </template>
-
-<script lang="ts">
+<script>
 import Vue from 'vue';
 import JigsawToolbarItem from './JigsawToolbarItem.vue';
 import { ComplexNode } from '../document/complex-node';
 import { mapState } from 'vuex';
-import { JigsawState } from '../store';
 
 export default Vue.extend({
   name: 'JigsawNodeToolbar',
   computed: {
     ...mapState('jigsaw', {
-      editor: (state: JigsawState) => state.editor,
-      context: (state: JigsawState) => state.context,
+      editor: (state) => state.editor,
+      context: (state) => state.context,
     }),
-    path(): string[] {
-      if ((this as any).context) {
-        return (this as any).context.getPath().map((n: ComplexNode) => n.name);
+    path() {
+      if (this.context) {
+        return this.context.getPath().map((n) => n.name);
       }
-      return [];
+      return this.editor.getPath().map((n) => n.name);
     },
   },
   methods: {
-    getPrettyName(node: string): string {
-      return (this as any).editor.nodeConfig.getNodePrettyName(node);
+    getPrettyName(node) {
+      return this.editor.nodeConfig.getNodePrettyName(node);
     },
-    activate(f: string) {
+    activate(f) {
       // console.log(f);
     },
   },
@@ -51,6 +49,7 @@ export default Vue.extend({
   bottom: 0;
   left: 0;
   width: 100%;
+  height: 34px;
   z-index: 1;
 
   &:before {

@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Editor } from '@/jigsaw/editor.ts';
+import { JigsawEditor } from '@/jigsaw/jigsaw-editor.ts';
 import JigsawToolbar from '@/jigsaw/components/JigsawToolbar.vue';
 import JigsawNodeToolbar from '@/jigsaw/components/JigsawNodeToolbar.vue';
 import EditableContent from '@/jigsaw/components/EditableContent.vue';
@@ -48,7 +48,7 @@ export default Vue.extend({
     };
   },
   created() {
-    const editor = new Editor(
+    const editor = new JigsawEditor(
       this.xml,
       this.stylesheet,
       this.schema,

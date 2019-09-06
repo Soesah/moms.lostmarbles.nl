@@ -69,27 +69,27 @@ export default Vue.extend({
 
 .toolbar-group {
   display: flex;
-  margin: 3px 2px 2px;
+  margin: 2px 2px 2px;
   padding-right: 2px;
   border: solid 1px rgb(87, 123, 156);
   border-top-color: rgb(142, 177, 204);
   border-left-color: rgb(142, 177, 204);
-  border-radius: 2px;
 }
 
 .toolbar-item {
-  padding: 2px 2px 0;
+  padding: 2px 2px 2px;
   text-align: center;
   border-radius: 2px;
-  margin: 3px 2px 2px;
+  margin: 3px;
   margin-right: 0px;
   color: white;
   background: rgb(87, 123, 156);
-  font-size: 17px;
-  line-height: 17px;
+  font-size: 20px;
+  line-height: 20px;
   text-decoration: none;
 }
 .toolbar-item:hover {
-  opacity: 0.5;
+  opacity: 1;
+  background: rgb(48, 84, 117);
 }
 </style>

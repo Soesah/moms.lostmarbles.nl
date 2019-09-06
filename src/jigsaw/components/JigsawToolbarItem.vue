@@ -31,19 +31,21 @@ export default Vue.extend({
 </script>
 <style scoped>
 .toolbar-item {
-  padding: 2px 2px 0;
+  display: block;
+  padding: 2px 2px 2px;
   text-align: center;
   border-radius: 2px;
-  margin: 3px 2px 2px;
+  margin: 3px 4px 2px;
   margin-right: 0px;
   color: white;
   background: rgb(87, 123, 156);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 17px;
   text-decoration: none;
-  padding: 4px 8px;
+  padding: 6px;
 }
 .toolbar-item:hover {
-  opacity: 0.5;
+  opacity: 1;
+  background: rgb(48, 84, 117);
 }
 </style>

@@ -8,7 +8,7 @@ import { DOMSelection } from './document/selection';
 import { KeyUtil } from './util/key.util';
 import { EditTextCommand } from './document/commands/edit-text.command';
 
-export class Editor extends EventEmitter {
+export class JigsawEditor extends EventEmitter {
   public document!: ComplexDocument;
   public nodeConfig!: NodeConfiguration;
   public enrichedXSL!: Document;
@@ -17,9 +17,18 @@ export class Editor extends EventEmitter {
 
   private http: HTTPService = new HTTPService();
 
-  constructor(file: string, stylesheet: string, schema: string, config: string) {
+  constructor(
+    file: string,
+    stylesheet: string,
+    schema: string,
+    config: string,
+  ) {
     super();
     this.load(file, stylesheet, schema, config);
+  }
+
+  public getPath() {
+    return [this.document.root];
   }
 
   public getXHTML(): Document | null {
@@ -49,11 +58,9 @@ export class Editor extends EventEmitter {
     this.emit('changedSelection', selection);
 
     const el = selection.getNode();
-    if (el && el !== document ) {
-
+    if (el && el !== document) {
       const id = (el as Element).getAttribute('data-editor-node-id');
       if (id) {
-
         const node = this.document.getComplexNode(id);
         this.emit('changedFocus', node);
 
@@ -97,7 +104,6 @@ export class Editor extends EventEmitter {
           command = new EditTextCommand();
           break;
       }
-
     }
 
     if (command && command.modifiesDocument()) {
@@ -106,14 +112,19 @@ export class Editor extends EventEmitter {
     }
   }
 
-  private async load(file: string, stylesheet: string, schema: string, configfile: string) {
+  private async load(
+    file: string,
+    stylesheet: string,
+    schema: string,
+    configfile: string,
+  ) {
     const xml = await this.http.getDocument(file);
     const xsl = await this.http.getDocument(stylesheet);
     const xsd = await this.http.getDocument(schema);
     const config = await this.http.getJSON(configfile);
 
     // create a complex document representation of the xml
-    this.document =  new ComplexDocument(xml, xsd);
+    this.document = new ComplexDocument(xml, xsd);
     this.nodeConfig = new NodeConfiguration(config as NodeConfig[]);
 
     // enrich the xsl to output uuids

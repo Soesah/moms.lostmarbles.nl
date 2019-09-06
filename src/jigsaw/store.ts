@@ -1,13 +1,12 @@
 import { ComplexNode } from './document/complex-node';
 import { DOMSelection } from './document/selection';
-import { Editor } from './editor';
+import { JigsawEditor } from './jigsaw-editor';
 
 export interface JigsawState {
-  editor: Editor | null;
+  editor: JigsawEditor | null;
   selection: DOMSelection | null;
   context: ComplexNode | null;
 }
-
 
 const jigsawState: JigsawState = {
   editor: null,
@@ -19,7 +18,7 @@ export const jigsawStore = {
   namespaced: true,
   state: jigsawState,
   mutations: {
-    setEditor(state: JigsawState, editor: Editor) {
+    setEditor(state: JigsawState, editor: JigsawEditor) {
       state.editor = editor;
     },
     setSelection(state: JigsawState, selection: DOMSelection) {
@@ -29,7 +28,5 @@ export const jigsawStore = {
       state.context = context;
     },
   },
-  actions: {
-
-  },
+  actions: {},
 };

@@ -31,6 +31,21 @@ export const toolbarConfig: ToolbarConfig = [
     ],
   },
   {
+    name: 'Element',
+    items: [
+      {
+        label: 'Add',
+        command: 'ShowAddMenu',
+        icon: 'add',
+      },
+      {
+        label: 'Remove',
+        command: 'removeNode',
+        icon: 'remove',
+      },
+    ],
+  },
+  {
     name: 'Formatting',
     items: [
       {
@@ -48,6 +63,11 @@ export const toolbarConfig: ToolbarConfig = [
         command: 'insertUnderline',
         icon: 'format_underlined',
       },
+      {
+        label: 'Add image',
+        command: 'addImage',
+        icon: 'format_insert_image',
+      },
     ],
   },
   {
@@ -62,26 +82,6 @@ export const toolbarConfig: ToolbarConfig = [
         label: 'Move down',
         command: 'moveDown',
         icon: 'chevron_down',
-      },
-    ],
-  },
-  {
-    name: 'Element',
-    items: [
-      {
-        label: 'Add',
-        command: 'ShowAddMenu',
-        icon: 'add',
-      },
-      {
-        label: 'Remove',
-        command: 'removeNode',
-        icon: 'remove',
-      },
-      {
-        label: 'Add image',
-        command: 'addImage',
-        icon: 'format_insert_image',
       },
     ],
   },

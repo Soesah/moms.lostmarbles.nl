@@ -1,66 +1,110 @@
 package user
 
 import (
+	"errors"
 	"net/http"
-	"strings"
 
-	"github.com/Soesah/moms.lostmarbles.nl/api"
 	"github.com/Soesah/moms.lostmarbles.nl/api/models"
-	"google.golang.org/appengine"
-	"google.golang.org/appengine/datastore"
+)
+
+var (
+	errUserNotFound = errors.New("User not found")
 )
 
 // GetUserList returns a list of Users
 func GetUserList(r *http.Request) ([]models.User, error) {
-	var users []models.User
-	ctx := appengine.NewContext(r)
+	c := Controller{}
 
-	q := datastore.NewQuery(api.MomsUserKind)
-	_, err := q.GetAll(ctx, &users)
+	users, err := c.Load(r)
+
 	if err != nil {
 		return users, err
 	}
 
 	return users, nil
-
 }
 
 // CreateUser creates a user
 func CreateUser(user models.User, r *http.Request) (models.User, error) {
-	ctx := appengine.NewContext(r)
-	key := api.UserKey(ctx, user.ID)
+	c := Controller{}
 
-	user.Search = strings.ToLower(user.Name)
-	_, err := datastore.Put(ctx, key, &user)
+	users, err := c.Load(r)
+
+	if err != nil {
+		return user, err
+	}
+
+	user.ID = c.GetNewID()
+
+	updated := users
+	updated = append(updated, user)
+
+	err = c.Store(updated, r)
 
 	if err != nil {
 		return user, err
 	}
 
 	return user, nil
-}
-
-// GetUser returns a user
-func GetUser() {
-
 }
 
 // UpdateUser updates a user
 func UpdateUser(user models.User, r *http.Request) (models.User, error) {
-	ctx := appengine.NewContext(r)
-	key := api.UserKey(ctx, user.ID)
+	c := Controller{}
 
-	user.Search = strings.ToLower(user.Name)
-	_, err := datastore.Put(ctx, key, &user)
+	users, err := c.Load(r)
 
 	if err != nil {
 		return user, err
 	}
 
+	var updated []models.User
+	found := false
+	for _, u := range users {
+		if u.ID == user.ID {
+			updated = append(updated, user)
+			found = true
+		} else {
+			updated = append(updated, u)
+		}
+	}
+
+	if !found {
+		return user, errUserNotFound
+	}
+
 	return user, nil
 }
 
-// DeleteUser deletes a user
-func DeleteUser() {
+// DeleteUser deletes a category
+func DeleteUser(ID int64, r *http.Request) error {
+	c := Controller{}
 
+	users, err := c.Load(r)
+
+	if err != nil {
+		return err
+	}
+
+	var updated []models.User
+	found := false
+	for _, u := range users {
+		if u.ID == ID {
+			found = true
+		} else {
+			updated = append(updated, u)
+		}
+	}
+
+	if !found {
+		return errUserNotFound
+	}
+
+	err = c.Store(updated, r)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

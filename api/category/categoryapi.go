@@ -1,21 +1,22 @@
 package category
 
 import (
+	"errors"
 	"net/http"
 
-	"github.com/Soesah/moms.lostmarbles.nl/api"
 	"github.com/Soesah/moms.lostmarbles.nl/api/models"
-	"google.golang.org/appengine"
-	"google.golang.org/appengine/datastore"
+)
+
+var (
+	errCategoryNotFound = errors.New("Category not found")
 )
 
 // GetCategoryList returns a list of categories
 func GetCategoryList(r *http.Request) ([]models.Category, error) {
-	var categories []models.Category
-	ctx := appengine.NewContext(r)
+	c := Controller{}
 
-	q := datastore.NewQuery(api.MomsCategoryKind)
-	_, err := q.GetAll(ctx, &categories)
+	categories, err := c.Load(r)
+
 	if err != nil {
 		return categories, err
 	}
@@ -24,14 +25,24 @@ func GetCategoryList(r *http.Request) ([]models.Category, error) {
 }
 
 // GetCategory returns a category
-func GetCategory(id int64, r *http.Request) (models.Category, error) {
+func GetCategory(ID int64, r *http.Request) (models.Category, error) {
 	var category models.Category
-	ctx := appengine.NewContext(r)
-	key := api.CategoryKey(ctx, id)
+	c := Controller{}
 
-	err := datastore.Get(ctx, key, &category)
+	categories, err := c.Load(r)
+
 	if err != nil {
 		return category, err
+	}
+
+	for _, cat := range categories {
+		if cat.ID == ID {
+			category = cat
+		}
+	}
+
+	if category.NameSingular == "" {
+		return category, errCategoryNotFound
 	}
 
 	return category, nil
@@ -39,10 +50,31 @@ func GetCategory(id int64, r *http.Request) (models.Category, error) {
 
 // UpdateCategory updates a category
 func UpdateCategory(category models.Category, r *http.Request) (models.Category, error) {
-	ctx := appengine.NewContext(r)
-	key := api.CategoryKey(ctx, category.ID)
+	c := Controller{}
 
-	_, err := datastore.Put(ctx, key, &category)
+	categories, err := c.Load(r)
+
+	if err != nil {
+		return category, err
+	}
+
+	var updated []models.Category
+	found := false
+	for _, u := range categories {
+		if u.ID == category.ID {
+			updated = append(updated, category)
+			found = true
+		} else {
+			updated = append(updated, u)
+		}
+	}
+
+	if !found {
+		return category, errCategoryNotFound
+	}
+
+	err = c.Store(updated, r)
+
 	if err != nil {
 		return category, err
 	}
@@ -51,11 +83,31 @@ func UpdateCategory(category models.Category, r *http.Request) (models.Category,
 }
 
 // DeleteCategory deletes a category
-func DeleteCategory(id int64, r *http.Request) error {
-	ctx := appengine.NewContext(r)
-	key := api.CategoryKey(ctx, id)
+func DeleteCategory(ID int64, r *http.Request) error {
+	c := Controller{}
 
-	err := datastore.Delete(ctx, key)
+	categories, err := c.Load(r)
+
+	if err != nil {
+		return err
+	}
+
+	var updated []models.Category
+	found := false
+	for _, u := range categories {
+		if u.ID == ID {
+			found = true
+		} else {
+			updated = append(updated, u)
+		}
+	}
+
+	if !found {
+		return errCategoryNotFound
+	}
+
+	err = c.Store(updated, r)
+
 	if err != nil {
 		return err
 	}

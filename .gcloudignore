@@ -1,0 +1,21 @@
+^(.*/)?.*\.DS_Store$
+node_modules/
+.vscode/
+old/
+bin/
+dev/ #used for development
+src/
+test/
+source/
+public/
+README.md
+.eslintrc.js
+.gitignore
+settings.json
+tsconfig.json
+vue.config.js
+tslint.json
+recipes.xml
+package.json
+yarn.lock
+yarn-error.log

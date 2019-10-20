@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/Soesah/docs.front-crafter.nl/server/config"
+	"github.com/Soesah/moms.lostmarbles.nl/server/config"
 	"github.com/Soesah/moms.lostmarbles.nl/server/httpext"
 )
 

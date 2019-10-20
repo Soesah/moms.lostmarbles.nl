@@ -1,5 +1,4 @@
-runtime: go
-api_version: go1
+runtime: go112
 instance_class: F1
 
 default_expiration: '1d'
@@ -13,29 +12,6 @@ handlers:
     script: _go_app
     secure: always
     redirect_http_response_code: 301
-
-skip_files:
-  - ^(.*/)?.*\.DS_Store$
-  - node_modules/
-  - .vscode/
-  - old/
-  - bin/
-  - dev/ #used for development
-  - src/
-  - test/
-  - source/
-  - public/
-  - README.md
-  - .eslintrc.js
-  - .gitignore
-  - settings.json
-  - tsconfig.json
-  - vue.config.js
-  - tslint.json
-  - recipes.xml
-  - package.json
-  - yarn.lock
-  - yarn-error.log
 
 env_variables:
   ENVIRONMENT: 'master'

@@ -18,8 +18,8 @@ type User struct {
 	ID            int64     `json:"id"`
 	Name          string    `json:"name"`
 	Search        string    `json:"-"`
-	Password      string    `json:"password"`
-	Email         string    `json:"email"`
+	Password      string    `json:"password,omitempty"`
+	Email         string    `json:"email,omitempty"`
 	LastLoginDate time.Time `json:"last_login_date,omitempty"`
-	UserLevel     int64     `json:"user_level"`
+	UserLevel     int64     `json:"user_level,omitempty"`
 }

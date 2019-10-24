@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"strings"
+	"time"
+)
 
 const (
 	// AdminLevel is for people who can edit recipes and users
@@ -17,9 +20,13 @@ const (
 type User struct {
 	ID            int64     `json:"id"`
 	Name          string    `json:"name"`
-	Search        string    `json:"-"`
 	Password      string    `json:"password,omitempty"`
 	Email         string    `json:"email,omitempty"`
 	LastLoginDate time.Time `json:"last_login_date,omitempty"`
 	UserLevel     int64     `json:"user_level,omitempty"`
+}
+
+// Search is used to search a user
+func (u *User) Search() string {
+	return strings.ToLower(u.Name)
 }

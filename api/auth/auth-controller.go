@@ -1,4 +1,4 @@
-package user
+package auth
 
 import (
 	"encoding/json"
@@ -43,35 +43,19 @@ func (c *Controller) Load(r *http.Request) (models.AuthData, error) {
 // setData is used to start the controller
 func (c *Controller) setData(data models.AuthData) {
 	c.Data = data
-	c.parseNewID()
 }
 
-// GetNewID raises the internal ID and returns a new one
-func (c *Controller) GetNewID() int64 {
-
-	c.NewID = c.NewID + 1
-	return c.NewID
+// SetUsers is used to set the user list
+func (c *Controller) SetUsers(users []models.User) {
+	c.Data.Users = users
 }
 
-// parseNewID reads the hours and sets newID
-func (c *Controller) parseNewID() {
-	var newID int64 = 0
-
-	for _, r := range c.Data.Users {
-		if r.ID > newID {
-			newID = r.ID
-		}
-	}
-
-	c.NewID = newID
-}
-
-// StoreUsers is used to store a user list
-func (c *Controller) StoreUsers(users []models.User, r *http.Request) error {
+// StoreSessions is used to store a user list
+func (c *Controller) StoreSessions(sessions []models.Session, r *http.Request) error {
 	var updated models.AuthData
 
-	updated.Sessions = c.Data.Sessions
-	updated.Users = users
+	updated.Sessions = sessions
+	updated.Users = c.Data.Users
 
 	return c.Store(updated, r)
 }

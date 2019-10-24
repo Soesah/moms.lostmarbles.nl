@@ -2,6 +2,12 @@ package models
 
 import "time"
 
+// AuthData is the complete set of sessions and users
+type AuthData struct {
+	Sessions []Session `json:"sessions"`
+	Users    []User    `json:"users"`
+}
+
 // Auth is some authentication data which is exposed to the front-end
 type Auth struct {
 	Name            string `json:"name"`

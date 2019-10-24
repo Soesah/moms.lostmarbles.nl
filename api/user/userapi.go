@@ -15,20 +15,20 @@ var (
 func GetUserList(r *http.Request) ([]models.User, error) {
 	c := Controller{}
 
-	users, err := c.Load(r)
+	data, err := c.Load(r)
 
 	if err != nil {
-		return users, err
+		return data.Users, err
 	}
 
-	return users, nil
+	return data.Users, nil
 }
 
 // CreateUser creates a user
 func CreateUser(user models.User, r *http.Request) (models.User, error) {
 	c := Controller{}
 
-	users, err := c.Load(r)
+	data, err := c.Load(r)
 
 	if err != nil {
 		return user, err
@@ -36,10 +36,10 @@ func CreateUser(user models.User, r *http.Request) (models.User, error) {
 
 	user.ID = c.GetNewID()
 
-	updated := users
+	updated := data.Users
 	updated = append(updated, user)
 
-	err = c.Store(updated, r)
+	err = c.StoreUsers(updated, r)
 
 	if err != nil {
 		return user, err
@@ -52,7 +52,7 @@ func CreateUser(user models.User, r *http.Request) (models.User, error) {
 func UpdateUser(user models.User, r *http.Request) (models.User, error) {
 	c := Controller{}
 
-	users, err := c.Load(r)
+	data, err := c.Load(r)
 
 	if err != nil {
 		return user, err
@@ -60,7 +60,7 @@ func UpdateUser(user models.User, r *http.Request) (models.User, error) {
 
 	var updated []models.User
 	found := false
-	for _, u := range users {
+	for _, u := range data.Users {
 		if u.ID == user.ID {
 			updated = append(updated, user)
 			found = true
@@ -73,6 +73,12 @@ func UpdateUser(user models.User, r *http.Request) (models.User, error) {
 		return user, errUserNotFound
 	}
 
+	err = c.StoreUsers(updated, r)
+
+	if err != nil {
+		return user, err
+	}
+
 	return user, nil
 }
 
@@ -80,7 +86,7 @@ func UpdateUser(user models.User, r *http.Request) (models.User, error) {
 func DeleteUser(ID int64, r *http.Request) error {
 	c := Controller{}
 
-	users, err := c.Load(r)
+	data, err := c.Load(r)
 
 	if err != nil {
 		return err
@@ -88,7 +94,7 @@ func DeleteUser(ID int64, r *http.Request) error {
 
 	var updated []models.User
 	found := false
-	for _, u := range users {
+	for _, u := range data.Users {
 		if u.ID == ID {
 			found = true
 		} else {
@@ -100,7 +106,7 @@ func DeleteUser(ID int64, r *http.Request) error {
 		return errUserNotFound
 	}
 
-	err = c.Store(updated, r)
+	err = c.StoreUsers(updated, r)
 
 	if err != nil {
 		return err

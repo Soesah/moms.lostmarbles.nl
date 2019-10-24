@@ -87,17 +87,6 @@ func main() {
 			})
 		})
 
-		r.Route("/system", func(r chi.Router) {
-			r.Use(middlewares.NoCache)
-			// r.Use(middlewares.AdminContext)
-			r.Post("/import/users", handlers.ImportUsers)
-			r.Post("/import/categories", handlers.ImportCategories)
-			r.Post("/import/recipes", handlers.ImportRecipes)
-			r.Post("/import/changelog", handlers.ImportChangelog)
-			r.Get("/export", handlers.ExportData)
-			r.Get("/clearall", handlers.ClearAll)
-		})
-
 		r.Route("/editor", func(r chi.Router) {
 			r.Use(middlewares.NoCache)
 			r.Use(middlewares.AdminContext)

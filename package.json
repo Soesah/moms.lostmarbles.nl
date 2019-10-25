@@ -11,14 +11,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
-    "store": "gcloud beta emulators datastore start",
-    "app": "$(gcloud beta emulators datastore env-init) && dev_appserver.py dev/app-develop.yaml --automatic_restart=no --support_datastore_emulator=True --port 8182",
+    "app": "go run moms.go",
     "build": "vue-cli-service build",
     "major": "./bin/deploy.sh major",
     "minor": "./bin/deploy.sh minor",
     "patch": "./bin/deploy.sh patch",
-    "deploy": "yarn build && gcloud app deploy app.yaml --project moms-lost-marbles -q",
-    "update-index": "cp dev/index.yaml ./index.yaml && gcloud datastore create-indexes index.yaml --project moms-lost-marbles -q"
+    "deploy": "yarn build && gcloud app deploy app.yaml --project moms-lost-marbles -q"
   },
   "dependencies": {
     "axios": "^0.18.0",

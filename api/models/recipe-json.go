@@ -20,7 +20,7 @@ type RecipeJSON struct {
 	Cook             string       `json:"cook"`
 	Servings         string       `json:"servings"`
 	PreparationTime  string       `json:"preparation_time"`
-	XML              string       `json:"-" datastore:",noindex"`
+	XML              string       `json:"-"`
 	CreationDate     time.Time    `json:"creation_date"`
 	ModificationDate time.Time    `json:"modification_date"`
 	Ingredients      []Ingredient `json:"ingredients"`
@@ -78,17 +78,17 @@ func (recipe RecipeJSON) GetIngredients() ([]Ingredient, error) {
 	return ingredients.Ingredients, nil
 }
 
-// GetSteps returns a struct for the recipes ingredients
-func (recipe RecipeJSON) GetSteps() ([]Step, error) {
+// GetPreparation returns a struct for the recipes preparation
+func (recipe RecipeJSON) GetPreparation() (Preparation, error) {
 	recipeXML := recipe.GetXML()
 	r, _ := regexp.Compile("<preparation>(.*)</preparation>")
 	preparationXML := r.FindString(recipeXML)
 	var preparation Preparation
 	err := xml.Unmarshal([]byte(preparationXML), &preparation)
 	if err != nil {
-		return preparation.Steps, err
+		return preparation, err
 	}
-	return preparation.Steps, nil
+	return preparation, nil
 }
 
 // GetNotes returns a struct for the recipes ingredients

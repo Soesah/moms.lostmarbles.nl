@@ -140,14 +140,13 @@ export default new Vuex.Store({
       commit('selectCategory', category);
     },
     async getRecipeBySlug({ state, commit, dispatch }, slug) {
-      await dispatch('getCategories');
       await dispatch('getRecipes');
       const found = (state.recipes as Recipe[]).find(
         (rec: Recipe) => rec.slug === slug,
       );
       if (found) {
-        const { id, category_id } = found;
-        const response = await recipeService.get(id, category_id);
+        const { id } = found;
+        const response = await recipeService.get(id);
         commit('setRecipe', response.data);
       }
     },

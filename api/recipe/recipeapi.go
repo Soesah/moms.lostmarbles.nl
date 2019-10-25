@@ -1,131 +1,64 @@
 package recipe
 
 import (
-	"context"
-	"errors"
 	"net/http"
-	"time"
+	"sort"
 
-	"github.com/Soesah/moms.lostmarbles.nl/api"
 	"github.com/Soesah/moms.lostmarbles.nl/api/models"
-	"google.golang.org/appengine"
-	"google.golang.org/appengine/datastore"
 )
 
 // GetRecipeList returns a list of recipes
 func GetRecipeList(r *http.Request) ([]models.RecipeItem, error) {
-	var recipes []models.Recipe
-	var items []models.RecipeItem
 
-	ctx := appengine.NewContext(r)
+	c := Controller{}
+	err := c.LoadList(r)
 
-	qr := datastore.NewQuery(api.RecipeKind)
-	_, err := qr.GetAll(ctx, &recipes)
 	if err != nil {
-		return items, err
+		return c.List, err
 	}
 
-	threemonths, _ := time.ParseDuration("2160h")
-
-	for _, recipe := range recipes {
-		ingredients, err := getRecipeIngredients(ctx, recipe)
-
-		if err != nil {
-			return items, err
-		}
-
-		recipeJSON := models.RecipeJSON{
-			XML: recipe.XML,
-		}
-
-		steps, err := recipeJSON.GetSteps()
-
-		if err != nil {
-			return items, err
-		}
-
-		items = append(items, models.RecipeItem{
-			ID:          recipe.ID,
-			CategoryID:  recipe.CategoryID,
-			Slug:        recipe.Slug,
-			Name:        recipe.Name,
-			Cook:        recipeJSON.GetCook(),
-			Ingredients: ingredients,
-			Steps:       steps,
-			IsNew:       recipe.CreationDate.After(time.Now().Add(-threemonths)),
-		})
-	}
-
-	return items, nil
-}
-
-func getRecipeIngredients(ctx context.Context, recipe models.Recipe) ([]models.Ingredient, error) {
-	var ingredients []models.Ingredient
-	recipeKey := api.RecipeKey(ctx, recipe.ID, recipe.CategoryID)
-
-	q := datastore.NewQuery(api.IngredientKind).Ancestor(recipeKey)
-	_, err := q.GetAll(ctx, &ingredients)
-	if err != nil {
-		return ingredients, err
-	}
-
-	return ingredients, nil
+	return c.List, nil
 }
 
 // GetNewRecipes returns the latest two recipe
 func GetNewRecipes(r *http.Request) ([]models.RecipeItem, error) {
-	ctx := appengine.NewContext(r)
-	var items []models.RecipeItem
-	var recipes []models.Recipe
-
-	q := datastore.NewQuery(api.RecipeKind).Order("-CreationDate")
-
-	_, err := q.GetAll(ctx, &recipes)
+	c := Controller{}
+	err := c.LoadList(r)
 
 	if err != nil {
-		return items, err
+		return c.List, err
 	}
 
-	for _, recipe := range recipes[0:2] {
+	list := c.List
+	sort.SliceStable(list, func(i, j int) bool {
+		return list[i].CreationDate.After(list[j].CreationDate)
+	})
 
-		recipeJSON := models.RecipeJSON{
-			XML: recipe.XML,
-		}
-
-		if err != nil {
-			return items, err
-		}
-
-		items = append(items, models.RecipeItem{
-			ID:           recipe.ID,
-			CategoryID:   recipe.CategoryID,
-			Slug:         recipe.Slug,
-			Name:         recipe.Name,
-			CreationDate: recipe.CreationDate,
-			Cook:         recipeJSON.GetCook(),
-		})
-	}
-
-	return items, nil
+	return list[0:2], nil
 }
 
-// CreateRecipe creates a recipe
-func CreateRecipe() {
+// AddRecipe creates a recipe
+func AddRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) {
+	c := Controller{}
+	err := c.Store(recipe, r)
 
+	if err != nil {
+		return recipe, err
+	}
+
+	return recipe, nil
 }
 
 // GetRecipe returns a recipe
-func GetRecipe(ID int64, categoryID int64, r *http.Request) (models.RecipeJSON, error) {
-	var recipe models.Recipe
+func GetRecipe(ID int64, r *http.Request) (models.RecipeJSON, error) {
 	var json models.RecipeJSON
-	ctx := appengine.NewContext(r)
-	key := api.RecipeKey(ctx, ID, categoryID)
-
-	err := datastore.Get(ctx, key, &recipe)
+	c := Controller{}
+	recipe, err := c.Load(ID, r)
 
 	if err != nil {
 		return json, err
 	}
+
 	json = models.RecipeJSON{
 		ID:               recipe.ID,
 		CategoryID:       recipe.CategoryID,
@@ -139,81 +72,36 @@ func GetRecipe(ID int64, categoryID int64, r *http.Request) (models.RecipeJSON, 
 		ModificationDate: recipe.ModificationDate,
 	}
 	ingredients, err := json.GetIngredients()
+
 	if err != nil {
 		json.Ingredients = make([]models.Ingredient, 0)
 	}
+
 	json.Ingredients = ingredients
 	json.Cook = json.GetCook()
-	steps, err := json.GetSteps()
+	steps, err := json.GetPreparation()
+
 	if err != nil {
 		json.Steps = make([]models.Step, 0)
 	}
-	json.Steps = steps
+
+	json.Steps = steps.Steps
 	notes, err := json.GetNotes()
+
 	if err != nil {
 		json.Notes = make([]models.Note, 0)
 	}
+
 	json.Notes = notes
 
 	return json, nil
 }
 
-// UpdateIngredients updates ingredients for the recipe
-func UpdateIngredients(ctx context.Context, recipe models.Recipe) error {
-	var ingredients []models.Ingredient
-	var ingredientKeys []*datastore.Key
-
-	err := DeleteIngredients(ctx, recipe)
-	if err != nil {
-		return err
-	}
-
-	recipeIngredients, err := recipe.GetIngredients()
-	if err != nil {
-		return errors.New("Error parsing ingredients for recipe " + recipe.Name + ":" + err.Error())
-	}
-
-	for _, ingredient := range recipeIngredients {
-		ingredientKeys = append(ingredientKeys, api.IngredientKey(ctx, ingredient.Name, recipe.ID, recipe.CategoryID))
-		ingredients = append(ingredients, ingredient)
-	}
-
-	_, err = datastore.PutMulti(ctx, ingredientKeys, ingredients)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-// DeleteIngredients deletes ingredients of a recipe
-func DeleteIngredients(ctx context.Context, recipe models.Recipe) error {
-	var ingredients []models.Ingredient
-	key := api.RecipeKey(ctx, recipe.ID, recipe.CategoryID)
-
-	q := datastore.NewQuery(api.IngredientKind).Ancestor(key)
-	keys, err := q.GetAll(ctx, &ingredients)
-	if err != nil {
-		return err
-	}
-
-	err = datastore.DeleteMulti(ctx, keys)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // UpdateRecipe updates a recipe
 func UpdateRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) {
-	// changelog
-	ctx := appengine.NewContext(r)
-	key := api.RecipeKey(ctx, recipe.ID, recipe.CategoryID)
+	c := Controller{}
+	err := c.Store(recipe, r)
 
-	UpdateIngredients(ctx, recipe)
-
-	_, err := datastore.Put(ctx, key, &recipe)
 	if err != nil {
 		return recipe, err
 	}
@@ -222,6 +110,13 @@ func UpdateRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) 
 }
 
 // DeleteRecipe deletes a recipe
-func DeleteRecipe() {
+func DeleteRecipe(ID int64, r *http.Request) error {
+	c := Controller{}
+	err := c.Delete(ID, r)
 
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

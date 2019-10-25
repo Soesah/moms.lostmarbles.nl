@@ -27,6 +27,7 @@ func ServeFile(r chi.Router, path string, filePath string) {
 	}))
 }
 
+// XML is a dummy
 func XML(w http.ResponseWriter, r *http.Request) {
 	xml := []byte("<?xml version='1.0' encoding='UTF-8'?><recipe id='1' slug='fried-egg' servings='1' preparation_time='20 min' category_id='1'><title>Fried Egg</title><ingredients><ingredient><name>Egg</name></ingredient><ingredient><name>Salt &amp; pepper</name></ingredient></ingredients><preparation><step><p>Break the egg in the pan</p></step><step><p>Fry the egg, and add some peper and salt</p></step><step><p>Flip the egg</p></step></preparation></recipe>")
 	w.Header().Add("Content-Type", "application/xml")

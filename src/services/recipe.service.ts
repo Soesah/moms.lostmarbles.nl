@@ -34,8 +34,8 @@ export class RecipeService {
     this.$http = axios;
   }
 
-  public async get(id: number, category_id: number): Promise<RecipeResponse> {
-    const response = await this.$http.get(`${this.path}/${id}/${category_id}`);
+  public async get(id: number): Promise<RecipeResponse> {
+    const response = await this.$http.get(`${this.path}/${id}`);
     const status = response.status === STATUS_OK;
     return {
       status,

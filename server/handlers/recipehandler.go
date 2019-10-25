@@ -23,21 +23,28 @@ func GetRecipeList(w http.ResponseWriter, r *http.Request) {
 	httpext.SuccessDataAPI(w, "Ok", recipes)
 }
 
-// CreateRecipe creates a recipe
-func CreateRecipe(w http.ResponseWriter, r *http.Request) {
+// AddRecipe creates a recipe
+func AddRecipe(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var update models.Recipe
+	err := decoder.Decode(&update)
+	rec, err := recipe.AddRecipe(update, r)
 
-	httpext.SuccessAPI(w, "ok")
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", rec)
 }
 
 func getRecipe(w http.ResponseWriter, r *http.Request) (models.RecipeJSON, error) {
 	var re models.RecipeJSON
 
 	idParam := chi.URLParam(r, "id")
-	categoryIDParam := chi.URLParam(r, "category_id")
 	id, _ := strconv.Atoi(idParam)
-	categoryID, _ := strconv.Atoi(categoryIDParam)
 
-	re, err := recipe.GetRecipe(int64(id), int64(categoryID), r)
+	re, err := recipe.GetRecipe(int64(id), r)
 
 	if err != nil {
 		return re, err

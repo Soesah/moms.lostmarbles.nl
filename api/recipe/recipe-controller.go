@@ -22,11 +22,6 @@ type Controller struct {
 	Recipes []models.Recipe
 }
 
-// Init is used to start the controller
-func (c *Controller) Init(r *http.Request) {
-	c.LoadList(r)
-}
-
 // LoadList is used to load a recipe list
 func (c *Controller) LoadList(r *http.Request) error {
 	var recipes []models.RecipeItem
@@ -102,7 +97,7 @@ func (c *Controller) updateListItem(recipe models.Recipe, r *http.Request) error
 	}
 
 	c.List = updated
-	err := c.StoreList(r)
+	err := c.StoreList(updated, r)
 
 	if err != nil {
 		return err
@@ -112,13 +107,13 @@ func (c *Controller) updateListItem(recipe models.Recipe, r *http.Request) error
 }
 
 // StoreList is used to store a recipe list
-func (c *Controller) StoreList(r *http.Request) error {
+func (c *Controller) StoreList(recipes []models.RecipeItem, r *http.Request) error {
 
 	if len(c.List) == 0 {
 		return errNoRecipeListToSave
 	}
 
-	data, err := json.MarshalIndent(c.List, "", "  ")
+	data, err := json.MarshalIndent(recipes, "", "  ")
 
 	if err != nil {
 		return err
@@ -138,7 +133,7 @@ func (c *Controller) Load(ID int64, r *http.Request) (models.Recipe, error) {
 	var recipe models.Recipe
 
 	id := strconv.Itoa(int(ID))
-	path := strings.Join([]string{"recipe_", id}, "")
+	path := strings.Join([]string{"recipes/recipe_", id}, "")
 
 	data, err := storage.GetFile(path, r)
 
@@ -155,6 +150,38 @@ func (c *Controller) Load(ID int64, r *http.Request) (models.Recipe, error) {
 	return recipe, nil
 }
 
+// Delete is used to delete recipes
+func (c *Controller) Delete(ID int64, r *http.Request) error {
+	err := c.LoadList(r)
+
+	if err != nil {
+		return err
+	}
+
+	id := strconv.Itoa(int(ID))
+	path := strings.Join([]string{"recipes/recipe_", id}, "")
+	err = storage.RemoveFile(path, r)
+
+	if err != nil {
+		return err
+	}
+
+	var updated []models.RecipeItem
+	for _, r := range c.List {
+		if r.ID != ID {
+			updated = append(updated, r)
+		}
+	}
+
+	err = c.StoreList(updated, r)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Store is used to store recipes
 func (c *Controller) Store(recipe models.Recipe, r *http.Request) error {
 
@@ -165,9 +192,15 @@ func (c *Controller) Store(recipe models.Recipe, r *http.Request) error {
 	}
 
 	id := strconv.Itoa(int(recipe.ID))
-	path := strings.Join([]string{"recipe_", id}, "")
+	path := strings.Join([]string{"recipes/recipe_", id}, "")
 
 	err = storage.PutFile(path, data, r)
+
+	if err != nil {
+		return err
+	}
+
+	err = c.LoadList(r)
 
 	if err != nil {
 		return err

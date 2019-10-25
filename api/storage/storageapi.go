@@ -72,6 +72,49 @@ func PutFile(file string, data []byte, r *http.Request) error {
 	return nil
 }
 
+// RemoveFile removes a new file from the bucket
+func RemoveFile(file string, r *http.Request) error {
+
+	conf := config.Get()
+
+	if conf.IsDev() {
+		dir, _ := os.Getwd()
+		err := os.Remove(strings.Join([]string{dir, "/data/", file, ".json"}, ""))
+
+		if err != nil {
+			return err
+		}
+
+		return nil
+
+	}
+
+	ctx := r.Context()
+	creds, err := google.FindDefaultCredentials(ctx, storage.ScopeReadWrite)
+	if err != nil {
+		return err
+	}
+	client, err := storage.NewClient(ctx, option.WithCredentials(creds))
+
+	if err != nil {
+		return err
+	}
+
+	path := strings.Join([]string{"data/", file, ".json"}, "")
+
+	// store the file
+	bkt := client.Bucket(conf.BucketName)
+	obj := bkt.Object(path)
+
+	err = obj.Delete(ctx)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // GetFile returns the bytes of the reference file.
 func GetFile(file string, r *http.Request) ([]byte, error) {
 

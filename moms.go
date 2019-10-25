@@ -36,12 +36,12 @@ func main() {
 			r.Group(func(r chi.Router) {
 				r.Use(middlewares.CookContext)
 				r.Get("/", handlers.GetRecipeList)
-				r.Get("/{id}/{category_id}", handlers.GetRecipe)
-				r.Get("/{id}/{category_id}/xml", handlers.GetRecipeXML)
+				r.Get("/{id}", handlers.GetRecipe)
+				r.Get("/{id}/xml", handlers.GetRecipeXML)
 				r.Group(func(r chi.Router) {
 					r.Use(middlewares.NoCache)
 					r.Use(middlewares.ChefContext)
-					r.Post("/", handlers.CreateRecipe)
+					r.Post("/", handlers.AddRecipe)
 					r.Put("/{id}", handlers.UpdateRecipe)
 				})
 				r.Group(func(r chi.Router) {

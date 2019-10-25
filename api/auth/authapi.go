@@ -26,8 +26,8 @@ func LoginCook(name string, r *http.Request) (models.Session, models.Auth, error
 	var session models.Session
 	auth := models.Auth{
 		Name:            "",
-		Level:           models.GuestLevel,
-		AuthorizedLevel: models.GuestLevel,
+		Level:           models.CookLevel,
+		AuthorizedLevel: models.CookLevel,
 	}
 
 	c := Controller{}

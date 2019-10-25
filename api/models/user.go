@@ -12,8 +12,6 @@ const (
 	ChefLevel = 50
 	// CookLevel is for people who can read recipes
 	CookLevel = 0
-	// GuestLevel is for people who can read recipes
-	GuestLevel = -1
 )
 
 // User is a user

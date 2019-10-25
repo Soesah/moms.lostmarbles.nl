@@ -19,10 +19,12 @@
           <span class="rss-text">Volg de nieuwe recepten</span>
         </a>
     </p-->
+    <icon name="broccoli"></icon>
   </section>
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import Icon from '@/components/common/Icon.vue';
 
 export default {
   name: 'NewRecipes',
@@ -47,6 +49,9 @@ export default {
     persons(recipe) {
       return recipe.servings === 1 ? 'persoon' : 'personen';
     },
+  },
+  components: {
+    Icon,
   },
 };
 </script>

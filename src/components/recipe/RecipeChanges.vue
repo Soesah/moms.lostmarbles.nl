@@ -8,10 +8,11 @@
         {{ changeText(change.type, recipe.name) }}.
       </li>
     </ol>
-    <div class="icon icon-icecream"></div>
+    <icon name="icecream"></icon>
   </section>
 </template>
 <script>
+import Icon from '@/components/common/Icon.vue';
 export default {
   name: 'RecipeChanges',
   props: {
@@ -51,6 +52,9 @@ export default {
           return `heeft een notitie toegevoegd`;
       }
     },
+  },
+  components: {
+    Icon,
   },
 };
 </script>

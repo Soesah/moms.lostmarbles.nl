@@ -13,10 +13,12 @@
         <router-link :to="`/recipe/${recipe.slug}`" v-text="recipe.name"></router-link>
       </li>
     </ol>
+    <icon name="ricebowl"></icon>
   </section>
 </template>
 <script>
 import { mapGetters, mapState } from 'vuex';
+import Icon from '@/components/common/Icon.vue';
 
 export default {
   name: 'RecipeList',
@@ -33,6 +35,9 @@ export default {
   async created() {
     await this.$store.dispatch('getRecipes');
     this.loading = false;
+  },
+  components: {
+    Icon,
   },
 };
 </script>

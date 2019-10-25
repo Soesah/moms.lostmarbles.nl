@@ -7,11 +7,12 @@
         <router-link v-else :to="`/recipe/${rec.slug}`" v-text="rec.name"></router-link>
       </li>
     </ul>
-    <div class="icon icon-milk"></div>
+    <icon name="milk"></icon>
   </section>
 </template>
 <script>
 import { mapState } from 'vuex';
+import Icon from '@/components/common/Icon.vue';
 
 export default {
   name: 'RecipeCategory',
@@ -32,6 +33,9 @@ export default {
         (r) => r.category_id === this.recipe.category_id,
       );
     },
+  },
+  components: {
+    Icon,
   },
 };
 </script>

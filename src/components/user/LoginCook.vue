@@ -5,7 +5,7 @@
       <p class="description">Om gebruik te kunnen maken van Mom's Lost Marbles dient u in te loggen.</p>
       <div class="form-item">
         <label for="focus">Naam</label>
-        <input type="text" v-model="user.name" v-focus placeholder="(naam)">
+        <input type="text" v-model="user.name" v-focus placeholder="(naam)" />
       </div>
       <!-- <div class="form-item">
         <label></label>
@@ -25,12 +25,15 @@
       </div>
       <p class="description">
         Deze website gaat over en gebruikt
-        <i>cookies</i>. Door 'onthouden' aan te vinken stopt u uw hand in de koekjestrommel.
+        <i>cookies</i>.
+        <!--Door 'onthouden' aan te vinken stopt u uw hand in de koekjestrommel.-->
       </p>
     </form>
+    <icon name="bowl2"></icon>
   </section>
 </template>
 <script>
+import Icon from '@/components/common/Icon.vue';
 import { mapState } from 'vuex';
 export default {
   name: 'LoginCook',
@@ -56,6 +59,9 @@ export default {
         this.$router.push(this.redirect ? this.redirect : '/list');
       }
     },
+  },
+  components: {
+    Icon,
   },
 };
 </script>

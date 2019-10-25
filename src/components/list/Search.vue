@@ -18,9 +18,11 @@
         </button>
       </div>
     </form>
+    <icon name="mushroom"></icon>
   </section>
 </template>
 <script>
+import Icon from '@/components/common/Icon.vue';
 export default {
   name: 'Search',
   data() {
@@ -39,6 +41,9 @@ export default {
       this.searchValue = '';
       this.update();
     },
+  },
+  components: {
+    Icon,
   },
 };
 </script>

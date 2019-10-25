@@ -19,10 +19,12 @@
         ></router-link>
       </li>
     </ul>
+    <icon name="melon"></icon>
   </section>
 </template>
 <script>
 import { mapState } from 'vuex';
+import Icon from '@/components/common/Icon.vue';
 
 export default {
   name: 'Categories',
@@ -31,6 +33,9 @@ export default {
   },
   created() {
     this.$store.dispatch('getCategories');
+  },
+  components: {
+    Icon,
   },
 };
 </script>

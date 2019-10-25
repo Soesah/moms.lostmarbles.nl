@@ -16,4 +16,4 @@ handlers:
 env_variables:
   ENVIRONMENT: 'master'
   DIST_FOLDER: 'dist'
-  GAE_DATASTORE_HOST: 'moms-lost-marbles.appspot.com'
+  CLOUD_STORAGE_BUCKET: 'moms-lost-marbles.appspot.com'

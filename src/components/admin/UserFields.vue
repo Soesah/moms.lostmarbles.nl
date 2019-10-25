@@ -10,7 +10,7 @@
     </div>
     <div class="form-item">
       <label for="focus">Type</label>
-      <select v-model="user.user_level">
+      <select v-model.number="user.user_level">
         <option value="0">Kok</option>
         <option value="50">Chef</option>
         <option value="100">Administrator</option>

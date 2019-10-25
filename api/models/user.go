@@ -20,7 +20,7 @@ const (
 type User struct {
 	ID            int64     `json:"id"`
 	Name          string    `json:"name"`
-	Password      string    `json:"password,omitempty"`
+	Password      string    `json:"pass,omitempty"`
 	Email         string    `json:"email,omitempty"`
 	LastLoginDate time.Time `json:"last_login_date,omitempty"`
 	UserLevel     int64     `json:"user_level,omitempty"`

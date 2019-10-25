@@ -47,7 +47,7 @@ func LoginCook(name string, r *http.Request) (models.Session, models.Auth, error
 
 	if len(users) == 1 {
 		user := users[0]
-		sessionUUID := uuid.Must(uuid.NewV4())
+		sessionUUID := uuid.NewV4()
 
 		session.UserID = user.ID
 		session.UserName = user.Name

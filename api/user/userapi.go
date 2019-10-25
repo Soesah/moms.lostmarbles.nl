@@ -62,7 +62,14 @@ func UpdateUser(user models.User, r *http.Request) (models.User, error) {
 	found := false
 	for _, u := range data.Users {
 		if u.ID == user.ID {
-			updated = append(updated, user)
+			updated = append(updated, models.User{
+				ID:            user.ID,
+				Name:          user.Name,
+				Password:      u.Password,
+				Email:         user.Email,
+				LastLoginDate: user.LastLoginDate,
+				UserLevel:     user.UserLevel,
+			})
 			found = true
 		} else {
 			updated = append(updated, u)

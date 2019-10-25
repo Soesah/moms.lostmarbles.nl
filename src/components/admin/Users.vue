@@ -30,12 +30,13 @@ export default {
   methods: {
     userType(level) {
       switch (level) {
-        case AuthLevel.Cook:
-          return 'Gast Gebruiker';
         case AuthLevel.Chef:
-          return 'Gebruiker';
+          return 'Chef';
         case AuthLevel.Admin:
           return 'Administrator';
+        case AuthLevel.Cook:
+        default:
+          return 'Kok';
       }
     },
     choose(user) {

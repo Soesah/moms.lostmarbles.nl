@@ -38,13 +38,11 @@
   </section>
 </template>
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'RecipesNotes',
-  props: {
-    recipe: {
-      type: Object,
-      required: true,
-    },
+  computed: {
+    ...mapState(['recipe']),
   },
 };
 </script>

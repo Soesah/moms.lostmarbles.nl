@@ -1,5 +1,5 @@
 <template>
-  <section class="box box--secondary" v-if="changes">
+  <section class="box box--secondary" v-if="changes.length">
     <h2>Wijzigingen</h2>
     <ol class="changes">
       <li v-for="change in changes" :key="change.id">
@@ -13,29 +13,29 @@
 </template>
 <script>
 import Icon from '@/components/common/Icon.vue';
+import { mapState } from 'vuex';
 export default {
   name: 'RecipeChanges',
-  props: {
-    recipe: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
       changes: [],
     };
   },
-  created() {
-    this.update();
+  computed: {
+    ...mapState(['recipe']),
   },
   watch: {
-    $route() {
+    recipe() {
       this.update();
     },
   },
   methods: {
     async update() {
+      console.log(
+        'updating changes for recipe',
+        this.recipe.name,
+        this.recipe.id,
+      );
       this.changes = await this.$store.dispatch(
         'getRecipeChangeLog',
         this.recipe,

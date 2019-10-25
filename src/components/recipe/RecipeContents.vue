@@ -23,15 +23,10 @@
 import RecipeSummary from '@/components/recipe/RecipeSummary.vue';
 import RecipeIngredients from '@/components/recipe/RecipeIngredients.vue';
 import RecipeSteps from '@/components/recipe/RecipeSteps.vue';
+import { mapState } from 'vuex';
 
 export default {
   name: 'RecipeContents',
-  props: {
-    recipe: {
-      type: Object,
-      required: true,
-    },
-  },
   computed: {
     category() {
       const category = this.$store.state.categories.find(
@@ -48,6 +43,7 @@ export default {
     persons() {
       return parseInt(this.recipe.servings, 10) === 1 ? 'persoon' : 'personen';
     },
+    ...mapState(['recipe']),
   },
   components: {
     RecipeSummary,

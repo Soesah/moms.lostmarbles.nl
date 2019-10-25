@@ -39,7 +39,7 @@ export default new Router({
       component: List,
     },
     {
-      path: 'recipe/new/edit',
+      path: '/recipe/new/edit',
       beforeEnter: verifyChef,
       component: EditRecipe,
     },

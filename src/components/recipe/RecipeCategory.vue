@@ -16,17 +16,16 @@ import Icon from '@/components/common/Icon.vue';
 
 export default {
   name: 'RecipeCategory',
-  props: {
-    recipe: {
-      type: Object,
-      required: true,
-    },
+  created() {
+    this.$store.dispatch('getCategories');
   },
   computed: {
-    ...mapState(['recipes', 'categories']),
+    ...mapState(['recipe', 'recipes', 'categories']),
     title() {
-      return this.categories.find((c) => c.id === this.recipe.category_id)
-        .name_plural;
+      return this.categories.length
+        ? this.categories.find((c) => c.id === this.recipe.category_id)
+            .name_plural
+        : '';
     },
     categoryRecipes() {
       return this.recipes.filter(

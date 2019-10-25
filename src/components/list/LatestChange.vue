@@ -1,7 +1,7 @@
 <template>
   <section class="box box--secondary" v-if="latestChange">
     <h2>Wijzigingen</h2>
-    <p>De laatste wijziging was {{latestChange.date | longDate }}</p>
+    <p>{{ latestChange.user }} heeft wijzigingen gemaakt aan {{ latestChange.recipe }} op {{latestChange.date | longDate }}. </p>
   </section>
 </template>
 <script>

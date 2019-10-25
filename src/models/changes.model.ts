@@ -1,22 +1,25 @@
-export interface ChangeLogData {
-  id: number;
-  user_id: number;
-  recipe_id: number;
-  type: string;
+export enum ChangeType {
+  Created = 'created',
+  Changed = 'changed',
+  AddNote = 'addnote',
+}
+
+export interface ChangeData {
+  user: string;
+  recipe?: string;
+  type: ChangeType;
   date: string;
 }
 
-export class ChangeLog {
-  public id: number;
-  public user_id: number;
-  public recipe_id: number;
+export class Change {
+  public user: string;
+  public recipe?: string;
   public type: string;
   public date: string;
 
-  constructor(data: ChangeLogData) {
-    this.id = data.id;
-    this.user_id = data.user_id;
-    this.recipe_id = data.recipe_id;
+  constructor(data: ChangeData) {
+    this.user = data.user;
+    this.recipe = data.recipe;
     this.type = data.type;
     this.date = data.date;
   }

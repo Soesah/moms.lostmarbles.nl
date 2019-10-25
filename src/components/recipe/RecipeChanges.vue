@@ -4,7 +4,7 @@
     <ol class="changes">
       <li v-for="change in changes" :key="change.id">
         {{ change.date | longDate }}
-        <span v-text="`${userName(change.user_id)}`"></span>
+        <span v-text="`${change.user}`"></span>
         {{ changeText(change.type, recipe.name) }}.
       </li>
     </ol>
@@ -40,10 +40,6 @@ export default {
         this.recipe,
       );
       this.$store.dispatch('getUsers');
-    },
-    userName(user_id) {
-      const user = this.$store.state.users.find((u) => u.id === user_id);
-      return user ? user.name : '';
     },
     changeText(type, name) {
       switch (type) {

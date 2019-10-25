@@ -1,6 +1,6 @@
 import axios, { AxiosStatic } from 'axios';
 import { Recipe, RecipeData } from '@/models/recipe.model';
-import { ChangeLog } from '@/models/changes.model';
+import { Change } from '@/models/changes.model';
 
 interface RecipeResponse {
   status: boolean;
@@ -14,12 +14,12 @@ interface RecipeListResponse {
 
 interface ChangeResponse {
   status: boolean;
-  data: ChangeLog | null;
+  data: Change | null;
 }
 
 interface ChangeLogResponse {
   status: boolean;
-  data: ChangeLog[];
+  data: Change[];
 }
 
 const STATUS_OK = 200;
@@ -91,7 +91,7 @@ export class RecipeService {
     const status = response.status === STATUS_OK;
     return {
       status,
-      data: status ? new ChangeLog(response.data.data) : null,
+      data: status ? new Change(response.data.data) : null,
     };
   }
 

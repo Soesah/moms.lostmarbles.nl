@@ -7,7 +7,7 @@ import { RecipeService } from './services/recipe.service';
 import { User } from '@/models/user.model';
 import { Category } from './models/category.model';
 import { Recipe } from '@/models/recipe.model';
-import { ChangeLog } from '@/models/changes.model';
+import { Change } from '@/models/changes.model';
 import { MenuItem, MenuGroup } from './models/menu.model';
 import { createRecipeSpecification } from './specification/recipe.specification';
 import { Auth, AuthLevel, defaultAuth } from '@/models/auth.model';
@@ -150,11 +150,11 @@ export default new Vuex.Store({
         commit('setRecipe', response.data);
       }
     },
-    async getLatestChange(): Promise<ChangeLog | null> {
+    async getLatestChange(): Promise<Change | null> {
       const data = await recipeService.getLatestChange();
       return data.status ? data.data : null;
     },
-    async getRecipeChangeLog({}, recipe: Recipe): Promise<ChangeLog[]> {
+    async getRecipeChangeLog({}, recipe: Recipe): Promise<Change[]> {
       const data = await recipeService.getRecipeLatestChanges(recipe);
       return data.status ? data.data : [];
     },

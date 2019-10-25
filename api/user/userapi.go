@@ -11,6 +11,30 @@ var (
 	errUserNotFound = errors.New("User not found")
 )
 
+// GetUser returns a list of Users
+func GetUser(ID int64, r *http.Request) (models.User, error) {
+	var user models.User
+	c := Controller{}
+
+	data, err := c.Load(r)
+
+	if err != nil {
+		return user, err
+	}
+
+	for _, u := range data.Users {
+		if u.ID == ID {
+			user = u
+		}
+	}
+
+	if user.Name == "" {
+		return user, errUserNotFound
+	}
+
+	return user, nil
+}
+
 // GetUserList returns a list of Users
 func GetUserList(r *http.Request) ([]models.User, error) {
 	c := Controller{}

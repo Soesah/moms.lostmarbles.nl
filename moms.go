@@ -105,6 +105,7 @@ func main() {
 		handlers.ServeDir(r, "/js/*", http.Dir("./dist/js"))
 		handlers.ServeDir(r, "/css/*", http.Dir("./dist/css"))
 		handlers.ServeDir(r, "/fonts/*", http.Dir("./dist/fonts"))
+		handlers.ServeDir(r, "/img/*", http.Dir("./public/img"))
 		handlers.ServeFile(r, "/favicon.ico*", "./dist/favicon.ico")
 		handlers.ServeFile(r, "/*", "./dist/index.html")
 	})

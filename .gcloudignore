@@ -7,7 +7,6 @@ dev/ #used for development
 src/
 test/
 source/
-public/
 README.md
 .eslintrc.js
 .gitignore

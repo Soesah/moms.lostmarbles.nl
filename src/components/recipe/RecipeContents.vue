@@ -2,6 +2,7 @@
   <section class="box recipe">
     <h2 v-text="recipe.name"></h2>
     <recipe-summary :recipe="recipe"></recipe-summary>
+    <img class="image" v-if="image" :src="image" align="right" />
     <p class="summary-text">
       <span>
         Een
@@ -39,6 +40,9 @@ export default {
     },
     cook() {
       return this.recipe.cook;
+    },
+    image() {
+      return this.recipe.image ? `/img/recipe_large/${this.recipe.image}` : '';
     },
     persons() {
       return parseInt(this.recipe.servings, 10) === 1 ? 'persoon' : 'personen';

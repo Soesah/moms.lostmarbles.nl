@@ -18,6 +18,7 @@ type RecipeJSON struct {
 	Slug             string       `json:"slug"`
 	Name             string       `json:"name"`
 	Cook             string       `json:"cook"`
+	Image            string       `json:"image"`
 	Servings         string       `json:"servings"`
 	PreparationTime  string       `json:"preparation_time"`
 	XML              string       `json:"-"`
@@ -63,6 +64,19 @@ func (recipe RecipeJSON) GetCook() string {
 		return ""
 	}
 	return cook.Value
+}
+
+// GetImage returns a struct for the recipes ingredients
+func (recipe RecipeJSON) GetImage() string {
+	recipeXML := recipe.GetXML()
+	r, _ := regexp.Compile("<image(.*)/>")
+	imageXML := r.FindString(recipeXML)
+	var image Image
+	err := xml.Unmarshal([]byte(imageXML), &image)
+	if err != nil {
+		return ""
+	}
+	return image.Value
 }
 
 // GetIngredients returns a struct for the recipes ingredients

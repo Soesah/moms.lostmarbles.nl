@@ -74,6 +74,12 @@ func (recipe Recipe) GetSteps() ([]string, error) {
 	return steps, nil
 }
 
+// Image is the image of a recipe
+type Image struct {
+	XMLName xml.Name `json:"-" xml:"image"`
+	Value   string   `xml:"source,attr"`
+}
+
 // Cook is the cook of a recipe
 type Cook struct {
 	XMLName xml.Name `json:"-" xml:"cook"`

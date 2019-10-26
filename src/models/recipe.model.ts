@@ -5,6 +5,7 @@ export interface RecipeData {
   slug: string;
   name: string;
   cook: string;
+  image: string;
   servings: string;
   preparation_time: string;
   ingredients: Ingredient[];
@@ -34,6 +35,7 @@ export class Recipe {
   public slug: string;
   public name: string;
   public cook: string;
+  public image: string;
   public servings: string;
   public preparation_time: string;
   public ingredients: Ingredient[];
@@ -49,6 +51,7 @@ export class Recipe {
     this.slug = data.slug;
     this.name = data.name;
     this.cook = data.cook;
+    this.image = data.image;
     this.servings = data.servings;
     this.preparation_time = data.preparation_time;
     this.ingredients = data.ingredients;

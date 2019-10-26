@@ -79,6 +79,7 @@ func GetRecipe(ID int64, r *http.Request) (models.RecipeJSON, error) {
 
 	json.Ingredients = ingredients
 	json.Cook = json.GetCook()
+	json.Image = json.GetImage()
 	steps, err := json.GetPreparation()
 
 	if err != nil {

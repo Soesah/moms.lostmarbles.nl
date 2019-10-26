@@ -29,17 +29,16 @@ export default {
       this.update();
     },
   },
+  created() {
+    this.update();
+  },
   methods: {
     async update() {
-      console.log(
-        'updating changes for recipe',
-        this.recipe.name,
-        this.recipe.id,
-      );
-      this.changes = await this.$store.dispatch(
+      const changes = await this.$store.dispatch(
         'getRecipeChangeLog',
         this.recipe,
       );
+      this.changes = changes ? changes : [];
       this.$store.dispatch('getUsers');
     },
     changeText(type, name) {

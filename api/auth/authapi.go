@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Soesah/moms.lostmarbles.nl/api/models"
-	uuid "github.com/satori/go.uuid"
+	"github.com/google/uuid"
 )
 
 const (
@@ -47,7 +47,7 @@ func LoginCook(name string, r *http.Request) (models.Session, models.Auth, error
 
 	if len(users) == 1 {
 		user := users[0]
-		sessionUUID := uuid.NewV4()
+		sessionUUID, _ := uuid.NewUUID()
 
 		session.UserID = user.ID
 		session.UserName = user.Name

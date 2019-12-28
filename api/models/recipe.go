@@ -95,9 +95,9 @@ type Ingredients struct {
 // Ingredient is an ingredient of a recipe
 type Ingredient struct {
 	XMLName xml.Name `json:"-" xml:"ingredient"`
-	Amount  string   `json:"amount" xml:"amount"`
+	Amount  string   `json:"amount,omitempty" xml:"amount"`
 	Name    string   `json:"name" xml:"name"`
-	Remark  string   `json:"remark" xml:"remark"`
+	Remark  string   `json:"remark,omitempty" xml:"remark"`
 }
 
 // Preparation is a list of ingredients

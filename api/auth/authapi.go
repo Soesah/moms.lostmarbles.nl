@@ -47,6 +47,19 @@ func LoginCook(name string, r *http.Request) (models.Session, models.Auth, error
 
 	if len(users) == 1 {
 		user := users[0]
+		// update the user
+		var updated []models.User
+		for _, u := range c.Data.Users {
+			if u.ID == user.ID {
+				user.LastLoginDate = time.Now()
+				updated = append(updated, user)
+			} else {
+				updated = append(updated, u)
+			}
+		}
+
+		c.SetUsers(updated)
+
 		sessionUUID, _ := uuid.NewUUID()
 
 		session.UserID = user.ID
@@ -61,18 +74,6 @@ func LoginCook(name string, r *http.Request) (models.Session, models.Auth, error
 		auth.Level = user.UserLevel
 		// start as a cook
 		auth.AuthorizedLevel = session.AuthorizedLevel
-
-		// update the user
-		var updated []models.User
-		for _, u := range c.Data.Users {
-			if u.ID == user.ID {
-				user.LastLoginDate = time.Now()
-				updated = append(updated, user)
-			} else {
-				updated = append(updated, u)
-			}
-		}
-		c.SetUsers(updated)
 
 		// add the session
 		sessions := c.Data.Sessions

@@ -57,29 +57,29 @@ export class ComplexNode {
   }
 
   get allowedChildren(): ComplexNode[] {
-    // requires implementation
+    // use the node to find existing children, types and count
+    // use the schema to see if others are allowed
     return [];
   }
 
   get canBeRemoved(): boolean {
-    // requires implementation
+    // use the schema to verify if the node is required
     return true;
   }
 
   get canMoveUp(): boolean {
-    // requires implementation
+    // use the schema to see if this node can be moved up
     return true;
   }
 
   get canMoveDown(): boolean {
-    // requires implementation
+    // use the schema to see if this node can be moved down
     return true;
   }
 
   get hasAttributes(): boolean {
     return this.attributes.length !== 0;
   }
-
 
   public getPath(path: ComplexNode[] = []): ComplexNode[] {
     return this.parentNode

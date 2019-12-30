@@ -250,3 +250,11 @@ That means we can write `ingredient` differently too:
   }
 }
 ```
+
+## How to parse
+
+Walk the DOM of the schema, get every element, element reference, attribute, attribute reference, complexType, and more. Then figure out what is what?
+
+Or walk the DOM and parse everything in place, finding out references as you find them?
+
+Parse root elements first...Then parse deeper?

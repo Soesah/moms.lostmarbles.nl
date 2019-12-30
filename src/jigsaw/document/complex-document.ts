@@ -3,7 +3,7 @@ import { NodeType } from './document.info';
 import { ComplexText } from './complex-text';
 import { ComplexNode } from './complex-node';
 import { ComplexAttributeType, ComplexAttribute } from './complex-attribute';
-import { SchemaParser } from '../schema/schema.parser';
+import { SchemaParser } from '../schema/schema-parser';
 
 export class ComplexDocument {
   public root: ComplexNode;
@@ -34,7 +34,6 @@ export class ComplexDocument {
     return document;
   }
 
-
   private parseComplexNode(
     node: Element,
     parent: ComplexNode | null = null,
@@ -51,7 +50,10 @@ export class ComplexDocument {
       .map((child: ChildNode, index: number) => {
         switch (child.nodeType) {
           case NodeType.TEXT:
-            const textNode = new ComplexText(child.textContent ? child.textContent : '', complexNode);
+            const textNode = new ComplexText(
+              child.textContent ? child.textContent : '',
+              complexNode,
+            );
             textNode.index = index;
             return textNode;
           default:
@@ -67,11 +69,14 @@ export class ComplexDocument {
     complexNode.setChildNodes(childNodes);
 
     complexNode.setAttributes(
-      [...node.attributes]
-        .map(
-          (attr: Attr) =>
-            new ComplexAttribute(attr.name, attr.value, ComplexAttributeType.String),
-        ),
+      [...node.attributes].map(
+        (attr: Attr) =>
+          new ComplexAttribute(
+            attr.name,
+            attr.value,
+            ComplexAttributeType.String,
+          ),
+      ),
     );
 
     complexNode.mixed = definition.mixed;

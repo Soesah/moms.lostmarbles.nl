@@ -21,6 +21,7 @@ export enum SchemaAttributeUse {
 export interface SchemaElementDefinition {
   name: string;
   type: SchemaType;
+  typeName: string;
   isRef: boolean;
   minOccurs: number;
   maxOccurs: number;

@@ -167,8 +167,8 @@ export const schemaDocument2 = `<?xml version="1.0"?>
       <xs:sequence>
         <xs:element name="title" type="xs:string"/>
       </xs:sequence>
-      <xs:attribute name="index" type="xs:number" use="optional"/>
-      <xs:attribute name="year" type="xs:number" use="required"/>
+      <xs:attribute name="index" type="xs:integer" use="optional"/>
+      <xs:attribute name="year" type="xs:integer" use="required"/>
     </xs:complexType>
   </xs:element>
 
@@ -221,5 +221,39 @@ export const schemaDocument4 = `<?xml version="1.0"?>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+
+</xs:schema>`;
+
+export const schemaDocument5 = `<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="doc" type="docType"/>
+
+  <xs:complexType name="docType">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string"/>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="paragraph" />
+        <xs:element ref="list" />
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="paragraph" type="paragraphType"/>
+
+  <xs:complexType mixed="true" name="paragraphType">
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="bold" type="xs:string" />
+        <xs:element name="italic" type="xs:string" />
+      </xs:choice>
+  </xs:complexType>
+
+  <xs:element name="list" type="listType"/>
+
+  <xs:complexType mixed="false" name="listType">
+    <xs:sequence>
+      <xs:element name="item" type="xs:string" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
 
 </xs:schema>`;

@@ -45,9 +45,12 @@ export enum SchemaConstants {
 
 export class SchemaParser {
   public rootElements: SchemaElement[];
+  public elements: SchemaElement[] = [];
+  private schema: Document;
 
   constructor(schema: Document) {
     // reduce rootDefs
+    this.schema = schema;
     this.rootElements = this.parseElements(schema);
 
     // parse a def down to the  last detail
@@ -69,29 +72,40 @@ export class SchemaParser {
     );
 
     return elements.map((el) => {
-      const def = this.parseElementDefinition(el);
-      const element = new SchemaElement(def.name, def.type);
-      if (element.type === SchemaType.Complex && def.complexNode) {
-        const attributes = this.parseAttributes(def.complexNode);
-        element.setAttributes(attributes);
-
-        const complexContent = this.parseComplexType(def.complexNode);
-        element.setContent(complexContent);
-      }
-
-      return element;
+      return this.parseElement(el);
     });
   }
 
-  private parseComplexType(el: Element): SchemaComplexContent {
-    const mixed =
-      el.getAttribute(SchemaAttributes.Mixed) === SchemaConstants.True;
+  private parseElement(el: Element): SchemaElement {
+    const def = this.parseElementDefinition(el);
+    const element = new SchemaElement(def.name, def.type);
+    if (element.type === SchemaType.Complex && def.complexNode) {
+      const attributes = this.parseAttributes(def.complexNode);
+      element.setAttributes(attributes);
+
+      const mixed =
+        el.getAttribute(SchemaAttributes.Mixed) === SchemaConstants.True;
+
+      const complexContent = this.parseComplexType(
+        def.complexNode.firstElementChild,
+        mixed,
+      );
+      element.setContent(complexContent);
+    } else {
+      // custom type
+    }
+
+    return element;
+  }
+
+  private parseComplexType(
+    structureEl: Element | null,
+    mixed: boolean = false,
+  ): SchemaComplexContent {
     const content: Partial<SchemaComplexContent> = {
       type: SchemaContentType.Empty,
       mixed,
     };
-
-    const structureEl = el.firstElementChild;
 
     if (structureEl) {
       const min = parseInt(
@@ -143,8 +157,15 @@ export class SchemaParser {
                 max: def.maxOccurs,
               },
             ];
+            // add the element to the parser's known elements if they are not references
+            if (!def.isRef) {
+              const element = this.parseElement(child);
+              this.addElement(element);
+            }
             break;
-
+          case SchemaElements.Choice:
+            const content = this.parseComplexType(child);
+            structure = [...structure, content];
           default:
             break;
         }
@@ -152,6 +173,11 @@ export class SchemaParser {
       },
       [],
     );
+  }
+
+  private addElement(element: SchemaElement) {
+    const added = !!this.elements.find((el) => el.name === element.name);
+    this.elements = added ? this.elements : [...this.elements, element];
   }
 
   private parseAttributes(parent: Element): SchemaAttribute[] {
@@ -170,7 +196,7 @@ export class SchemaParser {
   private parseElementDefinition(el: Element): SchemaElementDefinition {
     const name = el.getAttribute(SchemaAttributes.Name);
     const ref = el.getAttribute(SchemaAttributes.Reference);
-    const type = el.getAttribute(SchemaAttributes.Type);
+    const type = el.getAttribute(SchemaAttributes.Type) || '';
     const minOccurs =
       parseInt(`${el.getAttribute(SchemaAttributes.Min)}`, 10) || 1;
     const maxOccurs =
@@ -194,6 +220,7 @@ export class SchemaParser {
     const def: SchemaElementDefinition = {
       name: definitionName,
       type: parseType(type, complexType, abstract),
+      typeName: type,
       isRef: !!ref,
       minOccurs,
       maxOccurs,
@@ -201,9 +228,30 @@ export class SchemaParser {
 
     if (complexType && el.firstElementChild) {
       def.complexNode = el.firstElementChild;
+    } else if (def.type === SchemaType.Complex && !complexType && !def.isRef) {
+      // find the complex type in the document as long this is not a reference element
+      def.complexNode = this.getNamedComplexType(def.typeName);
     }
 
     return def;
+  }
+
+  private getNamedComplexType(type: string): Element {
+    let el;
+    // assuming named complex types are root children
+    this.getChildElements(this.schema.documentElement).forEach(
+      (child: Element) => {
+        if (child.getAttribute(SchemaAttributes.Name) === type) {
+          el = child;
+        }
+      },
+    );
+
+    if (!el) {
+      throw new Error(`Unable to find complexType '${type}' as root child`);
+    }
+
+    return el;
   }
 
   private parseAttributeDefinition(el: Element): SchemaAttributeDefinition {

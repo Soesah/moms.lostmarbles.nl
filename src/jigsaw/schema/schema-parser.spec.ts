@@ -4,6 +4,7 @@ import {
   schemaDocument3,
   schemaDocument4,
   schemaDocument5,
+  schemaDocument1,
 } from './schema-parser.unit';
 import { SchemaType } from './definition/schema-definition';
 
@@ -23,7 +24,8 @@ describe('Schema Parser', () => {
   describe('Simple Schema', () => {
     beforeEach(() => {
       arrange(schemaDocument2);
-      parser = new SchemaParser(schema);
+      parser = new SchemaParser();
+      parser.parse(schema);
     });
     it('should parse the schema for root elements', () => {
       expect(parser.rootElements.length).toBe(1);
@@ -51,7 +53,7 @@ describe('Schema Parser', () => {
       }
     });
     it('should parse element complex type content', () => {
-      expect(parser.rootElements[0].content).toEqual({
+      expect(parser.rootElements[0].complexType).toEqual({
         max: 1,
         min: 1,
         mixed: false,
@@ -70,7 +72,8 @@ describe('Schema Parser', () => {
   describe('Slightly more complex Schema', () => {
     beforeEach(() => {
       arrange(schemaDocument3);
-      parser = new SchemaParser(schema);
+      parser = new SchemaParser();
+      parser.parse(schema);
     });
     it('should parse the schema for elements', () => {
       expect(parser.rootElements.length).toBe(2);
@@ -84,7 +87,7 @@ describe('Schema Parser', () => {
       expect(parser.rootElements[1].type).toBe(SchemaType.String);
     });
     it('should parse element complex type content', () => {
-      expect(parser.rootElements[0].content).toEqual({
+      expect(parser.rootElements[0].complexType).toEqual({
         max: 1,
         min: 1,
         mixed: false,
@@ -108,7 +111,8 @@ describe('Schema Parser', () => {
   describe('More complex Schema', () => {
     beforeEach(() => {
       arrange(schemaDocument4);
-      parser = new SchemaParser(schema);
+      parser = new SchemaParser();
+      parser.parse(schema);
     });
     it('should parse the schema for elements', () => {
       expect(parser.rootElements.length).toBe(3);
@@ -134,7 +138,7 @@ describe('Schema Parser', () => {
       expect(parser.elements[3].type).toBe(SchemaType.String);
     });
     it('should parse element complex type content', () => {
-      expect(parser.rootElements[0].content).toEqual({
+      expect(parser.rootElements[0].complexType).toEqual({
         max: 1,
         min: 1,
         mixed: false,
@@ -171,11 +175,12 @@ describe('Schema Parser', () => {
   describe('Same Schema, seperately declared complex types', () => {
     beforeEach(() => {
       arrange(schemaDocument5);
-      parser = new SchemaParser(schema);
+      parser = new SchemaParser();
+      parser.parse(schema);
     });
     it('should parse the schema for elements', () => {
       expect(parser.rootElements.length).toBe(3);
-      expect(parser.elements.length).toBe(4);
+      expect(parser.elements.length).toBe(5);
     });
     it('should parse element name', () => {
       expect(parser.rootElements[0].name).toBe('doc');
@@ -184,7 +189,8 @@ describe('Schema Parser', () => {
       expect(parser.elements[0].name).toBe('title');
       expect(parser.elements[1].name).toBe('bold');
       expect(parser.elements[2].name).toBe('italic');
-      expect(parser.elements[3].name).toBe('item');
+      expect(parser.elements[3].name).toBe('introduction');
+      expect(parser.elements[4].name).toBe('item');
     });
     it('should parse element type', () => {
       expect(parser.rootElements[0].type).toBe(SchemaType.Complex);
@@ -194,10 +200,11 @@ describe('Schema Parser', () => {
       expect(parser.elements[0].type).toBe(SchemaType.String);
       expect(parser.elements[1].type).toBe(SchemaType.String);
       expect(parser.elements[2].type).toBe(SchemaType.String);
-      expect(parser.elements[3].type).toBe(SchemaType.String);
+      expect(parser.elements[3].type).toBe(SchemaType.Complex);
+      expect(parser.elements[4].type).toBe(SchemaType.String);
     });
     it('should parse elements complex type content', () => {
-      expect(parser.rootElements[0].content).toEqual({
+      expect(parser.rootElements[0].complexType).toEqual({
         max: 1,
         min: 1,
         mixed: false,
@@ -206,6 +213,11 @@ describe('Schema Parser', () => {
             max: 1,
             min: 1,
             name: 'title',
+          },
+          {
+            max: 1,
+            min: 1,
+            name: 'introduction',
           },
           {
             max: Infinity,
@@ -228,7 +240,7 @@ describe('Schema Parser', () => {
         ],
         type: 'sequence',
       });
-      expect(parser.rootElements[1].content).toEqual({
+      expect(parser.rootElements[1].complexType).toEqual({
         max: Infinity,
         min: 1,
         mixed: false,
@@ -246,7 +258,7 @@ describe('Schema Parser', () => {
         ],
         type: 'choice',
       });
-      expect(parser.rootElements[2].content).toEqual({
+      expect(parser.rootElements[2].complexType).toEqual({
         max: 1,
         min: 1,
         mixed: false,
@@ -259,6 +271,21 @@ describe('Schema Parser', () => {
         ],
         type: 'sequence',
       });
+      // introduction equals paragraph
+      expect(parser.elements[3].complexType).toEqual(
+        parser.rootElements[1].complexType,
+      );
+    });
+  });
+  describe('Recipe Schema, with abstract elements', () => {
+    beforeEach(() => {
+      arrange(schemaDocument1);
+      parser = new SchemaParser();
+      parser.parse(schema);
+    });
+    it('should parse the schema for elements', () => {
+      expect(parser.rootElements.length).toBe(27);
+      expect(parser.elements.length).toBe(0);
     });
   });
 });

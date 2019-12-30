@@ -1,12 +1,13 @@
 import { SchemaAttribute } from './schema-attribute';
 import { SchemaType } from './schema-definition';
-import { SchemaComplexContent } from './schema-complex-content';
+import { SchemaComplexType } from './schema-complex-type';
 
 export class SchemaElement {
   public name: string;
   public type: SchemaType;
+  public complexType?: SchemaComplexType;
   public attributes?: SchemaAttribute[];
-  public content?: SchemaComplexContent;
+  public root: boolean = false;
 
   constructor(name: string, type: SchemaType) {
     this.name = name;
@@ -17,7 +18,11 @@ export class SchemaElement {
     this.attributes = attributes;
   }
 
-  public setContent(content: SchemaComplexContent) {
-    this.content = content;
+  public setContent(complexType: SchemaComplexType) {
+    this.complexType = complexType;
+  }
+
+  public setRoot(root: boolean) {
+    this.root = root;
   }
 }

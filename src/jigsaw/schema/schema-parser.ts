@@ -9,10 +9,11 @@ import {
   SchemaAttributeUse,
 } from './definition/schema-definition';
 import {
-  SchemaComplexContent,
-  SchemaContentType,
-  SchemaComplexStructure,
-} from './definition/schema-complex-content';
+  SchemaComplexType,
+  SchemaContentTypes,
+  SchemaComplexTypeStructure,
+} from './definition/schema-complex-type';
+import { SchemaDocument } from './definition/schema-document';
 
 const SCHEMA_NAMESPACE_URI = 'http://www.w3.org/2001/XMLSchema';
 
@@ -44,27 +45,27 @@ export enum SchemaConstants {
 }
 
 export class SchemaParser {
-  public rootElements: SchemaElement[];
+  public rootElements: SchemaElement[] = [];
   public elements: SchemaElement[] = [];
-  private schema: Document;
+  private document: SchemaDocument;
+  private schema!: Document;
 
-  constructor(schema: Document) {
-    // reduce rootDefs
-    this.schema = schema;
-    this.rootElements = this.parseElements(schema);
-
-    // parse a def down to the  last detail
-    // parse complexType
-    // parse abstract/substitution group
-    // create structure of element
-    // do not parse defs that have been parsed (as  long as they occur as root  defs...)
-    // get abstracts
-    // fill out abstracts
-    // complete known complexTypes
-    // complete elements and inline complexTypes
+  constructor() {
+    this.document = new SchemaDocument();
   }
 
-  private parseElements(schema: Document): SchemaElement[] {
+  public parse(schema: Document): SchemaDocument {
+    this.schema = schema;
+    // collect abstract elements from substitution grouped elements
+    this.rootElements = this.parseElements(schema, true);
+
+    return this.document;
+  }
+
+  private parseElements(
+    schema: Document,
+    root: boolean = false,
+  ): SchemaElement[] {
     // get the possible root elements
     const elements = this.getChildElements(
       schema.documentElement,
@@ -72,11 +73,11 @@ export class SchemaParser {
     );
 
     return elements.map((el) => {
-      return this.parseElement(el);
+      return this.parseElement(el, root);
     });
   }
 
-  private parseElement(el: Element): SchemaElement {
+  private parseElement(el: Element, root: boolean = false): SchemaElement {
     const def = this.parseElementDefinition(el);
     const element = new SchemaElement(def.name, def.type);
     if (element.type === SchemaType.Complex && def.complexNode) {
@@ -91,9 +92,9 @@ export class SchemaParser {
         mixed,
       );
       element.setContent(complexContent);
-    } else {
-      // custom type
     }
+
+    element.setRoot(root);
 
     return element;
   }
@@ -101,9 +102,9 @@ export class SchemaParser {
   private parseComplexType(
     structureEl: Element | null,
     mixed: boolean = false,
-  ): SchemaComplexContent {
-    const content: Partial<SchemaComplexContent> = {
-      type: SchemaContentType.Empty,
+  ): SchemaComplexType {
+    const content: Partial<SchemaComplexType> = {
+      type: SchemaContentTypes.Empty,
       mixed,
     };
 
@@ -126,26 +127,26 @@ export class SchemaParser {
 
       switch (structureEl.nodeName) {
         case SchemaElements.Sequence:
-          content.type = SchemaContentType.Sequence;
+          content.type = SchemaContentTypes.Sequence;
           break;
         case SchemaElements.Choice:
-          content.type = SchemaContentType.Choice;
+          content.type = SchemaContentTypes.Choice;
           break;
       }
       content.structure = this.parseComplexTypeContent(structureEl);
     }
 
-    return content as SchemaComplexContent;
+    return content as SchemaComplexType;
   }
 
-  private parseComplexTypeContent(el: Element): SchemaComplexStructure[] {
+  private parseComplexTypeContent(el: Element): SchemaComplexTypeStructure[] {
     const children = this.getChildElements(el);
 
     return children.reduce(
       (
-        structure: SchemaComplexStructure[],
+        structure: SchemaComplexTypeStructure[],
         child: Element,
-      ): SchemaComplexStructure[] => {
+      ): SchemaComplexTypeStructure[] => {
         switch (child.nodeName) {
           case SchemaElements.Element:
             const def = this.parseElementDefinition(child);
@@ -228,15 +229,20 @@ export class SchemaParser {
 
     if (complexType && el.firstElementChild) {
       def.complexNode = el.firstElementChild;
-    } else if (def.type === SchemaType.Complex && !complexType && !def.isRef) {
+    } else if (
+      def.type === SchemaType.Complex &&
+      !complexType &&
+      !def.isRef &&
+      !abstract
+    ) {
       // find the complex type in the document as long this is not a reference element
-      def.complexNode = this.getNamedComplexType(def.typeName);
+      def.complexNode = this.getNamedComplexType(def.name, def.typeName);
     }
 
     return def;
   }
 
-  private getNamedComplexType(type: string): Element {
+  private getNamedComplexType(name: string, type: string): Element {
     let el;
     // assuming named complex types are root children
     this.getChildElements(this.schema.documentElement).forEach(
@@ -248,7 +254,9 @@ export class SchemaParser {
     );
 
     if (!el) {
-      throw new Error(`Unable to find complexType '${type}' as root child`);
+      throw new Error(
+        `Unable to find complexType '${type}' for '${name}' as root child`,
+      );
     }
 
     return el;

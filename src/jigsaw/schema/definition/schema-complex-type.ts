@@ -1,4 +1,4 @@
-export enum SchemaContentType {
+export enum SchemaContentTypes {
   Sequence = 'sequence',
   Choice = 'choice',
   Empty = 'empty',
@@ -10,16 +10,16 @@ interface SchemaElementOccurance {
   max?: number;
 }
 
-export type SchemaComplexStructure =
+export type SchemaComplexTypeStructure =
   | SchemaElementOccurance
-  | SchemaComplexContent;
+  | SchemaComplexType;
 
-export interface SchemaComplexContent {
-  type: SchemaContentType;
+export interface SchemaComplexType {
+  type: SchemaContentTypes;
   mixed: boolean;
   min?: number;
   max?: number;
-  structure: SchemaComplexStructure[];
+  structure: SchemaComplexTypeStructure[];
 }
 
 /*

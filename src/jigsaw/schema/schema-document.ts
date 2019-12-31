@@ -1,4 +1,4 @@
-import { SchemaElement } from './schema-element';
+import { SchemaElement } from './definition/schema-element';
 
 export class SchemaDocument {
   public elements: SchemaElement[] = [];
@@ -21,6 +21,11 @@ export class SchemaDocument {
     }
 
     return element;
+  }
+
+  // temp
+  public isMixed(name: string): boolean {
+    return false;
   }
 
   private hasElement(name: string): boolean {

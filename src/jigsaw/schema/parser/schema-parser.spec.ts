@@ -8,8 +8,8 @@ import {
   schemaDocument6,
   schemaDocument7,
 } from './schema-parser.unit';
-import { SchemaType } from './definition/schema-definition';
-import { SchemaDocument } from './definition/schema-document';
+import { SchemaType } from '../definition/schema-definition';
+import { SchemaDocument } from '../schema-document';
 
 describe('Schema Parser', () => {
   let schema: Document;

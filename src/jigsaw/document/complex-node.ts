@@ -1,6 +1,6 @@
 import { ComplexAttribute } from './complex-attribute';
 import { ComplexText } from './complex-text';
-import { NodeType, EDITOR_NAMESPACE } from './document.info';
+import { NodeType, EDITOR_NAMESPACE } from '../core/info';
 import { UUIDUtil } from '../util/uuid.util';
 
 type ComplexNodes = ComplexNode | ComplexText;

@@ -3,8 +3,11 @@ import { VNodeRenderer } from './renderer/vnode-renderer';
 import { EventEmitter } from './core/event-emitter';
 import { CreateElement } from 'vue';
 import { ComplexDocument } from './document/complex-document';
-import { NodeConfiguration, NodeConfig } from './document/node-configuration';
-import { DOMSelection } from './document/selection';
+import {
+  NodeConfiguration,
+  NodeConfig,
+} from './node-config/node-configuration';
+import { DOMSelection } from './selection/selection';
 import { KeyUtil } from './util/key.util';
 import { EditTextCommand } from './document/commands/edit-text.command';
 

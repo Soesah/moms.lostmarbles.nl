@@ -1,9 +1,8 @@
 import { ComplexDocument } from '../complex-document';
 import { ComplexText } from '../complex-text';
-import { NodeType } from '../document.info';
+import { NodeType } from '../../core/info';
 
 export class EditTextCommand {
-
   public static command: string = 'EditText';
 
   public execute(node: ComplexText, _: ComplexDocument, contents: string) {

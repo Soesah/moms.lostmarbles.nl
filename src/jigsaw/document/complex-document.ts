@@ -1,9 +1,9 @@
-import { NodeType } from './document.info';
+import { NodeType } from '../core/info';
 import { ComplexText } from './complex-text';
 import { ComplexNode } from './complex-node';
 import { ComplexAttributeType, ComplexAttribute } from './complex-attribute';
-import { SchemaParser } from '../schema/schema-parser';
-import { SchemaDocument } from '../schema/definition/schema-document';
+import { SchemaParser } from '../schema/parser/schema-parser';
+import { SchemaDocument } from '../schema/schema-document';
 
 export class ComplexDocument {
   public root: ComplexNode;

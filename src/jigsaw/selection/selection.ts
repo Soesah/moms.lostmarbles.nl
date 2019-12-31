@@ -1,4 +1,4 @@
-import { NodeType } from './document.info';
+import { NodeType } from '../core/info';
 
 export class DOMSelection {
   private range: Range;
@@ -8,7 +8,10 @@ export class DOMSelection {
 
     if (selection && selection.anchorNode) {
       this.range.setStart(selection.anchorNode, selection.anchorOffset);
-      this.range.setEnd(selection.focusNode ? selection.focusNode : selection.anchorNode, selection.focusOffset);
+      this.range.setEnd(
+        selection.focusNode ? selection.focusNode : selection.anchorNode,
+        selection.focusOffset,
+      );
     }
   }
 

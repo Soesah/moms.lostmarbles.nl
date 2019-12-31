@@ -1,7 +1,7 @@
 import { VNode, CreateElement } from 'vue';
-import { SchemaDocument } from '../schema/document.definition';
+import { SchemaDocument } from '../schema/schema-document';
 import { getElementByXpath } from '../util/dom.util';
-import { NodeType } from '../document/document.info';
+import { NodeType } from '../core/info';
 import { ComplexDocument } from '../document/complex-document';
 
 export class VNodeRenderer {
@@ -63,7 +63,6 @@ export class VNodeRenderer {
       })
       .filter((n) => n);
 
-
     return this.h(tagName, options, children);
   }
 
@@ -71,6 +70,6 @@ export class VNodeRenderer {
     const node = getElementByXpath(this.xml, `//*[@*[. = "${nodeId}"]]`);
     const nodeName = node.nodeName;
 
-    return this.schema.isContentEditable(nodeName);
+    return this.schema.isMixed(nodeName);
   }
 }

@@ -1,6 +1,6 @@
-import { SchemaElement } from './definition/schema-element';
-import { SchemaAttribute } from './definition/schema-attribute';
-import { NodeType } from '../document/document.info';
+import { SchemaElement } from '../definition/schema-element';
+import { SchemaAttribute } from '../definition/schema-attribute';
+import { NodeType } from '../../core/info';
 import {
   SchemaType,
   SchemaElementDefinition,
@@ -8,13 +8,13 @@ import {
   SchemaAttributeDefinition,
   SchemaAttributeUse,
   AbstractElement,
-} from './definition/schema-definition';
+} from '../definition/schema-definition';
 import {
   SchemaComplexType,
   SchemaContentTypes,
   SchemaComplexTypeStructure,
-} from './definition/schema-complex-type';
-import { SchemaDocument } from './definition/schema-document';
+} from '../definition/schema-complex-type';
+import { SchemaDocument } from '../schema-document';
 
 const SCHEMA_NAMESPACE_URI = 'http://www.w3.org/2001/XMLSchema';
 

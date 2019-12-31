@@ -1,4 +1,4 @@
-import { EDITOR_NAMESPACE } from '../document/document.info';
+import { EDITOR_NAMESPACE } from '../core/info';
 
 export const parseXMLDocument = (contents: string): Document => {
   const parser = new DOMParser();

@@ -34,7 +34,7 @@ export class JigsawEditor extends EventEmitter {
     return [this.document.root];
   }
 
-  public getXHTML(): Document | null {
+  public getXHTML(): Document {
     if (this.enrichedXSL && this.document) {
       const processor = new XSLTProcessor();
 

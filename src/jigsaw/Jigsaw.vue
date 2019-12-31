@@ -9,12 +9,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { JigsawEditor } from '@/jigsaw/jigsaw-editor.ts';
-import JigsawToolbar from '@/jigsaw/components/JigsawToolbar.vue';
-import JigsawNodeToolbar from '@/jigsaw/components/JigsawNodeToolbar.vue';
+import { JigsawEditor } from '@/jigsaw/jigsaw.ts';
+import JigsawToolbar from '@/jigsaw/components/toolbar/JigsawToolbar.vue';
+import JigsawContextMenu from '@/jigsaw/components/menu/JigsawContextMenu.vue';
+import JigsawNodeToolbar from '@/jigsaw/components/toolbar/JigsawNodeToolbar.vue';
 import EditableContent from '@/jigsaw/components/EditableContent.vue';
-import JigsawContextMenu from '@/jigsaw/components/JigsawContextMenu.vue';
-import { SchemaDocument } from '@/jigsaw/schema/document.definition';
 
 const props = {
   xml: {

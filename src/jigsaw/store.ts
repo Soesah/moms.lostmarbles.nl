@@ -1,6 +1,6 @@
 import { ComplexNode } from './document/complex-node';
 import { DOMSelection } from './selection/selection';
-import { JigsawEditor } from './jigsaw-editor';
+import { JigsawEditor } from './jigsaw';
 
 export interface JigsawState {
   editor: JigsawEditor | null;

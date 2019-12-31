@@ -20,20 +20,21 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { toolbarConfig } from './toolbar.config';
+import { toolbarConfig } from '../toolbar.config';
 import { mapState } from 'vuex';
-import { JigsawState } from '../store';
+import { JigsawState } from '../../store';
 
 export default Vue.extend({
   name: 'JigsawToolbar',
-  ...mapState('jigsaw', {
-    editor: (state: JigsawState) => state.editor,
-  }),
-
   data() {
     return {
       config: toolbarConfig,
     };
+  },
+  computed: {
+    ...mapState('jigsaw', {
+      editor: (state) => (state as JigsawState).editor,
+    }),
   },
   methods: {
     activate(commandName: string) {

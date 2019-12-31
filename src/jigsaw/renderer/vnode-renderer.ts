@@ -17,7 +17,7 @@ export class VNodeRenderer {
 
   public nodeToVNode(
     node: Element,
-    handler: (evt: KeyboardEvent) => {},
+    handler: (evt: KeyboardEvent) => void,
     parent: null | Element,
   ): VNode {
     const tagName = node.localName;

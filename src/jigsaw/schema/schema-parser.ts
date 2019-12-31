@@ -7,6 +7,7 @@ import {
   parseType,
   SchemaAttributeDefinition,
   SchemaAttributeUse,
+  AbstractElement,
 } from './definition/schema-definition';
 import {
   SchemaComplexType,
@@ -34,6 +35,7 @@ export enum SchemaAttributes {
   Use = 'use',
   Abstract = 'abstract',
   Mixed = 'mixed',
+  SubstitutionGroup = 'substitutionGroup',
 }
 
 export enum SchemaConstants {
@@ -45,9 +47,8 @@ export enum SchemaConstants {
 }
 
 export class SchemaParser {
-  public rootElements: SchemaElement[] = [];
-  public elements: SchemaElement[] = [];
   private document: SchemaDocument;
+  private abstractElements: AbstractElement[] = [];
   private schema!: Document;
 
   constructor() {
@@ -57,19 +58,24 @@ export class SchemaParser {
   public parse(schema: Document): SchemaDocument {
     this.schema = schema;
     // collect abstract elements from substitution grouped elements
-    this.parseElements(schema, true);
+    this.abstractElements = this.parseAbstractElements();
+    this.parseElements(true);
 
     return this.document;
   }
 
-  private parseElements(schema: Document, root: boolean = false) {
+  private parseElements(root: boolean = false) {
     // get the possible root elements
     const elements = this.getChildElements(
-      schema.documentElement,
+      this.schema.documentElement,
       SchemaElements.Element,
+    ).filter(
+      (el) =>
+        !el.getAttribute(SchemaAttributes.Abstract) &&
+        !el.getAttribute(SchemaAttributes.SubstitutionGroup),
     );
 
-    elements.map((el) => {
+    elements.forEach((el) => {
       const element = this.parseElement(el, root);
       this.document.addElement(element);
     });
@@ -148,14 +154,30 @@ export class SchemaParser {
         switch (child.nodeName) {
           case SchemaElements.Element:
             const def = this.parseElementDefinition(child);
-            structure = [
-              ...structure,
-              {
-                name: def.name,
-                min: def.minOccurs,
-                max: def.maxOccurs,
-              },
-            ];
+            const abstractContent = this.abstractElements.find(
+              (abs) => abs.name === def.name,
+            );
+            if (abstractContent && abstractContent.elements.length) {
+              structure = [
+                ...structure,
+                ...abstractContent.elements.map((abs) => {
+                  return {
+                    name: abs.name,
+                    min: def.minOccurs,
+                    max: def.maxOccurs,
+                  };
+                }),
+              ];
+            } else {
+              structure = [
+                ...structure,
+                {
+                  name: def.name,
+                  min: def.minOccurs,
+                  max: def.maxOccurs,
+                },
+              ];
+            }
             // add the element to the parser's known elements if they are not references
             if (!def.isRef) {
               const element = this.parseElement(child);
@@ -277,12 +299,34 @@ export class SchemaParser {
     };
   }
 
-  // private parseReferenceElement() {}
+  private parseAbstractElements(): AbstractElement[] {
+    // add all elements that point to this abstract to the definition
+    return this.getChildElements(
+      this.schema.documentElement,
+      SchemaElements.Element,
+    )
+      .filter(
+        (el) =>
+          el.getAttribute(SchemaAttributes.Abstract) === SchemaConstants.True,
+      )
+      .map((el) => {
+        const name = el.getAttribute('name') || '';
+        const elements = this.getChildElements(
+          this.schema.documentElement,
+          SchemaElements.Element,
+        )
+          .filter(
+            (child) =>
+              child.getAttribute(SchemaAttributes.SubstitutionGroup) === name,
+          )
+          .map((child) => this.parseElement(child));
 
-  // private parseAbstractElement() {
-  //   // add all elements that point to this abstract to the definition
-  //   // keep the abstract around
-  // }
+        return {
+          name,
+          elements,
+        };
+      });
+  }
 
   // gets child elements by type, or all if no type is provided
   private getChildElements(parent: Element, type?: string): Element[] {

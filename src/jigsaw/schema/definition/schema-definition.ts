@@ -1,3 +1,5 @@
+import { SchemaElement } from './schema-element';
+
 export enum SchemaType {
   String,
   Number,
@@ -33,6 +35,11 @@ export interface SchemaAttributeDefinition {
   type: SchemaType;
   isRef: boolean;
   use: SchemaAttributeUse;
+}
+
+export interface AbstractElement {
+  name: string;
+  elements: SchemaElement[];
 }
 
 export const parseType = (

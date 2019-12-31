@@ -18,7 +18,7 @@ export class SchemaElement {
     this.attributes = attributes;
   }
 
-  public setContent(complexType: SchemaComplexType) {
+  public setComplexType(complexType: SchemaComplexType) {
     this.complexType = complexType;
   }
 

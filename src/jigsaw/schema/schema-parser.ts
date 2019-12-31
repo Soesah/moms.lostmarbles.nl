@@ -57,23 +57,21 @@ export class SchemaParser {
   public parse(schema: Document): SchemaDocument {
     this.schema = schema;
     // collect abstract elements from substitution grouped elements
-    this.rootElements = this.parseElements(schema, true);
+    this.parseElements(schema, true);
 
     return this.document;
   }
 
-  private parseElements(
-    schema: Document,
-    root: boolean = false,
-  ): SchemaElement[] {
+  private parseElements(schema: Document, root: boolean = false) {
     // get the possible root elements
     const elements = this.getChildElements(
       schema.documentElement,
       SchemaElements.Element,
     );
 
-    return elements.map((el) => {
-      return this.parseElement(el, root);
+    elements.map((el) => {
+      const element = this.parseElement(el, root);
+      this.document.addElement(element);
     });
   }
 
@@ -87,11 +85,11 @@ export class SchemaParser {
       const mixed =
         el.getAttribute(SchemaAttributes.Mixed) === SchemaConstants.True;
 
-      const complexContent = this.parseComplexType(
+      const complexType = this.parseComplexType(
         def.complexNode.firstElementChild,
         mixed,
       );
-      element.setContent(complexContent);
+      element.setComplexType(complexType);
     }
 
     element.setRoot(root);
@@ -161,7 +159,7 @@ export class SchemaParser {
             // add the element to the parser's known elements if they are not references
             if (!def.isRef) {
               const element = this.parseElement(child);
-              this.addElement(element);
+              this.document.addElement(element);
             }
             break;
           case SchemaElements.Choice:
@@ -174,11 +172,6 @@ export class SchemaParser {
       },
       [],
     );
-  }
-
-  private addElement(element: SchemaElement) {
-    const added = !!this.elements.find((el) => el.name === element.name);
-    this.elements = added ? this.elements : [...this.elements, element];
   }
 
   private parseAttributes(parent: Element): SchemaAttribute[] {

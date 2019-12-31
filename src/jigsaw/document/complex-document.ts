@@ -1,18 +1,18 @@
-import { SchemaDocument } from '../schema/document.definition';
 import { NodeType } from './document.info';
 import { ComplexText } from './complex-text';
 import { ComplexNode } from './complex-node';
 import { ComplexAttributeType, ComplexAttribute } from './complex-attribute';
 import { SchemaParser } from '../schema/schema-parser';
+import { SchemaDocument } from '../schema/definition/schema-document';
 
 export class ComplexDocument {
   public root: ComplexNode;
   public schema: SchemaDocument;
 
   constructor(document: Document, xsd: Document) {
-    const parser = new SchemaParser(xsd);
+    const parser = new SchemaParser();
 
-    this.schema = parser.schema;
+    this.schema = parser.parse(xsd);
     this.root = this.parseComplexNode(document.documentElement);
   }
 
@@ -39,7 +39,7 @@ export class ComplexDocument {
     parent: ComplexNode | null = null,
   ): ComplexNode {
     const name = node.nodeName;
-    const definition = this.schema.getDefinition(name);
+    const definition = this.schema.getElement(name);
 
     const complexNode = new ComplexNode(name, parent);
     const childNodes = [...node.childNodes]
@@ -79,9 +79,11 @@ export class ComplexDocument {
       ),
     );
 
-    complexNode.mixed = definition.mixed;
-    complexNode.min = definition.minOccurs;
-    complexNode.max = definition.maxOccurs;
+    if (definition.complexType) {
+      complexNode.mixed = definition.complexType.mixed;
+      complexNode.min = definition.complexType.min;
+      complexNode.max = definition.complexType.max;
+    }
 
     return complexNode;
   }

@@ -17,8 +17,8 @@ export type SchemaComplexTypeStructure =
 export interface SchemaComplexType {
   type: SchemaContentTypes;
   mixed: boolean;
-  min?: number;
-  max?: number;
+  min: number;
+  max: number;
   structure: SchemaComplexTypeStructure[];
 }
 

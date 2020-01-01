@@ -6,7 +6,7 @@ export class SchemaElement {
   public name: string;
   public type: SchemaType;
   public complexType?: SchemaComplexType;
-  public attributes?: SchemaAttribute[];
+  public attributes: SchemaAttribute[] = [];
   public root: boolean = false;
 
   constructor(name: string, type: SchemaType) {
@@ -16,6 +16,18 @@ export class SchemaElement {
 
   public setAttributes(attributes: SchemaAttribute[]) {
     this.attributes = attributes;
+  }
+
+  public getAttribute(name: string): SchemaAttribute {
+    const attribute = this.attributes.find((attr) => attr.name === name);
+
+    if (!attribute) {
+      throw new Error(
+        `Attribute '${name}' not declared on element '${this.name}'`,
+      );
+    }
+
+    return attribute;
   }
 
   public setComplexType(complexType: SchemaComplexType) {

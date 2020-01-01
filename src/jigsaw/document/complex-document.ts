@@ -1,10 +1,7 @@
 import { NodeType } from '../core/info';
 import { ComplexText } from './elements/complex-text';
 import { ComplexNode } from './elements/complex-node';
-import {
-  ComplexAttributeType,
-  ComplexAttribute,
-} from './elements/complex-attribute';
+import { ComplexAttribute } from './elements/complex-attribute';
 import { SchemaParser } from '../schema/parser/schema-parser';
 import { SchemaDocument } from '../schema/schema-document';
 
@@ -42,9 +39,9 @@ export class ComplexDocument {
     parent: ComplexNode | null = null,
   ): ComplexNode {
     const name = node.nodeName;
-    const definition = this.schema.getElement(name);
+    const schema = this.schema.getElement(name);
 
-    const complexNode = new ComplexNode(name, parent);
+    const complexNode = new ComplexNode(name, parent, schema);
     const childNodes = [...node.childNodes]
       .filter(
         (child: ChildNode) =>
@@ -72,20 +69,16 @@ export class ComplexDocument {
     complexNode.setChildNodes(childNodes);
 
     complexNode.setAttributes(
-      [...node.attributes].map(
-        (attr: Attr) =>
-          new ComplexAttribute(
-            attr.name,
-            attr.value,
-            ComplexAttributeType.String,
-          ),
-      ),
+      [...node.attributes].map((attr: Attr) => {
+        const attributeSchema = schema.getAttribute(attr.name);
+        return new ComplexAttribute(attr.name, attr.value, attributeSchema);
+      }),
     );
 
-    if (definition.complexType) {
-      complexNode.mixed = definition.complexType.mixed;
-      complexNode.min = definition.complexType.min;
-      complexNode.max = definition.complexType.max;
+    if (schema.complexType) {
+      complexNode.mixed = schema.complexType.mixed;
+      complexNode.min = schema.complexType.min;
+      complexNode.max = schema.complexType.max;
     }
 
     return complexNode;

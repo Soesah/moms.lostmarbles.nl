@@ -2,6 +2,7 @@ import { ComplexAttribute } from './complex-attribute';
 import { ComplexText } from './complex-text';
 import { NodeType, EDITOR_NAMESPACE } from '../../core/info';
 import { UUIDUtil } from '../../util/uuid.util';
+import { SchemaElement } from '../../schema/definition/schema-element';
 
 type ComplexNodes = ComplexNode | ComplexText;
 
@@ -12,16 +13,18 @@ export class ComplexNode {
   public parentNode: ComplexNode | null;
   public childNodes: ComplexNodes[] = [];
   public type: NodeType = NodeType.ELEMENT;
+  public schema: SchemaElement;
 
   private siblingIndex: number = 0;
   private minOccurs: number = 0;
   private maxOccurs: number = 0;
   private isMixed: boolean = true;
 
-  constructor(name: string, parent: ComplexNode | null) {
+  constructor(name: string, parent: ComplexNode | null, schema: SchemaElement) {
     this.uuid = UUIDUtil.uuid4();
     this.name = name;
     this.parentNode = parent;
+    this.schema = schema;
   }
 
   get index() {

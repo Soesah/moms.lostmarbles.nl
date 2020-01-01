@@ -1,5 +1,5 @@
 import { ComplexNode } from './complex-node';
-import { NodeType } from '../core/info';
+import { NodeType } from '../../core/info';
 
 export class ComplexText {
   public parent: ComplexNode;

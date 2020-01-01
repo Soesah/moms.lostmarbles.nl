@@ -1,7 +1,10 @@
 import { NodeType } from '../core/info';
-import { ComplexText } from './complex-text';
-import { ComplexNode } from './complex-node';
-import { ComplexAttributeType, ComplexAttribute } from './complex-attribute';
+import { ComplexText } from './elements/complex-text';
+import { ComplexNode } from './elements/complex-node';
+import {
+  ComplexAttributeType,
+  ComplexAttribute,
+} from './elements/complex-attribute';
 import { SchemaParser } from '../schema/parser/schema-parser';
 import { SchemaDocument } from '../schema/schema-document';
 

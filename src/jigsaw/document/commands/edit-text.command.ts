@@ -1,5 +1,5 @@
 import { ComplexDocument } from '../complex-document';
-import { ComplexText } from '../complex-text';
+import { ComplexText } from '../elements/complex-text';
 import { NodeType } from '../../core/info';
 
 export class EditTextCommand {

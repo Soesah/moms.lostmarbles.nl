@@ -1,4 +1,4 @@
-import { ComplexNode } from './document/complex-node';
+import { ComplexNode } from './document/elements/complex-node';
 import { DOMSelection } from './selection/selection';
 import { JigsawEditor } from './jigsaw';
 

@@ -1,12 +1,11 @@
 import { ComplexDocument } from './complex-document';
-import { xmlDocument1, xmlDocument1a } from './complex-document.unit';
+import { xmlDocument1 } from './complex-document.unit';
 import { schemaDocument2 } from '../schema/parser/schema-parser.unit';
-import { ComplexNode } from './elements/complex-node';
+import { ComplexNode, ComplexNodes } from './elements/complex-node';
 import { parseXMLDocument } from '../util/dom.util';
-import { SchemaElement } from '../schema/definition/schema-element';
-import { SchemaType } from '../schema/definition/schema-definition';
 import { SchemaParser } from '../schema/parser/schema-parser';
 import { ComplexAttribute } from './elements/complex-attribute';
+import { NodeType } from '../core/info';
 
 describe('Complex Document', () => {
   let document: ComplexDocument;
@@ -27,9 +26,6 @@ describe('Complex Document', () => {
       arrange(xmlDocument1, schemaDocument2);
       expect(document.root).toBeInstanceOf(ComplexNode);
     });
-    xit('should throw an error when the document does not contain uuids', () => {
-      expect(() => arrange(xmlDocument1a, schemaDocument2)).toThrowError();
-    });
   });
   describe('XSD', () => {
     beforeEach(() => {
@@ -44,8 +40,35 @@ describe('Complex Document', () => {
     const parser = new SchemaParser();
     const schema = parser.parse(parseXMLDocument(schemaDocument2));
 
+    let childNode: ComplexNodes;
+    beforeEach(() => {
+      arrange(xmlDocument1, schemaDocument2);
+      childNode = document.root.childNodes[0];
+    });
+
+    it('should be a complex node', () => {
+      expect(document.root).toBeInstanceOf(ComplexNode);
+    });
+    it('should have a type', () => {
+      expect(document.root.type).toBe(NodeType.ELEMENT);
+      expect(childNode.type).toBe(NodeType.ELEMENT);
+    });
+    it('should have an index of its position within its parent', () => {
+      expect(document.root.index).toBe(0);
+      expect(childNode.index).toBe(0);
+    });
     it('should have a schema reference', () => {
       expect(document.root.schema).toEqual(schema.rootElements[0]);
+    });
+    it('should add a uuid to the element', () => {
+      expect(document.root.uuid).toBeTruthy();
+    });
+    it('should have access to its parent node', () => {
+      expect(document.root.parentNode).toBe(null);
+      expect(childNode.parentNode).toBe(document.root);
+    });
+    it('should contain its child nodes', () => {
+      expect(document.root.childNodes.length).toBe(1);
     });
     it('should contain its attributes', () => {
       expect(document.root.attributes.length).toBe(1);
@@ -56,9 +79,11 @@ describe('Complex Document', () => {
         schema.rootElements[0].attributes[1],
       );
     });
-    it('should contain its child nodes', () => {
-      expect(document.root.childNodes.length).toBe(1);
-    });
+    // describe('Schema awareness', () => {
+    //   it('should know if it can be removed', () => {
+    //     expect(childNode.canBeRemoved()).toBe(false);
+    //   });
+    // });
   });
 
   it('provides getXML to return the XML as is', () => {

@@ -14,6 +14,10 @@ export class SchemaElement {
     this.type = type;
   }
 
+  get isComplexType(): boolean {
+    return this.type === SchemaType.Complex;
+  }
+
   public setAttributes(attributes: SchemaAttribute[]) {
     this.attributes = attributes;
   }

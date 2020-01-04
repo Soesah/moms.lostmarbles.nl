@@ -4,68 +4,40 @@ import { NodeType, EDITOR_NAMESPACE } from '../../core/info';
 import { UUIDUtil } from '../../util/uuid.util';
 import { SchemaElement } from '../../schema/definition/schema-element';
 
-type ComplexNodes = ComplexNode | ComplexText;
+export type ComplexNodes = ComplexNode | ComplexText;
 
 export class ComplexNode {
   public uuid: string;
   public name: string;
-  public attributes: ComplexAttribute[] = [];
+  public type: NodeType = NodeType.ELEMENT;
+  public index: number = 0;
   public parentNode: ComplexNode | null;
   public childNodes: ComplexNodes[] = [];
-  public type: NodeType = NodeType.ELEMENT;
+  public attributes: ComplexAttribute[] = [];
   public schema: SchemaElement;
 
-  private siblingIndex: number = 0;
-  private minOccurs: number = 0;
-  private maxOccurs: number = 0;
-  private isMixed: boolean = true;
-
-  constructor(name: string, parent: ComplexNode | null, schema: SchemaElement) {
+  constructor(
+    name: string,
+    parent: ComplexNode | null,
+    schema: SchemaElement,
+    index: number,
+  ) {
     this.uuid = UUIDUtil.uuid4();
     this.name = name;
     this.parentNode = parent;
     this.schema = schema;
-  }
-
-  get index() {
-    return this.siblingIndex;
-  }
-
-  set index(index: number) {
-    this.siblingIndex = index;
-  }
-
-  get min(): number {
-    return this.minOccurs;
-  }
-
-  set min(min: number) {
-    this.minOccurs = min;
-  }
-
-  get max(): number {
-    return this.maxOccurs;
-  }
-
-  set max(max: number) {
-    this.maxOccurs = max;
+    this.index = index;
   }
 
   get mixed(): boolean {
-    return this.isMixed;
+    return !!(
+      this.schema.isComplexType &&
+      this.schema.complexType &&
+      this.schema.complexType.mixed
+    );
   }
 
-  set mixed(mixed: boolean) {
-    this.isMixed = mixed;
-  }
-
-  get allowedChildren(): ComplexNode[] {
-    // use the node to find existing children, types and count
-    // use the schema to see if others are allowed
-    return [];
-  }
-
-  get canBeRemoved(): boolean {
+  public canBeRemoved(): boolean {
     // use the schema to verify if the node is required
     return true;
   }
@@ -84,6 +56,16 @@ export class ComplexNode {
     return this.attributes.length !== 0;
   }
 
+  get allowedChildren(): ComplexNode[] {
+    // use the node to find existing children, types and count
+    // use the schema to see if others are allowed
+    return [];
+  }
+
+  public allowsChild(name: string): boolean {
+    return this.allowedChildren.map((n: ComplexNode) => n.name).includes(name);
+  }
+
   public getPath(path: ComplexNode[] = []): ComplexNode[] {
     return this.parentNode
       ? this.parentNode.getPath([this, ...path])
@@ -92,10 +74,6 @@ export class ComplexNode {
 
   public setChildNodes(childNodes: ComplexNodes[]) {
     this.childNodes = [...childNodes];
-  }
-
-  public allowsChild(name: string): boolean {
-    return this.allowedChildren.map((n: ComplexNode) => n.name).includes(name);
   }
 
   public setAttributes(attributes: ComplexAttribute[]) {

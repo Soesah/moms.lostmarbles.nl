@@ -13,7 +13,7 @@ export class ComplexDocument {
     const parser = new SchemaParser();
 
     this.schema = parser.parse(xsd);
-    this.root = this.parseComplexNode(document.documentElement);
+    this.root = this.parseComplexNode(document.documentElement, null, 0);
   }
 
   public getComplexNode(uuid: string): ComplexNode {
@@ -37,36 +37,35 @@ export class ComplexDocument {
   private parseComplexNode(
     node: Element,
     parent: ComplexNode | null = null,
+    childIndex: number,
   ): ComplexNode {
     const name = node.nodeName;
     const schema = this.schema.getElement(name);
+    const complexNode = new ComplexNode(name, parent, schema, childIndex);
 
-    const complexNode = new ComplexNode(name, parent, schema);
-    const childNodes = [...node.childNodes]
-      .filter(
-        (child: ChildNode) =>
-          child.nodeType !== NodeType.PROCESSING_INSTRUCTION,
-      )
-      .map((child: ChildNode, index: number) => {
-        switch (child.nodeType) {
-          case NodeType.TEXT:
-            const textNode = new ComplexText(
-              child.textContent ? child.textContent : '',
-              complexNode,
-            );
-            textNode.index = index;
-            return textNode;
-          default:
-            const childNode = this.parseComplexNode(
-              child as Element,
-              complexNode,
-            );
-            childNode.index = index;
-            return childNode;
-        }
-      });
-
-    complexNode.setChildNodes(childNodes);
+    complexNode.setChildNodes(
+      [...node.childNodes]
+        .filter(
+          (child: ChildNode) =>
+            child.nodeType !== NodeType.PROCESSING_INSTRUCTION,
+        )
+        .map((child: ChildNode, index: number) => {
+          switch (child.nodeType) {
+            case NodeType.TEXT:
+              return new ComplexText(
+                child.textContent || '',
+                complexNode,
+                index,
+              );
+            default:
+              return this.parseComplexNode(
+                child as Element,
+                complexNode,
+                index,
+              );
+          }
+        }),
+    );
 
     complexNode.setAttributes(
       [...node.attributes].map((attr: Attr) => {
@@ -74,12 +73,6 @@ export class ComplexDocument {
         return new ComplexAttribute(attr.name, attr.value, attributeSchema);
       }),
     );
-
-    if (schema.complexType) {
-      complexNode.mixed = schema.complexType.mixed;
-      complexNode.min = schema.complexType.min;
-      complexNode.max = schema.complexType.max;
-    }
 
     return complexNode;
   }

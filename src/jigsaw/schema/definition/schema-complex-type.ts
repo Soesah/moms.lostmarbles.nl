@@ -6,9 +6,14 @@ export enum SchemaContentTypes {
 
 interface SchemaElementOccurance {
   name: string;
-  min?: number;
-  max?: number;
+  min: number;
+  max: number;
 }
+
+export const isSchemaElementOccurance = (
+  occurance: any,
+): occurance is SchemaElementOccurance =>
+  (occurance as SchemaElementOccurance).name !== undefined;
 
 export type SchemaComplexTypeStructure =
   | SchemaElementOccurance
@@ -21,6 +26,12 @@ export interface SchemaComplexType {
   max: number;
   structure: SchemaComplexTypeStructure[];
 }
+
+export const isSchemaChoice = (def: SchemaComplexTypeStructure): boolean =>
+  !isSchemaElementOccurance(def) && def.type === SchemaContentTypes.Choice;
+
+export const isSchemaSequence = (def: SchemaComplexTypeStructure): boolean =>
+  !isSchemaElementOccurance(def) && def.type === SchemaContentTypes.Sequence;
 
 /*
 

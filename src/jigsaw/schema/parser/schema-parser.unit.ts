@@ -232,7 +232,7 @@ export const schemaDocument5 = `<?xml version="1.0"?>
   <xs:complexType name="docType">
     <xs:sequence>
       <xs:element name="title" type="xs:string"/>
-      <xs:element name="introduction" type="paragraphType"/>
+      <xs:element name="introduction" type="paragraphType" minOccurs="0"/>
       <xs:choice maxOccurs="unbounded">
         <xs:element ref="paragraph" />
         <xs:element ref="list" />

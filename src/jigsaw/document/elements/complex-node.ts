@@ -1,18 +1,24 @@
-import { ComplexAttribute } from './complex-attribute';
-import { ComplexText } from './complex-text';
 import { NodeType, EDITOR_NAMESPACE } from '../../core/info';
+import { ComplexChoice } from '../structure/complex-choice';
+import { ComplexSequence } from '../structure/complex-sequence';
+import { ComplexText } from './complex-text';
+import { ComplexAttribute } from './complex-attribute';
 import { UUIDUtil } from '../../util/uuid.util';
 import { SchemaElement } from '../../schema/definition/schema-element';
+import { SchemaType } from '../../schema/definition/schema-definition';
+import {
+  ComplexNodeBase,
+  isText,
+  isComment,
+  isElement,
+} from './complex-node-base';
 
 export type ComplexNodes = ComplexNode | ComplexText;
 
-export class ComplexNode {
+export class ComplexNode extends ComplexNodeBase {
   public uuid: string;
   public name: string;
-  public type: NodeType = NodeType.ELEMENT;
-  public index: number = 0;
-  public parentNode: ComplexNode | null;
-  public childNodes: ComplexNodes[] = [];
+  public structure: ComplexChoice | ComplexSequence | null = null;
   public attributes: ComplexAttribute[] = [];
   public schema: SchemaElement;
 
@@ -22,11 +28,13 @@ export class ComplexNode {
     schema: SchemaElement,
     index: number,
   ) {
+    super();
+    this.type = NodeType.ELEMENT;
+    this.index = index;
+    this.parentNode = parent;
     this.uuid = UUIDUtil.uuid4();
     this.name = name;
-    this.parentNode = parent;
     this.schema = schema;
-    this.index = index;
   }
 
   get mixed(): boolean {
@@ -37,8 +45,53 @@ export class ComplexNode {
     );
   }
 
+  get childNodes(): ComplexNode[] {
+    return this.structure ? this.structure.nodes : [];
+  }
+
+  get firstChild(): ComplexNodes {
+    return this.childNodes[0];
+  }
+
+  get lastChild(): ComplexNodes {
+    return this.childNodes[this.childNodes.length - 1];
+  }
+
+  get elementChildNodes(): ComplexNode[] {
+    return this.childNodes.filter((child) => isElement(child)) as ComplexNode[];
+  }
+
+  get firstElementChild(): ComplexNode {
+    return this.elementChildNodes[0];
+  }
+
+  get lastElementChild(): ComplexNodes {
+    return this.elementChildNodes[this.elementChildNodes.length - 1];
+  }
+
   public canBeRemoved(): boolean {
-    // use the schema to verify if the node is required
+    return !!(this.parentNode && this.parentNode.canRemoveChild(this));
+  }
+
+  public canRemoveChild(child: ComplexNodes): boolean {
+    if (isText(child)) {
+      // a text node can be removed from a string typed element
+      return this.schema.type === SchemaType.String;
+    } else if (isComment(child)) {
+      return true;
+    } else if (isElement(child)) {
+      // verify with the schema if a child can be removed from a complexType
+      if (this.schema.isComplexType) {
+        const min = this.schema.getMinOccurs(child.name);
+        console.log({ min });
+        return min === 0;
+      }
+    }
+
+    return false;
+  }
+
+  public canInsertChild(): boolean {
     return true;
   }
 
@@ -72,8 +125,12 @@ export class ComplexNode {
       : [this, ...path];
   }
 
+  public setStructure(structure: ComplexSequence | ComplexChoice) {
+    this.structure = structure;
+  }
+
   public setChildNodes(childNodes: ComplexNodes[]) {
-    this.childNodes = [...childNodes];
+    // this.childNodes = [...childNodes];
   }
 
   public setAttributes(attributes: ComplexAttribute[]) {

@@ -1,6 +1,10 @@
 import { SchemaAttribute } from './schema-attribute';
 import { SchemaType } from './schema-definition';
-import { SchemaComplexType } from './schema-complex-type';
+import {
+  SchemaComplexType,
+  isSchemaElementOccurance,
+  isSchemaChoice,
+} from './schema-complex-type';
 
 export class SchemaElement {
   public name: string;
@@ -36,6 +40,23 @@ export class SchemaElement {
 
   public setComplexType(complexType: SchemaComplexType) {
     this.complexType = complexType;
+  }
+
+  public getMinOccurs(name: string): number {
+    if (this.complexType) {
+      const occ = this.complexType.structure.find((def) => {
+        if (isSchemaElementOccurance(def)) {
+          return def.name === name;
+        } else if (isSchemaChoice(def)) {
+          console.log(def);
+          return 1;
+        }
+      });
+      if (occ) {
+        return occ.min;
+      }
+    }
+    throw new Error(`${name} is not a child of ${this.name}`);
   }
 
   public setRoot(root: boolean) {

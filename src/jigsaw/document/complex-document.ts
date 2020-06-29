@@ -4,6 +4,7 @@ import { ComplexNode } from './elements/complex-node';
 import { ComplexAttribute } from './elements/complex-attribute';
 import { SchemaParser } from '../schema/parser/schema-parser';
 import { SchemaDocument } from '../schema/schema-document';
+import { SchemaContentTypes } from '../schema/definition/schema-complex-type';
 
 export class ComplexDocument {
   public root: ComplexNode;
@@ -42,6 +43,9 @@ export class ComplexDocument {
     const name = node.nodeName;
     const schema = this.schema.getElement(name);
     const complexNode = new ComplexNode(name, parent, schema, childIndex);
+
+    if (schema.isChoice) {
+    }
 
     complexNode.setChildNodes(
       [...node.childNodes]

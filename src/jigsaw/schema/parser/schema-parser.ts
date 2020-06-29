@@ -213,8 +213,9 @@ export class SchemaParser {
     const name = el.getAttribute(SchemaAttributes.Name);
     const ref = el.getAttribute(SchemaAttributes.Reference);
     const type = el.getAttribute(SchemaAttributes.Type) || '';
-    const minOccurs =
-      parseInt(`${el.getAttribute(SchemaAttributes.Min)}`, 10) || 1;
+    const minOccurs = el.getAttribute(SchemaAttributes.Min)
+      ? parseInt(`${el.getAttribute(SchemaAttributes.Min)}`, 10)
+      : 1;
     const maxOccurs =
       el.getAttribute(SchemaAttributes.Max) === SchemaConstants.Unbounded
         ? Infinity

@@ -12,6 +12,8 @@
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
     "app": "go run moms.go",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "build": "vue-cli-service build",
     "major": "./bin/deploy.sh major",
     "minor": "./bin/deploy.sh minor",

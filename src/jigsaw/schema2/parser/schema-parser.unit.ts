@@ -174,6 +174,35 @@ export const schemaDocument2 = `<?xml version="1.0"?>
 
 </xs:schema>`;
 
+export const schemaDocument2a = `<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="doc">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>`;
+
+export const schemaDocument2b = `<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="doc"/>
+
+</xs:schema>`;
+
+export const schemaDocument2c = `<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="doc">
+    <xs:complexType/>
+  </xs:element>
+
+</xs:schema>`;
+
 export const schemaDocument3 = `<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 

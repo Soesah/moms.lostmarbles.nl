@@ -84,11 +84,11 @@ export class SchemaParser {
   private parseElement(el: Element): SchemaElement {
     const name = el.getAttribute(SchemaAttributes.Name);
     if (!name) {
-      throw new Error('Cannot parse element without name');
+      throw new Error('Could not parse element without name');
     }
     const schemaEl = new SchemaElement(name);
 
-    const { type, complexType } = this.parseSchemaType(el);
+    const { type, complexType } = this.parseSchemaType(name, el);
     schemaEl.setSchemaType(type);
 
     if (complexType) {
@@ -103,6 +103,7 @@ export class SchemaParser {
   }
 
   private parseSchemaType(
+    name: string,
     el: Element,
   ): { type: SchemaElementType; complexType?: Element } {
     let type = getSchemaElementType(el.getAttribute(SchemaAttributes.Type));
@@ -116,12 +117,14 @@ export class SchemaParser {
             complexTypeElement.tagName === SchemaElements.Sequence
               ? SchemaElementType.ComplexTypeSequence
               : SchemaElementType.ComplexTypeChoice;
+        } else {
+          type = SchemaElementType.Empty;
         }
       }
     }
 
     if (type === null) {
-      throw new Error('Could not parse type for element');
+      throw new Error(`Could not parse type for element "${name}"`);
     }
 
     return complexType ? { type, complexType } : { type };

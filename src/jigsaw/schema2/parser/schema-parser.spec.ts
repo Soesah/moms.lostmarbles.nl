@@ -1,5 +1,10 @@
 import { SchemaParser } from './schema-parser';
-import { schemaDocument2 } from './schema-parser.unit';
+import {
+  schemaDocument2,
+  schemaDocument2a,
+  schemaDocument2b,
+  schemaDocument2c,
+} from './schema-parser.unit';
 import { SchemaDocument } from '../schema-document';
 import { SchemaElementType } from '../definition/schema.info';
 import { SchemaSequence } from '../definition/schema-sequence';
@@ -17,6 +22,41 @@ describe('Schema Parser', () => {
       throw new Error(e.message);
     }
   };
+
+  describe('Errors', () => {
+    it('should throw an error for a nameless element', () => {
+      arrange(schemaDocument2a);
+      parser = new SchemaParser(sourceDocument);
+
+      expect(() => parser.parse()).toThrow(
+        'Could not parse element without name',
+      );
+    });
+    it('should throw an error for a typeless element', () => {
+      arrange(schemaDocument2b);
+      parser = new SchemaParser(sourceDocument);
+
+      expect(() => parser.parse()).toThrow(
+        'Could not parse type for element "doc"',
+      );
+    });
+  });
+  describe('Simplest Schema', () => {
+    beforeEach(() => {
+      arrange(schemaDocument2c);
+      parser = new SchemaParser(sourceDocument);
+      schema = parser.parse();
+    });
+
+    it('should parse the schema for root elements', () => {
+      expect(schema.rootElements.length).toBe(1);
+    });
+
+    it(`should parse the doc element's type`, () => {
+      const docEl = schema.getElement('doc');
+      expect(docEl.type).toBe(SchemaElementType.Empty);
+    });
+  });
 
   describe('Simple Schema', () => {
     beforeEach(() => {

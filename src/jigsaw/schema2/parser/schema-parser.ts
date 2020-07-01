@@ -9,10 +9,10 @@ import {
   getSchemaElementType,
   getSchemaAttributeType,
   getSchemaAttributeUse,
+  getSchemaAttributeOccurs,
 } from './schema-parser.utils';
 import { SchemaElement } from '../definition/schema-element';
 import { SchemaAttribute } from '../definition/schema-attribute';
-import { SchemaType } from '@/jigsaw/schema/definition/schema-definition';
 import { SchemaSequence } from '../definition/schema-sequence';
 
 export class SchemaParser {
@@ -60,12 +60,25 @@ export class SchemaParser {
     // parse the attributes
     return getChildElementsByTagName(complexType, SchemaElements.Attribute).map(
       (attr: Element) => {
-        const name = attr.getAttribute(SchemaAttributes.Name);
-        const type = getSchemaAttributeType(
-          attr.getAttribute(SchemaAttributes.Type),
-        );
+        let name = attr.getAttribute(SchemaAttributes.Name);
+        const ref = attr.getAttribute(SchemaAttributes.Reference);
         const use = getSchemaAttributeUse(
           attr.getAttribute(SchemaAttributes.Use),
+        );
+
+        if (ref && !name) {
+          const referenceEl = this.getReferenceAttribute(ref);
+
+          if (!referenceEl) {
+            throw new Error(`Reference attribute not found for ref "${ref}"`);
+          }
+
+          attr = referenceEl;
+          name = ref;
+        }
+
+        const type = getSchemaAttributeType(
+          attr.getAttribute(SchemaAttributes.Type),
         );
 
         if (!name) {
@@ -82,21 +95,35 @@ export class SchemaParser {
   }
 
   private parseElement(el: Element): SchemaElement {
-    const name = el.getAttribute(SchemaAttributes.Name);
+    let name = el.getAttribute(SchemaAttributes.Name);
+    const ref = el.getAttribute(SchemaAttributes.Reference);
+
+    if (ref && !name) {
+      const referenceEl = this.getReferenceElement(ref);
+
+      if (!referenceEl) {
+        throw new Error(`Reference element not found for ref "${ref}"`);
+      }
+
+      el = referenceEl;
+      name = ref;
+    }
+
     if (!name) {
       throw new Error('Could not parse element without name');
     }
+
     const schemaEl = new SchemaElement(name);
 
     const { type, complexType } = this.parseSchemaType(name, el);
     schemaEl.setSchemaType(type);
 
-    if (complexType) {
-      schemaEl.setAttributes(...this.parseAttributes(complexType));
-    }
-
     if (type === SchemaElementType.ComplexTypeSequence && complexType) {
       schemaEl.setComplexType(this.parseComplexTypeSequence(complexType));
+    }
+
+    if (complexType) {
+      schemaEl.setAttributes(...this.parseAttributes(complexType));
     }
 
     return schemaEl;
@@ -142,11 +169,39 @@ export class SchemaParser {
     );
 
     children.forEach((child: Element) => {
-      const element = this.parseElement(child as Element);
+      const element = this.parseElement(child);
+      const minOccurs = getSchemaAttributeOccurs(
+        child.getAttribute(SchemaAttributes.Min),
+      );
+      const maxOccurs = getSchemaAttributeOccurs(
+        child.getAttribute(SchemaAttributes.Max),
+      );
 
-      complexType.addElement(element);
+      complexType.addElement(element, minOccurs, maxOccurs);
     });
 
     return complexType;
+  }
+
+  private getReferenceElement(name: string): Element | undefined {
+    const rootElements = getChildElementsByTagName(
+      this.schema.documentElement,
+      SchemaElements.Element,
+    );
+
+    return rootElements.find(
+      (el) => el.getAttribute(SchemaAttributes.Name) === name,
+    );
+  }
+
+  private getReferenceAttribute(name: string): Element | undefined {
+    const rootElements = getChildElementsByTagName(
+      this.schema.documentElement,
+      SchemaElements.Attribute,
+    );
+
+    return rootElements.find(
+      (el) => el.getAttribute(SchemaAttributes.Name) === name,
+    );
   }
 }

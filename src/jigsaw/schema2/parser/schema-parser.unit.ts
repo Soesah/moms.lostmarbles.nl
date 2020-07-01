@@ -210,9 +210,10 @@ export const schemaDocument3 = `<?xml version="1.0"?>
     <xs:complexType>
       <xs:sequence>
         <xs:element name="title" type="xs:string"/>
-        <xs:element ref="paragraph" maxOccurs="unbounded"/>
+        <xs:element ref="paragraph" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute ref="year" use="required"/>
+      <xs:attribute name="date" use="optional" type="xs:date"/>
     </xs:complexType>
   </xs:element>
 

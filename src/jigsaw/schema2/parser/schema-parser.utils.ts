@@ -2,6 +2,7 @@ import {
   SchemaElementType,
   SchemaAttributeType,
   SchemaAttributeUse,
+  SchemaConstants,
 } from '../definition/schema.info';
 
 enum NodeType {
@@ -19,6 +20,15 @@ enum NodeType {
   DOCUMENT_FRAGMENT,
   NOTATION,
 }
+
+export const getSchemaAttributeOccurs = (occurs: string | null): number => {
+  if (occurs === SchemaConstants.Unbounded) {
+    return Infinity;
+  } else if (typeof occurs === 'string') {
+    return parseInt(occurs, 10);
+  }
+  return 1;
+};
 
 export const getSchemaAttributeType = (
   type: string | null,

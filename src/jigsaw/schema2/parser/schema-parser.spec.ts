@@ -4,10 +4,11 @@ import {
   schemaDocument2a,
   schemaDocument2b,
   schemaDocument2c,
+  schemaDocument2d,
+  schemaDocument2e,
   schemaDocument3,
   schemaDocument4,
-  schemaDocument2e,
-  schemaDocument2d,
+  schemaDocument5,
 } from './schema-parser.unit';
 import { SchemaDocument } from '../schema-document';
 import {
@@ -16,6 +17,8 @@ import {
   SchemaAttributeType,
 } from '../definition/schema.info';
 import { SchemaSequence } from '../definition/schema-sequence';
+import { SchemaChoice } from '../definition/schema-choice';
+import { SchemaElement } from '../definition/schema-element';
 
 describe('Schema Parser', () => {
   let sourceDocument: Document;
@@ -221,6 +224,79 @@ describe('Schema Parser', () => {
       );
       expect((complexType as SchemaSequence).elements[1].minOccurs).toBe(1);
       expect((complexType as SchemaSequence).elements[1].maxOccurs).toBe(
+        Infinity,
+      );
+    });
+
+    it(`should parse the paragraph element's complex type`, () => {
+      const complexType = schema.getElement('paragraph').complexType;
+      if (!complexType) {
+        throw new Error('Testing wrong schema');
+      }
+      expect(complexType.type).toEqual(SchemaElementType.ComplexTypeChoice);
+      expect(complexType.isMixed).toEqual(true);
+      expect(complexType.elements.length).toBe(2);
+    });
+
+    it(`should parse the list element's complex type`, () => {
+      const complexType = schema.getElement('list').complexType;
+      if (!complexType) {
+        throw new Error('Testing wrong schema');
+      }
+      expect(complexType.type).toEqual(SchemaElementType.ComplexTypeSequence);
+      expect(complexType.isMixed).toEqual(false);
+      expect(complexType.elements.length).toBe(1);
+    });
+  });
+  describe('Schema with type references', () => {
+    beforeEach(() => {
+      arrange(schemaDocument5);
+      parser = new SchemaParser(sourceDocument);
+      schema = parser.parse();
+    });
+
+    it('should parse the schema for root elements', () => {
+      expect(schema.rootElements.length).toBe(3);
+    });
+    it(`should parse the doc element's complex type`, () => {
+      const complexType = schema.getElement('doc').complexType;
+      if (!complexType) {
+        throw new Error('Testing wrong schema');
+      }
+      expect(complexType.type).toEqual(SchemaElementType.ComplexTypeSequence);
+      expect(complexType.isMixed).toEqual(false);
+      expect(complexType.elements.length).toBe(3);
+      expect(complexType.elements[0].name).toBe('title');
+      if (complexType.type !== SchemaElementType.ComplexTypeSequence) {
+        throw new Error('Testing wrong schema');
+      }
+      expect((complexType as SchemaSequence).elements[0].element.type).toBe(
+        SchemaElementType.String,
+      );
+      expect((complexType as SchemaSequence).elements[0].minOccurs).toBe(1);
+      expect((complexType as SchemaSequence).elements[0].maxOccurs).toBe(1);
+
+      expect(complexType.elements[1].name).toBe('introduction');
+      const introductionElement = (complexType as SchemaSequence).elements[1]
+        .element as SchemaElement;
+      expect(introductionElement.type).toBe(
+        SchemaElementType.ComplexTypeChoice,
+      );
+      expect((introductionElement.complexType as SchemaChoice).isMixed).toEqual(
+        true,
+      );
+      expect(
+        (introductionElement.complexType as SchemaChoice).elements.length,
+      ).toBe(2);
+      expect((complexType as SchemaSequence).elements[1].minOccurs).toBe(0);
+      expect((complexType as SchemaSequence).elements[1].maxOccurs).toBe(1);
+
+      expect(complexType.elements[2].name).toBe('choice');
+      expect((complexType as SchemaSequence).elements[2].element.type).toBe(
+        SchemaElementType.ComplexTypeChoice,
+      );
+      expect((complexType as SchemaSequence).elements[2].minOccurs).toBe(1);
+      expect((complexType as SchemaSequence).elements[2].maxOccurs).toBe(
         Infinity,
       );
     });

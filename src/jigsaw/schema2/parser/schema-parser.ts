@@ -17,8 +17,11 @@ import { SchemaAttribute } from '../definition/schema-attribute';
 import { SchemaSequence } from '../definition/schema-sequence';
 import { SchemaChoice } from '../definition/schema-choice';
 
+export type SchemaComplexTypes = SchemaChoice | SchemaSequence;
+
 export class SchemaParser {
   public schema: Document;
+  public complexTypes: Map<string, Element> = new Map();
 
   constructor(schema: Document) {
     this.schema = schema;
@@ -34,6 +37,14 @@ export class SchemaParser {
     doc.addRootElements(...this.parseRootElements());
 
     return doc;
+  }
+
+  public addComplexType(name: string, complexType: Element) {
+    this.complexTypes.set(name, complexType);
+  }
+
+  public getComplexType(name: string): Element | undefined {
+    return this.complexTypes.get(name);
   }
 
   private parseAbstractElements() {
@@ -138,21 +149,27 @@ export class SchemaParser {
     name: string,
     el: Element,
   ): { type: SchemaElementType; complexType?: Element } {
-    let type = getSchemaElementType(el.getAttribute(SchemaAttributes.Type));
-    let complexType: Element | null = null;
+    const typeValue = el.getAttribute(SchemaAttributes.Type);
+    let type = getSchemaElementType(typeValue);
+    let complexType: Element | null = el.firstElementChild;
+    let complexTypeElement: Element | null = null;
+
     if (type === null) {
-      complexType = el.firstElementChild;
       if (complexType) {
-        const complexTypeElement = complexType.firstElementChild;
-        if (complexTypeElement) {
-          type =
-            complexTypeElement.tagName === SchemaElements.Sequence
-              ? SchemaElementType.ComplexTypeSequence
-              : SchemaElementType.ComplexTypeChoice;
-        } else {
-          type = SchemaElementType.Empty;
-        }
+        complexTypeElement = complexType.firstElementChild;
+      } else if (typeValue) {
+        complexType = this.parseReferenceType(typeValue);
+        complexTypeElement = complexType.firstElementChild;
       }
+    }
+
+    if (complexTypeElement) {
+      type =
+        complexTypeElement.tagName === SchemaElements.Sequence
+          ? SchemaElementType.ComplexTypeSequence
+          : SchemaElementType.ComplexTypeChoice;
+    } else if (complexType) {
+      type = SchemaElementType.Empty;
     }
 
     if (type === null) {
@@ -160,6 +177,21 @@ export class SchemaParser {
     }
 
     return complexType ? { type, complexType } : { type };
+  }
+
+  private parseReferenceType(type: string): Element {
+    let complexType = this.getComplexType(type);
+
+    if (!complexType) {
+      complexType = this.getReferenceComplexType(type);
+    }
+    if (!complexType) {
+      throw new Error(`Could not parse custom type "${type}"`);
+    }
+
+    this.addComplexType(type, complexType);
+
+    return complexType;
   }
 
   private parseComplexTypeSequence(el: Element): SchemaSequence {
@@ -242,6 +274,17 @@ export class SchemaParser {
     const rootElements = getChildElementsByTagName(
       this.schema.documentElement,
       SchemaElements.Element,
+    );
+
+    return rootElements.find(
+      (el) => el.getAttribute(SchemaAttributes.Name) === name,
+    );
+  }
+
+  private getReferenceComplexType(name: string): Element | undefined {
+    const rootElements = getChildElementsByTagName(
+      this.schema.documentElement,
+      SchemaElements.ComplexType,
     );
 
     return rootElements.find(

@@ -64,6 +64,16 @@ export const getSchemaAttributeUse = (
   }
 };
 
+export const getSchemaAttributeMixed = (type: string | null): boolean => {
+  switch (type) {
+    case 'true':
+      return true;
+    case 'false':
+    default:
+      return false;
+  }
+};
+
 export const getSchemaElementType = (
   type: string | null,
 ): SchemaElementType | null => {
@@ -88,13 +98,13 @@ export const getSchemaElementType = (
 // gets child elements by type, or all if no type is provided
 export const getChildElementsByTagName = (
   parent: Element,
-  type?: string,
+  ...types: string[]
 ): Element[] => {
   let children: Element[] = [];
 
   for (const child of parent.childNodes) {
     if (child.nodeType === NodeType.ELEMENT) {
-      if (!type || child.nodeName === type) {
+      if (types.includes(child.nodeName)) {
         children = [...children, child as Element];
       }
     }

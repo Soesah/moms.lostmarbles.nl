@@ -203,6 +203,28 @@ export const schemaDocument2c = `<?xml version="1.0"?>
 
 </xs:schema>`;
 
+export const schemaDocument2d = `<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="doc">
+    <xs:complexType>
+      <xs:attribute />
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>`;
+
+export const schemaDocument2e = `<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="doc">
+    <xs:complexType>
+      <xs:attribute name="test" />
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>`;
+
 export const schemaDocument3 = `<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 

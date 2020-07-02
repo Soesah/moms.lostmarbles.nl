@@ -27,7 +27,7 @@ export class SchemaElement {
     this.complexType = complexType;
   }
 
-  public getElement(name: string): SchemaElement {
+  public getElement(name: string): SchemaElement | SchemaChoice {
     if (!this.complexType) {
       throw new Error(
         `Cannot call getElement on non-complexType element ${this.name}`,

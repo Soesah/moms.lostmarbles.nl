@@ -11,6 +11,7 @@ import {
   getSchemaAttributeUse,
   getSchemaAttributeOccurs,
   getSchemaAttributeMixed,
+  getTypeFromComplexType,
 } from './schema-parser.utils';
 import { SchemaElement } from '../definition/schema-element';
 import { SchemaAttribute } from '../definition/schema-attribute';
@@ -82,10 +83,6 @@ export class SchemaParser {
         if (ref && !name) {
           const referenceEl = this.getReferenceAttribute(ref);
 
-          if (!referenceEl) {
-            throw new Error(`Reference attribute not found for ref "${ref}"`);
-          }
-
           attr = referenceEl;
           name = ref;
         }
@@ -94,13 +91,19 @@ export class SchemaParser {
           throw new Error(`Could not parse attribute without name`);
         }
 
-        const type = getSchemaAttributeType(
-          attr.getAttribute(SchemaAttributes.Type),
-        );
+        const typeValue = attr.getAttribute(SchemaAttributes.Type);
+        const type = getSchemaAttributeType(typeValue);
+
+        if (!type && typeValue) {
+          throw new Error(
+            `Could not parse custom simpleType for attribute "${name}"`,
+          );
+        }
 
         if (!type) {
           throw new Error(`Could not parse type for attribute "${name}"`);
         }
+
         return new SchemaAttribute(name, type, use);
       },
     );
@@ -162,14 +165,8 @@ export class SchemaParser {
         complexTypeElement = complexType.firstElementChild;
       }
     }
-
-    if (complexTypeElement) {
-      type =
-        complexTypeElement.tagName === SchemaElements.Sequence
-          ? SchemaElementType.ComplexTypeSequence
-          : SchemaElementType.ComplexTypeChoice;
-    } else if (complexType) {
-      type = SchemaElementType.Empty;
+    if (complexType) {
+      type = getTypeFromComplexType(complexType);
     }
 
     if (type === null) {
@@ -292,14 +289,20 @@ export class SchemaParser {
     );
   }
 
-  private getReferenceAttribute(name: string): Element | undefined {
+  private getReferenceAttribute(name: string): Element {
     const rootElements = getChildElementsByTagName(
       this.schema.documentElement,
       SchemaElements.Attribute,
     );
 
-    return rootElements.find(
+    const referenceEl = rootElements.find(
       (el) => el.getAttribute(SchemaAttributes.Name) === name,
     );
+
+    if (!referenceEl) {
+      throw new Error(`Reference attribute not found for ref "${name}"`);
+    }
+
+    return referenceEl;
   }
 }

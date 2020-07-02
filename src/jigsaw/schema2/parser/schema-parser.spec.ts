@@ -6,6 +6,8 @@ import {
   schemaDocument2c,
   schemaDocument2d,
   schemaDocument2e,
+  schemaDocument2f,
+  schemaDocument2g,
   schemaDocument3,
   schemaDocument4,
   schemaDocument5,
@@ -70,6 +72,15 @@ describe('Schema Parser', () => {
         'Could not parse type for attribute "test"',
       );
     });
+
+    it('should throw an error for a custom simpleType attribute', () => {
+      arrange(schemaDocument2f);
+      parser = new SchemaParser(sourceDocument);
+
+      expect(() => parser.parse()).toThrow(
+        'Could not parse custom simpleType for attribute "test"',
+      );
+    });
   });
 
   describe('Schema with an empty element', () => {
@@ -86,6 +97,31 @@ describe('Schema Parser', () => {
     it(`should parse the doc element's type`, () => {
       const docEl = schema.getElement('doc');
       expect(docEl.type).toBe(SchemaElementType.Empty);
+    });
+  });
+
+  describe('Schema with an empty element, but with attributes', () => {
+    beforeEach(() => {
+      arrange(schemaDocument2g);
+      parser = new SchemaParser(sourceDocument);
+      schema = parser.parse();
+    });
+
+    it('should parse the schema for root elements', () => {
+      expect(schema.rootElements.length).toBe(1);
+    });
+
+    it(`should parse the doc element's type`, () => {
+      const docEl = schema.getElement('doc');
+      expect(docEl.type).toBe(SchemaElementType.Empty);
+    });
+
+    it(`should parse the doc attribute correctly`, () => {
+      const docEl = schema.getElement('doc');
+      expect(docEl.attributes.length).toBe(1);
+      expect(docEl.attributes[0].name).toBe('date');
+      expect(docEl.attributes[0].type).toBe(SchemaAttributeType.Date);
+      expect(docEl.attributes[0].use).toBe(SchemaAttributeUse.Optional);
     });
   });
 

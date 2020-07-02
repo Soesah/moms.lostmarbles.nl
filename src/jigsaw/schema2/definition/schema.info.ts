@@ -25,6 +25,7 @@ export enum SchemaElements {
   Choice = 'xs:choice',
   Sequence = 'xs:sequence',
   ComplexType = 'xs:complexType',
+  ComplexContent = 'xs:complexContent',
 }
 
 export enum SchemaAttributes {

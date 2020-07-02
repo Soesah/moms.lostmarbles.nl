@@ -3,6 +3,7 @@ import {
   SchemaAttributeType,
   SchemaAttributeUse,
   SchemaConstants,
+  SchemaElements,
 } from '../definition/schema.info';
 
 enum NodeType {
@@ -93,6 +94,30 @@ export const getSchemaElementType = (
     default:
       return null;
   }
+};
+
+// get the type from the complexType
+export const getTypeFromComplexType = (
+  complexType: Element,
+): SchemaElementType | null => {
+  const complexTypeElement = complexType.firstElementChild;
+
+  if (complexTypeElement) {
+    switch (complexTypeElement.tagName) {
+      case SchemaElements.Sequence:
+        return SchemaElementType.ComplexTypeSequence;
+      case SchemaElements.Choice:
+        return SchemaElementType.ComplexTypeChoice;
+      case SchemaElements.ComplexContent:
+        throw new Error('Could not parse complexContent');
+      case SchemaElements.Attribute:
+        return SchemaElementType.Empty;
+    }
+  } else {
+    return SchemaElementType.Empty;
+  }
+
+  return null;
 };
 
 // gets child elements by type, or all if no type is provided

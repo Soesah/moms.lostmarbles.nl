@@ -377,18 +377,18 @@ export const schemaDocument7 = `<?xml version="1.0"?>
       <xs:element name="title" type="xs:string"/>
       <xs:element name="introduction" type="paragraphType"/>
       <xs:choice maxOccurs="unbounded">
-        <xs:element ref="paragraph" />
-        <xs:element ref="list" />
+        <xs:element ref="block.abstract"/>
       </xs:choice>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:element name="paragraph" type="paragraphType"/>
+  <xs:element name="block.abstract" abstract="true"/>
+  <xs:element name="paragraph" type="paragraphType" substitutionGroup="block.abstract"/>
 
   <xs:complexType mixed="true" name="paragraphType">
-      <xs:choice maxOccurs="unbounded">
-        <xs:element ref="inline.abstract"/>
-      </xs:choice>
+    <xs:choice maxOccurs="unbounded">
+      <xs:element ref="inline.abstract"/>
+    </xs:choice>
   </xs:complexType>
 
   <xs:element name="inline.abstract" abstract="true" />
@@ -396,11 +396,11 @@ export const schemaDocument7 = `<?xml version="1.0"?>
   <xs:element name="italic" type="xs:string" substitutionGroup="inline.abstract" />
 
 
-  <xs:element name="list" type="listType"/>
+  <xs:element name="list" type="listType" substitutionGroup="block.abstract" />
 
   <xs:complexType mixed="false" name="listType">
     <xs:sequence>
-      <xs:element name="item" type="xs:string" maxOccurs="unbounded"/>
+      <xs:element name="item" type="paragraphType" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 

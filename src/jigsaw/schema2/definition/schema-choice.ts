@@ -6,7 +6,7 @@ export class SchemaChoice {
   public isMixed: boolean = false;
   public minOccurs: number = 1;
   public maxOccurs: number = 1;
-  public elements: SchemaElement[] = [];
+  public elements: SchemaElement[] = []; // need to handle sequences also
 
   public get name(): string {
     return 'choice'; // not the nicest thing to do...

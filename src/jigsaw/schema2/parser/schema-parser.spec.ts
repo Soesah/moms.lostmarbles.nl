@@ -11,6 +11,7 @@ import {
   schemaDocument3,
   schemaDocument4,
   schemaDocument5,
+  schemaDocument7,
 } from './schema-parser.unit';
 import { SchemaDocument } from '../schema-document';
 import {
@@ -284,6 +285,7 @@ describe('Schema Parser', () => {
       expect(complexType.elements.length).toBe(1);
     });
   });
+
   describe('Schema with type references', () => {
     beforeEach(() => {
       arrange(schemaDocument5);
@@ -302,10 +304,10 @@ describe('Schema Parser', () => {
       expect(complexType.type).toEqual(SchemaElementType.ComplexTypeSequence);
       expect(complexType.isMixed).toEqual(false);
       expect(complexType.elements.length).toBe(3);
-      expect(complexType.elements[0].name).toBe('title');
       if (complexType.type !== SchemaElementType.ComplexTypeSequence) {
         throw new Error('Testing wrong schema');
       }
+      expect(complexType.elements[0].name).toBe('title');
       expect((complexType as SchemaSequence).elements[0].element.type).toBe(
         SchemaElementType.String,
       );
@@ -355,6 +357,76 @@ describe('Schema Parser', () => {
       expect(complexType.type).toEqual(SchemaElementType.ComplexTypeSequence);
       expect(complexType.isMixed).toEqual(false);
       expect(complexType.elements.length).toBe(1);
+    });
+  });
+
+  describe('Schema with abstract elements', () => {
+    beforeEach(() => {
+      arrange(schemaDocument7);
+      parser = new SchemaParser(sourceDocument);
+      schema = parser.parse();
+    });
+
+    it('should parse the schema for root elements', () => {
+      expect(schema.rootElements.length).toBe(1);
+    });
+
+    it(`should parse the doc element's complex type`, () => {
+      const complexType = schema.getElement('doc').complexType;
+      if (!complexType) {
+        throw new Error('Testing wrong schema');
+      }
+      expect(complexType.type).toEqual(SchemaElementType.ComplexTypeSequence);
+      expect(complexType.isMixed).toEqual(false);
+      expect(complexType.elements.length).toBe(3);
+
+      expect(complexType.elements[0].name).toBe('title');
+      expect((complexType as SchemaSequence).elements[0].element.type).toBe(
+        SchemaElementType.String,
+      );
+      expect((complexType as SchemaSequence).elements[0].minOccurs).toBe(1);
+      expect((complexType as SchemaSequence).elements[0].maxOccurs).toBe(1);
+
+      expect(complexType.elements[1].name).toBe('introduction');
+      expect((complexType as SchemaSequence).elements[1].element.type).toBe(
+        SchemaElementType.ComplexTypeChoice,
+      );
+      expect((complexType as SchemaSequence).elements[1].minOccurs).toBe(1);
+      expect((complexType as SchemaSequence).elements[1].maxOccurs).toBe(1);
+
+      expect(complexType.elements[2].name).toBe('choice');
+      expect((complexType as SchemaSequence).elements[2].element.type).toBe(
+        SchemaElementType.ComplexTypeChoice,
+      );
+      expect((complexType as SchemaSequence).elements[2].minOccurs).toBe(1);
+      expect((complexType as SchemaSequence).elements[2].maxOccurs).toBe(
+        Infinity,
+      );
+      expect(
+        ((complexType as SchemaSequence).elements[2].element as SchemaChoice)
+          .elements.length,
+      ).toBe(2);
+    });
+
+    it(`should parse the introduction element's complex type`, () => {
+      const introduction = schema.getElement('doc').getElement('introduction');
+      if (!introduction) {
+        throw new Error('Testing wrong schema');
+      }
+      const complexType = (introduction as SchemaElement).complexType;
+      if (!complexType) {
+        throw new Error('Testing wrong schema');
+      }
+      expect(complexType.isMixed).toEqual(true);
+      expect(complexType.elements.length).toBe(2);
+      expect(complexType.elements[0].name).toBe('bold');
+      expect((complexType as SchemaChoice).elements[0].type).toBe(
+        SchemaElementType.String,
+      );
+      expect(complexType.elements[1].name).toBe('italic');
+      expect((complexType as SchemaChoice).elements[1].type).toBe(
+        SchemaElementType.String,
+      );
     });
   });
 });

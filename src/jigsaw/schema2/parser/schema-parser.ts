@@ -23,6 +23,7 @@ export type SchemaComplexTypes = SchemaChoice | SchemaSequence;
 export class SchemaParser {
   public schema: Document;
   public complexTypes: Map<string, Element> = new Map();
+  public abstractElements: Map<string, Element[]> = new Map();
 
   constructor(schema: Document) {
     this.schema = schema;
@@ -50,7 +51,29 @@ export class SchemaParser {
 
   private parseAbstractElements() {
     // find abstract elements
+    const abstractElements = getChildElementsByTagName(
+      this.schema.documentElement,
+      SchemaElements.Element,
+    ).filter((el) => el.getAttribute(SchemaAttributes.Abstract));
     // find related elements
+    const substitutionGroupElements = getChildElementsByTagName(
+      this.schema.documentElement,
+      SchemaElements.Element,
+    ).filter((el) => el.getAttribute(SchemaAttributes.SubstitutionGroup));
+
+    abstractElements.forEach((element: Element) => {
+      const name = element.getAttribute(SchemaAttributes.Name);
+      if (!name) {
+        throw new Error('Could not parse abstract element without name');
+      }
+      this.abstractElements.set(
+        name,
+        substitutionGroupElements.filter(
+          (el: Element) =>
+            el.getAttribute(SchemaAttributes.SubstitutionGroup) === name,
+        ),
+      );
+    });
   }
 
   private parseRootElements(): SchemaElement[] {
@@ -133,15 +156,23 @@ export class SchemaParser {
     const { type, complexType } = this.parseSchemaType(name, el);
     schemaEl.setSchemaType(type);
 
-    if (type === SchemaElementType.ComplexTypeSequence && complexType) {
-      schemaEl.setComplexType(this.parseComplexTypeSequence(complexType));
-    }
-
-    if (type === SchemaElementType.ComplexTypeChoice && complexType) {
-      schemaEl.setComplexType(this.parseComplexTypeChoice(complexType));
-    }
-
     if (complexType) {
+      const isMixed = getSchemaAttributeMixed(
+        complexType.getAttribute(SchemaAttributes.Mixed),
+      );
+
+      if (type === SchemaElementType.ComplexTypeSequence && complexType) {
+        schemaEl.setComplexType(
+          this.parseComplexTypeSequence(complexType.firstElementChild),
+        );
+      }
+
+      if (type === SchemaElementType.ComplexTypeChoice && complexType) {
+        schemaEl.setComplexType(
+          this.parseComplexTypeChoice(complexType.firstElementChild, isMixed),
+        );
+      }
+
       schemaEl.setAttributes(...this.parseAttributes(complexType));
     }
 
@@ -155,16 +186,11 @@ export class SchemaParser {
     const typeValue = el.getAttribute(SchemaAttributes.Type);
     let type = getSchemaElementType(typeValue);
     let complexType: Element | null = el.firstElementChild;
-    let complexTypeElement: Element | null = null;
 
-    if (type === null) {
-      if (complexType) {
-        complexTypeElement = complexType.firstElementChild;
-      } else if (typeValue) {
-        complexType = this.parseReferenceType(typeValue);
-        complexTypeElement = complexType.firstElementChild;
-      }
+    if (type === null && typeValue) {
+      complexType = this.parseReferenceType(typeValue);
     }
+
     if (complexType) {
       type = getTypeFromComplexType(complexType);
     }
@@ -191,21 +217,32 @@ export class SchemaParser {
     return complexType;
   }
 
-  private parseComplexTypeSequence(el: Element): SchemaSequence {
-    const complexType = new SchemaSequence();
-    const isMixed = getSchemaAttributeMixed(
-      el.getAttribute(SchemaAttributes.Mixed),
-    );
-    complexType.isMixed = isMixed;
-
-    if (!el.firstElementChild) {
+  private parseComplexTypeSequence(
+    sequenceEl: Element | null,
+    isMixed: boolean = false,
+  ): SchemaSequence {
+    if (!sequenceEl) {
       throw new Error('Sequence has no element');
     }
+
+    const complexType = new SchemaSequence();
+    complexType.isMixed = isMixed;
+
+    // figure out abstract children
     const children = getChildElementsByTagName(
-      el.firstElementChild,
+      sequenceEl,
       SchemaElements.Element,
       SchemaElements.Choice,
-    );
+    ).reduce((acc: Element[], element: Element) => {
+      const ref = element.getAttribute(SchemaAttributes.Reference);
+      const abstractElements = this.abstractElements.get(ref || '');
+      if (abstractElements) {
+        acc = [...acc, ...abstractElements];
+      } else {
+        acc = [...acc, element];
+      }
+      return acc;
+    }, []);
 
     children.forEach((child: Element) => {
       const minOccurs = getSchemaAttributeOccurs(
@@ -218,11 +255,9 @@ export class SchemaParser {
       // possible sequence children
       if (child.tagName === SchemaElements.Choice) {
         const choice = this.parseComplexTypeChoice(child);
-
         complexType.addElement(choice, minOccurs, maxOccurs);
       } else if (child.tagName === SchemaElements.Element) {
         const element = this.parseElement(child);
-
         complexType.addElement(element, minOccurs, maxOccurs);
       } else {
         throw new Error(
@@ -234,29 +269,39 @@ export class SchemaParser {
     return complexType;
   }
 
-  private parseComplexTypeChoice(el: Element): SchemaChoice {
+  private parseComplexTypeChoice(
+    choiceEl: Element | null,
+    isMixed: boolean = false,
+  ): SchemaChoice {
+    if (!choiceEl) {
+      throw new Error('Choice has no element');
+    }
+
     const complexType = new SchemaChoice();
-    const isMixed = getSchemaAttributeMixed(
-      el.getAttribute(SchemaAttributes.Mixed),
-    );
     const minOccurs = getSchemaAttributeOccurs(
-      el.getAttribute(SchemaAttributes.Min),
+      choiceEl.getAttribute(SchemaAttributes.Min),
     );
     const maxOccurs = getSchemaAttributeOccurs(
-      el.getAttribute(SchemaAttributes.Max),
+      choiceEl.getAttribute(SchemaAttributes.Max),
     );
     complexType.minOccurs = minOccurs;
     complexType.maxOccurs = maxOccurs;
     complexType.isMixed = isMixed;
 
-    if (!el.firstElementChild) {
-      throw new Error('Choice has no element');
-    }
-
+    // figure out abstract children
     const children = getChildElementsByTagName(
-      el.firstElementChild,
+      choiceEl,
       SchemaElements.Element,
-    );
+    ).reduce((acc: Element[], element: Element) => {
+      const ref = element.getAttribute(SchemaAttributes.Reference);
+      const abstractElements = this.abstractElements.get(ref || '');
+      if (abstractElements) {
+        acc = [...acc, ...abstractElements];
+      } else {
+        acc = [...acc, element];
+      }
+      return acc;
+    }, []);
 
     children.forEach((child: Element) => {
       const element = this.parseElement(child);

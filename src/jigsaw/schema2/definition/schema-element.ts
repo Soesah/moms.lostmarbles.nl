@@ -8,11 +8,9 @@ export class SchemaElement {
   public type: SchemaElementType = SchemaElementType.String;
   public complexType?: SchemaChoice | SchemaSequence;
   public attributes: SchemaAttribute[] = [];
-  public isAbstract: boolean = false;
 
-  constructor(name: string, isAbstract = false) {
+  constructor(name: string) {
     this.name = name;
-    this.isAbstract = isAbstract;
   }
 
   public setSchemaType(type: SchemaElementType) {

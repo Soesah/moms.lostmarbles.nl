@@ -7,18 +7,16 @@ import {
 import {
   getChildElementsByTagName,
   getSchemaElementType,
+  getTypeFromComplexType,
   getSchemaAttributeType,
   getSchemaAttributeUse,
   getSchemaAttributeOccurs,
   getSchemaAttributeMixed,
-  getTypeFromComplexType,
 } from './schema-parser.utils';
 import { SchemaElement } from '../definition/schema-element';
 import { SchemaAttribute } from '../definition/schema-attribute';
 import { SchemaSequence } from '../definition/schema-sequence';
 import { SchemaChoice } from '../definition/schema-choice';
-
-export type SchemaComplexTypes = SchemaChoice | SchemaSequence;
 
 export class SchemaParser {
   public schema: Document;

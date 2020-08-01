@@ -1,5 +1,6 @@
 import { SchemaParser } from './schema-parser';
 import {
+  schemaDocument1,
   schemaDocument2,
   schemaDocument2a,
   schemaDocument2b,
@@ -11,6 +12,7 @@ import {
   schemaDocument3,
   schemaDocument4,
   schemaDocument5,
+  schemaDocument6,
   schemaDocument7,
 } from './schema-parser.unit';
 import { SchemaDocument } from '../schema-document';
@@ -33,7 +35,7 @@ describe('Schema Parser', () => {
       const domParser = new DOMParser();
       sourceDocument = domParser.parseFromString(source, 'text/xml');
     } catch (e) {
-      throw new Error(e.message);
+      throw new Error(`Failed to parse schema parser source ${e.message}`);
     }
   };
 
@@ -427,6 +429,30 @@ describe('Schema Parser', () => {
       expect((complexType as SchemaChoice).elements[1].type).toBe(
         SchemaElementType.String,
       );
+    });
+  });
+
+  fdescribe('Recipe schema with complexContent and extension', () => {
+    beforeEach(() => {
+      arrange(schemaDocument6);
+      parser = new SchemaParser(sourceDocument);
+      schema = parser.parse();
+    });
+
+    it('should parse the schema correctly', () => {
+      expect(schema.rootElements.length).toBe(2);
+    });
+  });
+
+  xdescribe('Recipe schema with recurring structures', () => {
+    beforeEach(() => {
+      arrange(schemaDocument1);
+      parser = new SchemaParser(sourceDocument);
+      schema = parser.parse();
+    });
+
+    it('should parse the schema correctly', () => {
+      expect(schema.rootElements.length).toBe(1);
     });
   });
 });

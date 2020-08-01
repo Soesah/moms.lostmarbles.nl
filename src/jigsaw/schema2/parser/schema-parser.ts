@@ -34,7 +34,8 @@ export class SchemaParser {
     this.parseAbstractElements();
 
     // parse the root elements from the root node of the document
-    doc.addRootElements(...this.parseRootElements());
+    const elements = this.parseRootElements();
+    doc.addRootElements(...elements);
 
     return doc;
   }
@@ -115,13 +116,13 @@ export class SchemaParser {
         const typeValue = attr.getAttribute(SchemaAttributes.Type);
         const type = getSchemaAttributeType(typeValue);
 
-        if (!type && typeValue) {
+        if (type === null && typeValue) {
           throw new Error(
             `Could not parse custom simpleType for attribute "${name}"`,
           );
         }
 
-        if (!type) {
+        if (type === null) {
           throw new Error(`Could not parse type for attribute "${name}"`);
         }
 
@@ -168,6 +169,12 @@ export class SchemaParser {
       if (type === SchemaElementType.ComplexTypeChoice && complexType) {
         schemaEl.setComplexType(
           this.parseComplexTypeChoice(complexType.firstElementChild, isMixed),
+        );
+      }
+
+      if (type === SchemaElementType.ComplexContent && complexType) {
+        schemaEl.setComplexType(
+          this.parseComplexContent(complexType.firstElementChild, isMixed),
         );
       }
 
@@ -308,6 +315,48 @@ export class SchemaParser {
     });
 
     return complexType;
+  }
+
+  private parseComplexContent(
+    contentEl: Element | null,
+    isMixed: boolean,
+  ): SchemaChoice | SchemaSequence {
+    if (!contentEl || !contentEl.firstElementChild) {
+      throw new Error('Content has no element or content');
+    }
+    const actionEl = contentEl.firstElementChild;
+    const base = actionEl.getAttribute(SchemaAttributes.Base);
+    if (!base) {
+      throw new Error(
+        `No base type specified for complex content ${actionEl.tagName}`,
+      );
+    }
+    const sourceComplexType = this.parseReferenceType(base);
+
+    if (!sourceComplexType) {
+      throw new Error(`No complexType found named ${base}`);
+    }
+
+    switch (actionEl.tagName) {
+      case SchemaElements.Restriction:
+        break;
+      case SchemaElements.Extension:
+        break;
+      default:
+        throw new Error(`Unable to parse complexContent ${actionEl.tagName}`);
+    }
+
+    console.log(
+      'complexType',
+      sourceComplexType.outerHTML,
+      'actionEl',
+      actionEl.outerHTML,
+    );
+    // use the complex content
+    // use the sequence or choice or simpleType
+    // apply the extension or restriction
+
+    return new SchemaChoice();
   }
 
   private getReferenceElement(name: string): Element | undefined {

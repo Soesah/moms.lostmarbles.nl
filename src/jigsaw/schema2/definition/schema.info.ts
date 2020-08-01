@@ -17,6 +17,16 @@ export enum SchemaElementType {
   Empty,
   ComplexTypeChoice,
   ComplexTypeSequence,
+  ComplexContent,
+}
+
+export enum SchemaSimpleType {
+  String = 'xs:string',
+  Decimal = 'xs:decimal',
+  Integer = 'xs:integer',
+  Boolean = 'xs:boolean',
+  Date = 'xs:date',
+  Time = 'xs:time',
 }
 
 export enum SchemaElements {
@@ -26,9 +36,12 @@ export enum SchemaElements {
   Sequence = 'xs:sequence',
   ComplexType = 'xs:complexType',
   ComplexContent = 'xs:complexContent',
+  Restriction = 'xs:restriction',
+  Extension = 'xs:extension',
 }
 
 export enum SchemaAttributes {
+  Base = 'base',
   Name = 'name',
   Reference = 'ref',
   Type = 'type',

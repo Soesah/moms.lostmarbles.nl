@@ -109,7 +109,7 @@ export const getTypeFromComplexType = (
       case SchemaElements.Choice:
         return SchemaElementType.ComplexTypeChoice;
       case SchemaElements.ComplexContent:
-        throw new Error('Could not parse complexContent');
+        return SchemaElementType.ComplexContent;
       case SchemaElements.Attribute:
         return SchemaElementType.Empty;
     }

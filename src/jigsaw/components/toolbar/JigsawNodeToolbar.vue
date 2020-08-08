@@ -8,7 +8,6 @@
 <script>
 import Vue from 'vue';
 import JigsawToolbarItem from './JigsawToolbarItem.vue';
-import { ComplexNode } from '../document/complex-node';
 import { mapState } from 'vuex';
 
 export default Vue.extend({

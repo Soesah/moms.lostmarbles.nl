@@ -3,12 +3,11 @@
     <a href="#" class="toolbar-item" @click.prevent="toggleMenu">
       <slot></slot>
     </a>
-    <jigsaw-menu v-if="menuOpen" :items="items"></jigsaw-menu>
+    <!-- <jigsaw-menu v-if="menuOpen" :items="items"></jigsaw-menu> -->
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import JigsawMenu from './JigsawMenu.vue';
 
 export default Vue.extend({
   name: 'JigsawToolbarItem',
@@ -24,9 +23,7 @@ export default Vue.extend({
       this.menuOpen = !this.menuOpen;
     },
   },
-  components: {
-    JigsawMenu,
-  },
+  components: {},
 });
 </script>
 <style scoped>

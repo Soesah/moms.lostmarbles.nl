@@ -44,8 +44,8 @@ export class ComplexDocument {
     const schema = this.schema.getElement(name);
     const complexNode = new ComplexNode(name, parent, schema, childIndex);
 
-    if (schema.isChoice) {
-    }
+    // if (schema.isChoice) {
+    // }
 
     complexNode.setChildNodes(
       [...node.childNodes]

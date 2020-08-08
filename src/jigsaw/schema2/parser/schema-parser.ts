@@ -346,12 +346,12 @@ export class SchemaParser {
         throw new Error(`Unable to parse complexContent ${actionEl.tagName}`);
     }
 
-    console.log(
-      'complexType',
-      sourceComplexType.outerHTML,
-      'actionEl',
-      actionEl.outerHTML,
-    );
+    // console.log(
+    //   'complexType',
+    //   sourceComplexType.outerHTML,
+    //   'actionEl',
+    //   actionEl.outerHTML,
+    // );
     // use the complex content
     // use the sequence or choice or simpleType
     // apply the extension or restriction

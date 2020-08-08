@@ -83,7 +83,7 @@ export class ComplexNode extends ComplexNodeBase {
       // verify with the schema if a child can be removed from a complexType
       if (this.schema.isComplexType) {
         const min = this.schema.getMinOccurs(child.name);
-        console.log({ min });
+        // console.log({ min });
         return min === 0;
       }
     }

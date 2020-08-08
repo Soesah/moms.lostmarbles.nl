@@ -48,7 +48,7 @@ export class SchemaElement {
         if (isSchemaElementOccurance(def)) {
           return def.name === name;
         } else if (isSchemaChoice(def)) {
-          console.log(def);
+          // console.log(def);
           return 1;
         }
       });

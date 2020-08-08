@@ -9,8 +9,42 @@ form {
   margin-bottom: 1em;
 }
 
+.form-multiple {
+  input {
+    margin-right: 0.5em;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
 .form-buttons button {
   justify-content: flex-end;
+}
+
+.form-option {
+  margin-top: 0.5em;
+  padding-left: 22%;
+  display: flex;
+  button {
+    margin-left: 0.5em;
+    width: 200px;
+
+    & + button {
+      margin-left: 0.5em;
+    }
+  }
+}
+
+.labels {
+  display: flex;
+  padding-left: 22%;
+  div {
+    padding-left: 1em;
+    display: block;
+    flex: 1;
+  }
 }
 
 label {
@@ -43,10 +77,24 @@ textarea {
   padding: 0.4em 2px;
   padding-inline-start: 0.75em;
   border: solid 2px black;
+  outline: none;
+
+  &:active {
+    border: solid 2px rgb(40, 40, 40);
+  }
+}
+
+textarea {
+  resize: vertical;
 }
 
 input[type='checkbox'] {
   max-width: 10px;
+  flex: 1;
+}
+
+input[type='number'] {
+  max-width: 60px;
   flex: 1;
 }
 

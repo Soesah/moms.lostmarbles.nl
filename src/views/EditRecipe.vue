@@ -1,13 +1,14 @@
 <template>
   <main class="columns">
-    <section class="column main" v-if="xml">
-      <jigsaw
+    <section class="column main" v-if="recipe">
+      <!-- <jigsaw
         :xml="xml"
         schema="/recipe.xsd"
         stylesheet="/recipe.xsl"
         config="/config.json"
         @save="saveRecipe"
-      ></jigsaw>
+      ></jigsaw>-->
+      <recipe-form :recipe="recipe" @cancel="cancel" @updateRecipe="saveRecipe"></recipe-form>
     </section>
     <section class="column">
       <page-menu></page-menu>
@@ -16,6 +17,7 @@
 </template>
 <script>
 import PageMenu from '@/components/common/PageMenu';
+import RecipeForm from '@/components/recipe/form/RecipeForm.vue';
 import { MenuGroup } from '@/models/menu.model';
 import { AuthLevel } from '../models/auth.model';
 import { mapState } from 'vuex';
@@ -72,11 +74,17 @@ export default {
       this.$store.dispatch('getRecipeBySlug', slug);
     },
     saveRecipe(recipe) {
+      console.log('Save recipe', recipe);
       this.$store.dispatch('saveRecipe', recipe);
+    },
+    cancel() {
+      console.log('cancel');
+      this.$router.push(`/recipe/${this.$route.params.slug}`);
     },
   },
   components: {
     PageMenu,
+    RecipeForm,
   },
 };
 </script>

@@ -1,6 +1,7 @@
 <template>
   <form class="box" @submit.prevent="submit" v-if="recipe">
     <h2>Edit Recipe</h2>
+    <recipe-select label="Categorie" v-model="updated.category_id" :options="categories"></recipe-select>
     <recipe-field label="Name" v-model="updated.name"></recipe-field>
     <recipe-field label="Kok" v-model="updated.cook"></recipe-field>
     <recipe-field label="Bereidingstijd" v-model="updated.preparation_time"></recipe-field>
@@ -16,8 +17,10 @@
 
 <script>
 import RecipeField from './RecipeField';
+import RecipeSelect from './RecipeSelect';
 import RecipeFormIngredients from './RecipeFormIngredients';
 import RecipeFormSteps from './RecipeFormSteps';
+import { mapState } from 'vuex';
 
 export default {
   name: 'RecipForm',
@@ -30,6 +33,9 @@ export default {
     return {
       updated: null,
     };
+  },
+  computed: {
+    ...mapState(['categories']),
   },
   created() {
     this.updated = this.recipe;
@@ -44,6 +50,7 @@ export default {
   },
   components: {
     RecipeField,
+    RecipeSelect,
     RecipeFormIngredients,
     RecipeFormSteps,
   },

@@ -71,14 +71,16 @@ export default {
   methods: {
     update() {
       const slug = this.$route.params.slug;
+      if (!slug) {
+        this.$store.dispatch('newRecipe');
+      }
       this.$store.dispatch('getRecipeBySlug', slug);
+      this.$store.dispatch('getCategories');
     },
     saveRecipe(recipe) {
-      console.log('Save recipe', recipe);
       this.$store.dispatch('saveRecipe', recipe);
     },
     cancel() {
-      console.log('cancel');
       this.$router.push(`/recipe/${this.$route.params.slug}`);
     },
   },

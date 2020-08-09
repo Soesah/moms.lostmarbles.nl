@@ -101,6 +101,7 @@ func GetRecipe(ID int64, r *http.Request) (models.RecipeJSON, error) {
 // UpdateRecipe updates a recipe
 func UpdateRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) {
 	c := Controller{}
+
 	err := c.Store(recipe, r)
 
 	if err != nil {

@@ -61,3 +61,47 @@ export class Recipe {
     this.modification_date = data.modification_date;
   }
 }
+
+export const getRecipeBackendData = (recipe: Recipe) => {
+  return {
+    id: recipe.id,
+    category_id: recipe.category_id,
+    language: recipe.language,
+    slug: recipe.slug,
+    name: recipe.name,
+    servings: recipe.servings,
+    preparation_time: recipe.preparation_time,
+    creation_date: recipe.creation_date,
+    modification_date: recipe.modification_date,
+    xml: getXMLData(recipe),
+  };
+};
+
+const getXMLData = (recipe: Recipe): string => {
+  const ingredients = recipe.ingredients.reduce(
+    (acc: string, ing: Ingredient) => {
+      const amount = ing.amount ? `<amount>${ing.amount}</amount>` : '';
+      const remark = ing.remark ? `<remark>${ing.remark}</remark>` : '';
+      return `${acc}<ingredient><name>${
+        ing.name
+      }</name>${amount}${remark}</ingredient>`;
+    },
+    '',
+  );
+  const preparation = recipe.steps.reduce((acc: string, step: Step) => {
+    return `${acc}<step>${step.contents}</step>`;
+  }, '');
+  const notes = recipe.notes.reduce((acc: string, note: Note) => {
+    return `${acc}<note><author>${note.author}</author>${note.paragraph
+      .map((p) => `<paragraph>${p}</paragraph>`)
+      .join('')}</note>`;
+  }, '');
+
+  return `
+    <title>${recipe.name}</title>
+    <cook>${recipe.cook}</cook>
+    <ingredients>${ingredients}</ingredients>
+    <preparation>${preparation}</preparation>
+    <notes>${notes}</notes>
+  `;
+};

@@ -1,5 +1,9 @@
 import axios, { AxiosStatic } from 'axios';
-import { Recipe, RecipeData } from '@/models/recipe.model';
+import {
+  Recipe,
+  RecipeData,
+  getRecipeBackendData,
+} from '@/models/recipe.model';
 import { Change } from '@/models/changes.model';
 
 interface RecipeResponse {
@@ -44,7 +48,11 @@ export class RecipeService {
   }
 
   public async save(recipe: Recipe): Promise<RecipeResponse> {
-    const response = await this.$http.put(`${this.path}/${recipe.id}`, recipe);
+    const recipeData = getRecipeBackendData(recipe);
+    const response = await this.$http.put(
+      `${this.path}/${recipe.id}`,
+      recipeData,
+    );
     const status = response.status === STATUS_OK;
     return {
       status,

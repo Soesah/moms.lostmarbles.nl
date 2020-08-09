@@ -40,7 +40,8 @@ func GetNewRecipes(r *http.Request) ([]models.RecipeItem, error) {
 // AddRecipe creates a recipe
 func AddRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) {
 	c := Controller{}
-	err := c.Store(recipe, r)
+
+	recipe, err := c.Store(recipe, r)
 
 	if err != nil {
 		return recipe, err
@@ -102,7 +103,7 @@ func GetRecipe(ID int64, r *http.Request) (models.RecipeJSON, error) {
 func UpdateRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) {
 	c := Controller{}
 
-	err := c.Store(recipe, r)
+	recipe, err := c.Store(recipe, r)
 
 	if err != nil {
 		return recipe, err

@@ -72,28 +72,70 @@ func (c *Controller) parseNewID() {
 // updateListItem is used to update the recipe list when a recipe has been saved
 func (c *Controller) updateListItem(recipe models.Recipe, r *http.Request) error {
 	var updated []models.RecipeItem
-
-	for _, r := range c.List {
+	found := false
+	for _, re := range c.List {
 
 		ingredients, err := recipe.GetIngredients()
 
 		if err != nil {
 			return err
 		}
+		steps, err := recipe.GetSteps()
 
-		if r.ID == recipe.ID {
+		if err != nil {
+			return err
+		}
+		cook, err := recipe.GetCook()
+
+		if err != nil {
+			return err
+		}
+
+		if re.ID == recipe.ID {
 			item := models.RecipeItem{
 				ID:           recipe.ID,
 				CategoryID:   recipe.CategoryID,
 				CreationDate: recipe.CreationDate,
 				Name:         recipe.Name,
+				Cook:         cook,
 				Slug:         recipe.Slug,
 				Ingredients:  ingredients,
+				Steps:        steps,
 			}
+			found = true
 			updated = append(updated, item)
 		} else {
-			updated = append(updated, r)
+			updated = append(updated, re)
 		}
+	}
+
+	if !found {
+		ingredients, err := recipe.GetIngredients()
+
+		if err != nil {
+			return err
+		}
+		steps, err := recipe.GetSteps()
+
+		if err != nil {
+			return err
+		}
+		cook, err := recipe.GetCook()
+
+		if err != nil {
+			return err
+		}
+
+		updated = append(updated, models.RecipeItem{
+			ID:           recipe.ID,
+			CategoryID:   recipe.CategoryID,
+			CreationDate: recipe.CreationDate,
+			Name:         recipe.Name,
+			Cook:         cook,
+			Slug:         recipe.Slug,
+			Ingredients:  ingredients,
+			Steps:        steps,
+		})
 	}
 
 	c.List = updated
@@ -183,12 +225,22 @@ func (c *Controller) Delete(ID int64, r *http.Request) error {
 }
 
 // Store is used to store recipes
-func (c *Controller) Store(recipe models.Recipe, r *http.Request) error {
+func (c *Controller) Store(recipe models.Recipe, r *http.Request) (models.Recipe, error) {
+
+	err := c.LoadList(r)
+
+	if err != nil {
+		return recipe, err
+	}
+
+	if recipe.ID == 0 {
+		recipe.ID = c.getNewID()
+	}
 
 	data, err := json.MarshalIndent(recipe, "", "  ")
 
 	if err != nil {
-		return err
+		return recipe, err
 	}
 
 	id := strconv.Itoa(int(recipe.ID))
@@ -197,20 +249,14 @@ func (c *Controller) Store(recipe models.Recipe, r *http.Request) error {
 	err = storage.PutFile(path, data, r)
 
 	if err != nil {
-		return err
-	}
-
-	err = c.LoadList(r)
-
-	if err != nil {
-		return err
+		return recipe, err
 	}
 
 	err = c.updateListItem(recipe, r)
 
 	if err != nil {
-		return err
+		return recipe, err
 	}
 
-	return nil
+	return recipe, nil
 }

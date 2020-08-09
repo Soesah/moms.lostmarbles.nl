@@ -139,6 +139,22 @@ export default new Vuex.Store({
       );
       commit('selectCategory', category);
     },
+    async newRecipe({ state, commit }) {
+      commit('setRecipe', {
+        id: null,
+        category_id: null,
+        name: '',
+        slug: '',
+        cook: '',
+        preparation_time: '',
+        servings: '',
+        ingredients: [],
+        steps: [],
+        creation_date: new Date().toISOString(),
+        modification_date: new Date().toISOString(),
+        notes: [],
+      });
+    },
     async getRecipeBySlug({ state, commit, dispatch }, slug) {
       await dispatch('getRecipes');
       const found = (state.recipes as Recipe[]).find(

@@ -74,6 +74,19 @@ func (recipe Recipe) GetSteps() ([]string, error) {
 	return steps, nil
 }
 
+// GetCook returns a string for the recipes cook
+func (recipe Recipe) GetCook() (string, error) {
+	recipeXML := recipe.GetXML()
+	r, _ := regexp.Compile("<cook>(.*)</cook>")
+	cookXML := r.FindString(recipeXML)
+	var cook string
+	err := xml.Unmarshal([]byte(cookXML), &cook)
+	if err != nil {
+		return cook, err
+	}
+	return cook, nil
+}
+
 // Image is the image of a recipe
 type Image struct {
 	XMLName xml.Name `json:"-" xml:"image"`

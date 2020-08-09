@@ -67,14 +67,33 @@ export const getRecipeBackendData = (recipe: Recipe) => {
     id: recipe.id,
     category_id: recipe.category_id,
     language: recipe.language,
-    slug: recipe.slug,
+    slug: slugify(recipe.name),
     name: recipe.name,
     servings: recipe.servings,
     preparation_time: recipe.preparation_time,
     creation_date: recipe.creation_date,
-    modification_date: recipe.modification_date,
+    modification_date: new Date().toISOString(),
     xml: getXMLData(recipe),
   };
+};
+
+const slugify = (str: string): string => {
+  str = str.replace(/^\s+|\s+$/g, ''); // trim
+  str = str.toLowerCase();
+
+  // remove accents, swap ñ for n, etc
+  const from = 'àáäâèéëêìíïîòóöôùúüûñç·/_,:;';
+  const to = 'aaaaeeeeiiiioooouuuunc------';
+  for (let i = 0, l = from.length; i < l; i++) {
+    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+  }
+
+  str = str
+    .replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+    .replace(/-+/g, '-'); // collapse dashes
+
+  return str;
 };
 
 const getXMLData = (recipe: Recipe): string => {
@@ -91,7 +110,7 @@ const getXMLData = (recipe: Recipe): string => {
   const preparation = recipe.steps.reduce((acc: string, step: Step) => {
     return `${acc}<step>${step.contents}</step>`;
   }, '');
-  const notes = recipe.notes.reduce((acc: string, note: Note) => {
+  const notes = (recipe.notes || []).reduce((acc: string, note: Note) => {
     return `${acc}<note><author>${note.author}</author>${note.paragraph
       .map((p) => `<paragraph>${p}</paragraph>`)
       .join('')}</note>`;

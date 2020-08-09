@@ -49,10 +49,10 @@ export class RecipeService {
 
   public async save(recipe: Recipe): Promise<RecipeResponse> {
     const recipeData = getRecipeBackendData(recipe);
-    const response = await this.$http.put(
-      `${this.path}/${recipe.id}`,
-      recipeData,
-    );
+    const response = recipe.id
+      ? await this.$http.put(`${this.path}/${recipe.id}`, recipeData)
+      : await this.$http.post(`${this.path}`, recipeData);
+
     const status = response.status === STATUS_OK;
     return {
       status,

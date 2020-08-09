@@ -77,8 +77,10 @@ export default {
       this.$store.dispatch('getRecipeBySlug', slug);
       this.$store.dispatch('getCategories');
     },
-    saveRecipe(recipe) {
-      this.$store.dispatch('saveRecipe', recipe);
+    async saveRecipe(recipe) {
+      const update = await this.$store.dispatch('saveRecipe', recipe);
+
+      this.$router.push(`/recipe/${update.slug}`);
     },
     cancel() {
       this.$router.push(`/recipe/${this.$route.params.slug}`);

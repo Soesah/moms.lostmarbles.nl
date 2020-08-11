@@ -1,7 +1,7 @@
 <template>
   <div class="form-item">
     <label v-text="label"></label>
-    <input :type="type" v-model="val" @change="update" />
+    <input :type="type" v-model="val" :placeholder="label" @change="update" />
   </div>
 </template>
 

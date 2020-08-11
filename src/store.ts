@@ -142,7 +142,7 @@ export default new Vuex.Store({
     async newRecipe({ state, commit }) {
       commit('setRecipe', {
         id: null,
-        category_id: null,
+        category_id: 6,
         name: '',
         slug: '',
         cook: '',

@@ -1,9 +1,19 @@
 <template>
   <div class="form-item form-multiple">
     <label></label>
-    <input type="text" v-model="val.amount" @change="update" />
-    <input type="text" v-model="val.name" @change="update" />
-    <input type="text" v-model="val.remark" @change="update" />
+    <input
+      type="text"
+      placeholder="Hoeveelheid"
+      v-model="val.amount"
+      @change="update"
+    />
+    <input type="text" placeholder="Naam" v-model="val.name" @change="update" />
+    <input
+      type="text"
+      placeholder="Opmerking"
+      v-model="val.remark"
+      @change="update"
+    />
   </div>
 </template>
 

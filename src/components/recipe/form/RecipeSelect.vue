@@ -2,7 +2,12 @@
   <div class="form-item">
     <label v-text="label"></label>
     <select :type="type" v-model="val" @change="update">
-      <option v-for="cat in options" :key="cat.id" :value="cat.id" v-text="cat.name_plural"></option>
+      <option
+        v-for="cat in options"
+        :key="cat.id"
+        :value="cat.id"
+        v-text="cat.name_singular"
+      ></option>
     </select>
   </div>
 </template>

@@ -4,7 +4,11 @@
     <template v-for="(step, index) in val">
       <div class="form-item" :key="index">
         <label></label>
-        <textarea v-model="val[index].contents" rows="4"></textarea>
+        <textarea
+          v-model="val[index].contents"
+          rows="4"
+          :placeholder="`Stap ${index + 1}`"
+        ></textarea>
       </div>
     </template>
     <div class="form-option">

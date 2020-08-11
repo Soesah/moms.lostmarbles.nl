@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sort"
 
+	"github.com/Soesah/moms.lostmarbles.nl/api/auth"
 	"github.com/Soesah/moms.lostmarbles.nl/api/models"
 )
 
@@ -42,6 +43,18 @@ func AddRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) {
 	c := Controller{}
 
 	recipe, err := c.Store(recipe, r)
+
+	if err != nil {
+		return recipe, err
+	}
+
+	s, err := auth.GetSession(r)
+
+	if err != nil {
+		return recipe, err
+	}
+
+	err = NewChange(s.UserID, recipe.ID, "created", r)
 
 	if err != nil {
 		return recipe, err
@@ -104,6 +117,18 @@ func UpdateRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) 
 	c := Controller{}
 
 	recipe, err := c.Store(recipe, r)
+
+	if err != nil {
+		return recipe, err
+	}
+
+	s, err := auth.GetSession(r)
+
+	if err != nil {
+		return recipe, err
+	}
+
+	err = NewChange(s.UserID, recipe.ID, "changed", r)
 
 	if err != nil {
 		return recipe, err

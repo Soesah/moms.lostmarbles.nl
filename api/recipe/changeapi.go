@@ -46,3 +46,27 @@ func GetRecipeChanges(ID int64, r *http.Request) ([]models.ChangeLog, error) {
 
 	return changes, nil
 }
+
+// NewChange stores a new change for a user and recipe
+func NewChange(userID int64, recipeID int64, changeType string, r *http.Request) error {
+	c := ChangeController{}
+	err := c.Load(r)
+
+	if err != nil {
+		return err
+	}
+
+	err = c.Add(userID, recipeID, changeType)
+
+	if err != nil {
+		return err
+	}
+
+	err = c.Store(r)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

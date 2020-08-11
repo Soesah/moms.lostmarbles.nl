@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/Soesah/moms.lostmarbles.nl/api/models"
 	"github.com/Soesah/moms.lostmarbles.nl/api/storage"
@@ -64,6 +65,19 @@ func (c *ChangeController) parseNewID() {
 	}
 
 	c.NewID = newID
+}
+
+// Add adds a change
+func (c *ChangeController) Add(userID int64, recipeID int64, changeType string) error {
+	c.Changes = append(c.Changes, models.ChangeLog{
+		ID:       c.getNewID(),
+		UserID:   userID,
+		RecipeID: recipeID,
+		Type:     changeType,
+		Date:     time.Now(),
+	})
+
+	return nil
 }
 
 // Store is used to store a changelog

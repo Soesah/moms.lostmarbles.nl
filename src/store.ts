@@ -125,12 +125,15 @@ export default new Vuex.Store({
       commit('setAuth', defaultAuth);
     },
     async saveUser({ commit, dispatch }, user) {
-      dispatch('notify', { type: NotificationType.Info, text: 'Saving user' });
+      dispatch('notify', {
+        type: NotificationType.Info,
+        text: 'Bezig met opslaan...',
+      });
       const response = await userService.update(user);
       if (response.status) {
         dispatch('notify', {
           type: NotificationType.Success,
-          text: 'User saved',
+          text: 'Gebruiker opgeslagen',
         });
         commit('updateUser', response.data);
       }
@@ -193,12 +196,12 @@ export default new Vuex.Store({
     async saveRecipe({ dispatch }, recipe: Recipe) {
       dispatch('notify', {
         type: NotificationType.Info,
-        text: 'Saving recipe',
+        text: 'Bezig met opslaan...',
       });
       const data = await recipeService.save(recipe);
       dispatch('notify', {
         type: NotificationType.Success,
-        text: 'Saved recipe',
+        text: 'Recept opgeslagen',
       });
 
       return data.status ? data.data : null;

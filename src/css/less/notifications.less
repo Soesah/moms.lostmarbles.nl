@@ -1,0 +1,99 @@
+.notifications {
+  position: fixed;
+  bottom: @size-default;
+  right: @size-default;
+  z-index: 10;
+  display: block;
+  width: 40%;
+  margin: 0;
+  padding: @size-small 0;
+  list-style-type: none;
+
+  li:before {
+    content: none;
+  }
+
+  .notification {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    width: auto;
+    max-width: 900px;
+    border: solid 1px @color-green;
+    background-color: @color-green;
+    box-shadow: 2px 2px 4px @color-green;
+    color: @color-black;
+    padding: @size-medium @size-large @size-medium @size-default;
+    border-radius: @size-smaller;
+
+    & + .notification {
+      margin-top: @size-small;
+    }
+
+    button {
+      position: absolute;
+      top: 7px;
+      right: 4px;
+    }
+
+    &.info {
+      border: solid 1px darken(@color-blue, 10%);
+      background-color: @color-blue;
+      box-shadow: 2px 2px 4px desaturate(darken(@color-blue, 15%), 40%);
+      color: white;
+
+      button {
+        background-color: darken(@color-blue, 20%);
+
+        &:hover {
+          background-color: @color-blue;
+        }
+      }
+    }
+
+    &.success {
+      border: solid 1px darken(@color-green, 10%);
+      background-color: @color-green;
+      box-shadow: 2px 2px 4px desaturate(darken(@color-green, 15%), 40%);
+      color: white;
+
+      button {
+        background-color: darken(@color-green, 20%);
+
+        &:hover {
+          background-color: @color-green;
+        }
+      }
+    }
+
+    &.warning {
+      border: solid 1px darken(@color-yellow, 10%);
+      background-color: @color-yellow;
+      box-shadow: 2px 2px 4px desaturate(darken(@color-yellow, 15%), 40%);
+      color: darken(@color-yellow, 40%);
+
+      button {
+        background-color: darken(@color-yellow, 20%);
+
+        &:hover {
+          background-color: @color-yellow;
+        }
+      }
+    }
+
+    &.error {
+      border: solid 1px darken(@color-red, 10%);
+      background-color: @color-red;
+      box-shadow: 2px 2px 4px desaturate(darken(@color-red, 15%), 40%);
+      color: white;
+
+      button {
+        background-color: darken(@color-red, 20%);
+
+        &:hover {
+          background-color: @color-red;
+        }
+      }
+    }
+  }
+}

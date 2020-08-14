@@ -5,12 +5,14 @@ import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { RecipeService } from './services/recipe.service';
 import { User } from '@/models/user.model';
+import { Notification, NotificationType } from '@/models/notification.model';
 import { Category } from './models/category.model';
 import { Recipe } from '@/models/recipe.model';
 import { Change } from '@/models/changes.model';
 import { MenuItem, MenuGroup } from './models/menu.model';
 import { createRecipeSpecification } from './specification/recipe.specification';
 import { Auth, AuthLevel, defaultAuth } from '@/models/auth.model';
+import { UUIDUtil } from './util/uuid.util';
 
 const authService = new AuthService();
 const userService = new UserService();
@@ -22,6 +24,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     auth: defaultAuth,
+    notifications: [] as Notification[],
     redirect: '',
     user: null,
     edit_user: null,
@@ -85,6 +88,14 @@ export default new Vuex.Store({
     toggleEditing(state, active: boolean) {
       state.editing = active;
     },
+    notify(state, notification: Notification) {
+      state.notifications = [...state.notifications, notification];
+    },
+    dismiss(state, uuid) {
+      state.notifications = [
+        ...state.notifications.filter((n) => n.uuid !== uuid),
+      ];
+    },
   },
   actions: {
     async getUsers({ commit }) {
@@ -113,9 +124,14 @@ export default new Vuex.Store({
 
       commit('setAuth', defaultAuth);
     },
-    async saveUser({ commit }, user) {
+    async saveUser({ commit, dispatch }, user) {
+      dispatch('notify', { type: NotificationType.Info, text: 'Saving user' });
       const response = await userService.update(user);
       if (response.status) {
+        dispatch('notify', {
+          type: NotificationType.Success,
+          text: 'User saved',
+        });
         commit('updateUser', response.data);
       }
       commit('setEditUser', null);
@@ -174,9 +190,38 @@ export default new Vuex.Store({
       const data = await recipeService.getRecipeLatestChanges(recipe);
       return data.status ? data.data : [];
     },
-    async saveRecipe({}, recipe: Recipe) {
+    async saveRecipe({ dispatch }, recipe: Recipe) {
+      dispatch('notify', {
+        type: NotificationType.Info,
+        text: 'Saving recipe',
+      });
       const data = await recipeService.save(recipe);
+      dispatch('notify', {
+        type: NotificationType.Success,
+        text: 'Saved recipe',
+      });
+
       return data.status ? data.data : null;
+    },
+    notify({ commit, dispatch }, notification: Notification) {
+      const uuid = UUIDUtil.uuid4();
+      commit('notify', { ...notification, uuid });
+      const delays: { [index: string]: number } = {
+        info: 2000,
+        success: 2500,
+        warning: 4500,
+        error: 5500,
+      };
+      dispatch('dismiss', {
+        uuid,
+        text: notification.text,
+        delay: delays[notification.type],
+      });
+    },
+    dismiss({ commit }, data) {
+      setTimeout(() => {
+        commit('dismiss', data.uuid);
+      }, data.delay);
     },
   },
   getters: {

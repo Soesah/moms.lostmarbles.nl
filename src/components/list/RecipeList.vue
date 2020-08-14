@@ -1,7 +1,7 @@
 <template>
   <section class="box">
     <h2>
-      {{ categoryName() || 'Recepten'}}
+      {{ categoryName() || 'Recepten' }}
       <span v-if="searchValue">
         <i>met {{ searchValue }}</i>
       </span>
@@ -9,8 +9,16 @@
 
     <p v-if="loading">De recepten worden geladen...</p>
     <ol>
-      <li v-for="recipe in filteredRecipes" :key="recipe.id">
-        <router-link :to="`/recipe/${recipe.slug}`" v-text="recipe.name"></router-link>
+      <li
+        v-for="recipe in filteredRecipes"
+        :key="recipe.id"
+        class="recipe-list-item"
+      >
+        <i class="star-icon" v-if="isNew(recipe)" />
+        <router-link
+          :to="`/recipe/${recipe.slug}`"
+          v-text="recipe.name"
+        ></router-link>
       </li>
     </ol>
     <icon name="ricebowl"></icon>
@@ -31,6 +39,12 @@ export default {
     ...mapState(['searchValue']),
     ...mapGetters(['categoryName']),
     ...mapGetters(['filteredRecipes']),
+  },
+  methods: {
+    isNew(recipe) {
+      const THREE_MONTHS = 31 * 24 * 60 * 60 * 1000;
+      return Date.parse(recipe.creation_date) > Date.now() - THREE_MONTHS;
+    },
   },
   async created() {
     await this.$store.dispatch('getRecipes');

@@ -7,7 +7,7 @@
         <p>
           Een
           <span class="category" v-text="categoryName(recipe.category_id, false)"></span>
-          <span v-if="recipe.cook">van {{ recipe.cook }}</span>
+          <span v-if="recipe.cook"> van {{ recipe.cook }}</span>
           <span v-if="recipe.servings">{{ servings(recipe) }}</span>. Toegevoegd op
           <span class="date">{{ recipe.creation_date | longDate }}</span>
         </p>

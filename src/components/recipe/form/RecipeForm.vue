@@ -14,7 +14,7 @@
     ></recipe-field>
     <recipe-field
       label="Aantal porties"
-      v-model.number="updated.servings"
+      v-model="updated.servings"
       type="number"
     ></recipe-field>
     <recipe-form-ingredients

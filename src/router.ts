@@ -44,6 +44,11 @@ export default new Router({
       component: EditRecipe,
     },
     {
+      path: '/recipe/by-id/:id',
+      beforeEnter: verifyCook,
+      component: Recipe,
+    },
+    {
       path: '/recipe/:slug',
       beforeEnter: verifyCook,
       component: Recipe,

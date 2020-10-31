@@ -65,7 +65,13 @@ export default {
   methods: {
     update() {
       const slug = this.$route.params.slug;
-      this.$store.dispatch('getRecipeBySlug', slug);
+      const id = this.$route.params.id;
+      if (slug) {
+        this.$store.dispatch('getRecipeBySlug', slug);
+      }
+      if (id) {
+        this.$store.dispatch('getRecipeById', parseInt(id, 10));
+      }
     },
   },
   components: {

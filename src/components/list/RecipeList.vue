@@ -19,6 +19,11 @@
           :to="`/recipe/${recipe.slug}`"
           v-text="recipe.name"
         ></router-link>
+        <router-link
+        class="hidden"
+          :to="`/recipe/by-id/${recipe.id}`"
+          v-text="' by-id'"
+        ></router-link>
       </li>
     </ol>
     <icon name="ricebowl"></icon>
@@ -56,3 +61,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.hidden {
+  color: transparent;
+  text-decoration: none;
+  border:none;
+}
+</style>

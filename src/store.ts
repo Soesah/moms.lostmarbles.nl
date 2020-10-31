@@ -185,6 +185,17 @@ export default new Vuex.Store({
         commit('setRecipe', response.data);
       }
     },
+    async getRecipeById({ state, commit, dispatch }, urlID) {
+      await dispatch('getRecipes');
+      const found = (state.recipes as Recipe[]).find(
+        (rec: Recipe) => rec.id === urlID,
+      );
+      if (found) {
+        const { id } = found;
+        const response = await recipeService.get(id);
+        commit('setRecipe', response.data);
+      }
+    },
     async getLatestChange(): Promise<Change | null> {
       const data = await recipeService.getLatestChange();
       return data.status ? data.data : null;

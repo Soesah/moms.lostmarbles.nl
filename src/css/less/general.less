@@ -12,24 +12,26 @@ body {
   background: radial-gradient(ellipse at center, #efe9d3 60%, #dbcfb2 100%);
 }
 
-a {
+a,
+.link {
+  cursor: pointer;
   color: White;
   text-decoration: none;
   border-bottom: solid 1px rgba(255, 255, 255, 0.4);
   transition: opacity 0.2s;
   outline: none;
-}
-a:focus,
-a:hover,
-a.selected {
-  text-decoration: none;
-  border-bottom: solid 1px rgba(255, 255, 255, 0.2);
-  opacity: 0.6;
-}
+  &:focus,
+  &:hover,
+  &.selected {
+    text-decoration: none;
+    border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+    opacity: 0.6;
+  }
 
-a.selected {
-  font-weight: bold;
-  font-size: 0.9em;
+  &.selected {
+    font-weight: bold;
+    font-size: 0.9em;
+  }
 }
 
 ul {

@@ -15,15 +15,12 @@
         class="recipe-list-item"
       >
         <i class="star-icon" v-if="isNew(recipe)" />
-        <router-link
-          :to="`/recipe/${recipe.slug}`"
+        <span class="link"
+          @click.shift="navigate(recipe, true)"
+          @click.exact="navigate(recipe)"
           v-text="recipe.name"
-        ></router-link>
-        <router-link
-        class="hidden"
-          :to="`/recipe/by-id/${recipe.id}`"
-          v-text="' by-id'"
-        ></router-link>
+        ></span>
+
       </li>
     </ol>
     <icon name="ricebowl"></icon>
@@ -51,6 +48,13 @@ export default {
       const THREE_MONTHS = 31 * MILLISECONDS_IN_DAY;
       return Date.parse(recipe.creation_date) > Date.now() - THREE_MONTHS;
     },
+    navigate(recipe, byId = false) {
+      if (byId) {
+        this.$router.push(`/recipe/by-id/${recipe.id}`)
+      } else {
+        this.$router.push(`/recipe/${recipe.slug}`)
+      }
+    }
   },
   async created() {
     await this.$store.dispatch('getRecipes');

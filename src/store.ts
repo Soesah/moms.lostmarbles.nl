@@ -196,6 +196,10 @@ export default new Vuex.Store({
         commit('setRecipe', response.data);
       }
     },
+    async removeRecipe({ state }, id: number): Promise<boolean> {
+      const data = await recipeService.remove(id);
+      return data.status ? true : false;
+    },
     async getLatestChange(): Promise<Change | null> {
       const data = await recipeService.getLatestChange();
       return data.status ? data.data : null;

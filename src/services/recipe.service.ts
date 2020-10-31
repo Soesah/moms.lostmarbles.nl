@@ -26,6 +26,10 @@ interface ChangeLogResponse {
   data: Change[];
 }
 
+interface StatusResponse {
+  status: boolean;
+}
+
 const STATUS_OK = 200;
 
 export class RecipeService {
@@ -44,6 +48,14 @@ export class RecipeService {
     return {
       status,
       data: status ? new Recipe(response.data.data) : null,
+    };
+  }
+
+  public async remove(id: number): Promise<StatusResponse> {
+    const response = await this.$http.delete(`${this.path}/${id}`);
+    const status = response.status === STATUS_OK;
+    return {
+      status,
     };
   }
 

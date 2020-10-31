@@ -27,6 +27,7 @@
     ></recipe-form-steps>
     <div class="form-option">
       <button type="submit">Opslaan</button>
+      <button type="button" @click="remove">Remove</button>
       <button type="button" @click="cancel">Stoppen</button>
     </div>
   </form>
@@ -64,6 +65,15 @@ export default {
     cancel() {
       this.$emit('cancel');
     },
+    async remove() {
+      if(window.confirm('Are you sure you want to remove this recipe')) {
+        const ok = await this.$store.dispatch('removeRecipe', this.recipe.id);
+        if (ok) {
+          this.$route.push('/list')
+        }
+      }
+
+    }
   },
   components: {
     RecipeField,

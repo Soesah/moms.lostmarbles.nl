@@ -108,5 +108,15 @@ func UpdateRecipe(w http.ResponseWriter, r *http.Request) {
 // DeleteRecipe deletes a recipe
 func DeleteRecipe(w http.ResponseWriter, r *http.Request) {
 
+	idParam := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(idParam)
+
+	err := recipe.DeleteRecipe(int64(id), r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	httpext.SuccessAPI(w, "ok")
 }

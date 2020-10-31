@@ -27,7 +27,7 @@
     ></recipe-form-steps>
     <div class="form-option">
       <button type="submit">Opslaan</button>
-      <button type="button" @click="remove">Remove</button>
+      <button v-if="isAdmin" type="button" @click="remove">Remove</button>
       <button type="button" @click="cancel">Stoppen</button>
     </div>
   </form>
@@ -38,7 +38,7 @@ import RecipeField from './RecipeField';
 import RecipeSelect from './RecipeSelect';
 import RecipeFormIngredients from './RecipeFormIngredients';
 import RecipeFormSteps from './RecipeFormSteps';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'RecipForm',
@@ -53,7 +53,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(['categories']),
+    ...mapState(['categories', 'auth']),
+    ...mapGetters(['isAdmin'])
   },
   created() {
     this.updated = this.recipe;

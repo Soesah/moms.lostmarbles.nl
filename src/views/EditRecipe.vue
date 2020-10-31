@@ -71,10 +71,16 @@ export default {
   methods: {
     update() {
       const slug = this.$route.params.slug;
-      if (!slug) {
+      const id = this.$route.params.id;
+      if (!slug && !id) {
         this.$store.dispatch('newRecipe');
       }
-      this.$store.dispatch('getRecipeBySlug', slug);
+      if (slug) {
+        this.$store.dispatch('getRecipeBySlug', slug);
+      }
+      if (id) {
+        this.$store.dispatch('getRecipeById', id);
+      }
       this.$store.dispatch('getCategories');
     },
     async saveRecipe(recipe) {

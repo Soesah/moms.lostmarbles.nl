@@ -55,7 +55,7 @@ export default {
       this.$store.commit('addMenuItems', [
         {
           label: 'Recept bewerken',
-          target: `/recipe/${this.recipe.slug}/edit`,
+          target: this.$route.params.slug ? `/recipe/${this.recipe.slug}/edit` : `/recipe/by-id/${this.recipe.id}/edit`,
           group: MenuGroup.RecipeEdit,
           level: AuthLevel.Chef,
         },

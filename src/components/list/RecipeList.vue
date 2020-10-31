@@ -27,6 +27,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
 import Icon from '@/components/common/Icon.vue';
+import { MILLISECONDS_IN_DAY } from '@/util/info'
 
 export default {
   name: 'RecipeList',
@@ -42,7 +43,7 @@ export default {
   },
   methods: {
     isNew(recipe) {
-      const THREE_MONTHS = 31 * 24 * 60 * 60 * 1000;
+      const THREE_MONTHS = 31 * MILLISECONDS_IN_DAY;
       return Date.parse(recipe.creation_date) > Date.now() - THREE_MONTHS;
     },
   },

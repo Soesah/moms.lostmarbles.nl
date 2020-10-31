@@ -73,6 +73,31 @@ func GetRecipe(ID int64, r *http.Request) (models.RecipeJSON, error) {
 		return json, err
 	}
 
+	uc := UsageController{}
+	err = uc.Load(r)
+
+	if err != nil {
+		return json, err
+	}
+
+	s, err := auth.GetSession(r)
+
+	if err != nil {
+		return json, err
+	}
+
+	err = uc.Add(ID, s.UserID)
+
+	if err != nil {
+		return json, err
+	}
+
+	err = uc.Store(r)
+
+	if err != nil {
+		return json, err
+	}
+
 	json = models.RecipeJSON{
 		ID:               recipe.ID,
 		CategoryID:       recipe.CategoryID,

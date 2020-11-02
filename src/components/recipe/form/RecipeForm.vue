@@ -70,7 +70,7 @@ export default {
       if(window.confirm('Are you sure you want to remove this recipe')) {
         const ok = await this.$store.dispatch('removeRecipe', this.recipe.id);
         if (ok) {
-          this.$route.push('/list')
+          this.$router.push('/list')
         }
       }
 

@@ -63,6 +63,18 @@ func AddRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) {
 	return recipe, nil
 }
 
+// GetRecipeName returns a recipe name
+func GetRecipeName(ID int64, r *http.Request) (string, error) {
+	c := Controller{}
+	recipe, err := c.Load(ID, r)
+
+	if err != nil {
+		return recipe.Name, err
+	}
+
+	return "", nil
+}
+
 // GetRecipe returns a recipe
 func GetRecipe(ID int64, r *http.Request) (models.RecipeJSON, error) {
 	var json models.RecipeJSON

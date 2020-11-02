@@ -35,14 +35,14 @@ func GetLatestChange(w http.ResponseWriter, r *http.Request) {
 		Date: c.Date,
 	}
 
-	re, err := recipe.GetRecipe(c.RecipeID, r)
+	name, err := recipe.GetRecipeName(c.RecipeID, r)
 
 	if err != nil {
 		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	change.Recipe = re.Name
+	change.Recipe = name
 
 	us, err := user.GetUser(c.UserID, r)
 

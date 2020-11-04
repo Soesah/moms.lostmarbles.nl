@@ -120,3 +120,18 @@ func DeleteRecipe(w http.ResponseWriter, r *http.Request) {
 
 	httpext.SuccessAPI(w, "ok")
 }
+
+// AddNoteToRecipe adds a note to a recipe
+func AddNoteToRecipe(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var update models.Recipe
+	err := decoder.Decode(&update)
+	rec, err := recipe.UpdateRecipeWithNote(update, r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", rec)
+}

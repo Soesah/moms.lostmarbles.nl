@@ -7,7 +7,7 @@ import { RecipeService } from './services/recipe.service';
 import { User } from '@/models/user.model';
 import { Notification, NotificationType } from '@/models/notification.model';
 import { Category } from './models/category.model';
-import { Recipe } from '@/models/recipe.model';
+import { Recipe, NoteData } from '@/models/recipe.model';
 import { Change } from '@/models/changes.model';
 import { MenuItem, MenuGroup } from './models/menu.model';
 import { createRecipeSpecification } from './specification/recipe.specification';
@@ -220,6 +220,22 @@ export default new Vuex.Store({
       });
 
       return data.status ? data.data : null;
+    },
+    async addNote({ state, dispatch, commit }, d: NoteData): Promise<boolean> {
+      const author = state.auth.name;
+      dispatch('notify', {
+        type: NotificationType.Info,
+        text: 'Bezig met opslaan...',
+      });
+      const data = await recipeService.addNote(d.recipe, { ...d.note, author });
+      dispatch('notify', {
+        type: NotificationType.Success,
+        text: 'Notitie toegevoegd',
+      });
+      if (data.status) {
+        commit('setRecipe', data.data);
+      }
+      return data.status;
     },
     notify({ commit, dispatch }, notification: Notification) {
       const uuid = UUIDUtil.uuid4();

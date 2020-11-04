@@ -40,6 +40,7 @@ func main() {
 					r.Use(middlewares.NoCache)
 					r.Use(middlewares.ChefContext)
 					r.Post("/", handlers.AddRecipe)
+					r.Put("/{id}/note", handlers.AddNoteToRecipe)
 					r.Put("/{id}", handlers.UpdateRecipe)
 				})
 				r.Group(func(r chi.Router) {

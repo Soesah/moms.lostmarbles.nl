@@ -174,6 +174,32 @@ func UpdateRecipe(recipe models.Recipe, r *http.Request) (models.Recipe, error) 
 	return recipe, nil
 }
 
+// UpdateRecipeWithNote updates a recipe with a note
+func UpdateRecipeWithNote(recipe models.Recipe, r *http.Request) (models.RecipeJSON, error) {
+	c := Controller{}
+	var re models.RecipeJSON
+
+	recipe, err := c.Store(recipe, r)
+
+	if err != nil {
+		return re, err
+	}
+
+	s, err := auth.GetSession(r)
+
+	if err != nil {
+		return re, err
+	}
+
+	err = NewChange(s.UserID, recipe.ID, "add note", r)
+
+	if err != nil {
+		return re, err
+	}
+
+	return GetRecipe(recipe.ID, r)
+}
+
 // DeleteRecipe deletes a recipe
 func DeleteRecipe(ID int64, r *http.Request) error {
 	c := Controller{}

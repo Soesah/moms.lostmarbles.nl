@@ -1,6 +1,7 @@
 import axios, { AxiosStatic } from 'axios';
 import {
   Recipe,
+  Note,
   RecipeData,
   getRecipeBackendData,
 } from '@/models/recipe.model';
@@ -120,6 +121,23 @@ export class RecipeService {
     return {
       status,
       data: status ? response.data.data : [],
+    };
+  }
+
+  public async addNote(recipe: Recipe, note: Note): Promise<RecipeResponse> {
+    const recipeData = getRecipeBackendData({
+      ...recipe,
+      notes: [...(recipe.notes || []), note],
+    });
+    const response = await this.$http.put(
+      `${this.path}/${recipe.id}/note`,
+      recipeData,
+    );
+
+    const status = response.status === STATUS_OK;
+    return {
+      status,
+      data: status ? new Recipe(response.data.data) : null,
     };
   }
 }

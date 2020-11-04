@@ -23,6 +23,10 @@ export interface Ingredient {
 export interface Step {
   contents: string;
 }
+export interface NoteData {
+  recipe: Recipe;
+  note: Note;
+}
 export interface Note {
   author: string;
   paragraph: string[];
@@ -101,9 +105,7 @@ const getXMLData = (recipe: Recipe): string => {
     (acc: string, ing: Ingredient) => {
       const amount = ing.amount ? `<amount>${ing.amount}</amount>` : '';
       const remark = ing.remark ? `<remark>${ing.remark}</remark>` : '';
-      return `${acc}<ingredient><name>${
-        ing.name
-      }</name>${amount}${remark}</ingredient>`;
+      return `${acc}<ingredient><name>${ing.name}</name>${amount}${remark}</ingredient>`;
     },
     '',
   );

@@ -1,12 +1,14 @@
 <template>
   <main v-if="recipe" class="columns">
-    <section class="column main-large">
+    <section class="column">
+      <recipe-changes></recipe-changes>
+    </section>
+    <section class="column main">
       <recipe-contents></recipe-contents>
       <recipe-category></recipe-category>
     </section>
     <section class="column">
       <page-menu></page-menu>
-      <recipe-changes></recipe-changes>
       <recipe-notes></recipe-notes>
     </section>
   </main>

@@ -69,10 +69,10 @@ func GetRecipeName(ID int64, r *http.Request) (string, error) {
 	recipe, err := c.Load(ID, r)
 
 	if err != nil {
-		return recipe.Name, err
+		return "", err
 	}
 
-	return "", nil
+	return recipe.Name, nil
 }
 
 // GetRecipe returns a recipe

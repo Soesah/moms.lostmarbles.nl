@@ -56,6 +56,9 @@ export default {
   },
   methods: {
     async addNote() {
+      if (this.note.paragraph.length === 0) {
+        return;
+      }
       const result = await this.$store.dispatch('addNote', {
           recipe: this.recipe,
           note: {...this.note, paragraph: this.note.paragraph.split('\n')}

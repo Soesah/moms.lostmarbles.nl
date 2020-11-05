@@ -9,6 +9,10 @@ form {
   margin-bottom: 1em;
 }
 
+.form-item.block {
+  display: block;
+}
+
 .form-multiple {
   input {
     margin-right: 0.5em;
@@ -54,6 +58,10 @@ label {
   position: relative;
   top: 0.5em;
   padding-right: 0.5em;
+
+  .block & {
+    top: 0;
+  }
 }
 
 input + label {

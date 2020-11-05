@@ -1,6 +1,6 @@
 <template>
   <main class="columns">
-    <section class="column main">
+    <section class="column main-large">
       <login-chef v-if="type === 'chef'"></login-chef>
       <login-admin v-if="type === 'admin'"></login-admin>
     </section>

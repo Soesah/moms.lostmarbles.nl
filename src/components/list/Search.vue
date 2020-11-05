@@ -5,6 +5,8 @@
       <p>Zoek hier op de naam, een ingrediënt of iets dergelijks</p>
       <div class="form-item">
         <label for="focus">Zoeken</label>
+      </div>
+      <div class="form-item">
         <input
           type="text"
           name="search"

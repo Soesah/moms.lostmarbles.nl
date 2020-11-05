@@ -4,7 +4,7 @@
       <search></search>
       <categories></categories>
     </section>
-    <section class="column">
+    <section class="column main">
       <recipe-list></recipe-list>
     </section>
     <section class="column">

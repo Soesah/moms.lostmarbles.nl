@@ -1,6 +1,6 @@
 <template>
   <main class="columns">
-    <section class="column main" v-if="recipe">
+    <section class="column main-large" v-if="recipe">
       <!-- <jigsaw
         :xml="xml"
         schema="/recipe.xsd"

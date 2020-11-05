@@ -1,6 +1,6 @@
 <template>
   <main v-if="recipe" class="columns">
-    <section class="column main">
+    <section class="column main-large">
       <recipe-contents></recipe-contents>
       <recipe-category></recipe-category>
     </section>

@@ -30,6 +30,11 @@ func AddRecipe(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&update)
 	rec, err := recipe.AddRecipe(update, r)
 
+	if err == recipe.ErrRecipeAlreadyExists {
+		httpext.AbortAPI(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	if err != nil {
 		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
 		return

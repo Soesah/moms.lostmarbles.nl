@@ -9,7 +9,7 @@ import { Change } from '@/models/changes.model';
 
 interface RecipeResponse {
   status: boolean;
-  data: Recipe | null;
+  data: Recipe | string;
 }
 
 interface RecipeListResponse {
@@ -48,7 +48,7 @@ export class RecipeService {
     const status = response.status === STATUS_OK;
     return {
       status,
-      data: status ? new Recipe(response.data.data) : null,
+      data: status ? new Recipe(response.data.data) : response.data.message,
     };
   }
 
@@ -64,12 +64,16 @@ export class RecipeService {
     const recipeData = getRecipeBackendData(recipe);
     const response = recipe.id
       ? await this.$http.put(`${this.path}/${recipe.id}`, recipeData)
-      : await this.$http.post(`${this.path}`, recipeData);
+      : await this.$http.post(`${this.path}`, recipeData, {
+          validateStatus: (s) => {
+            return s < 500; // Resolve only if the status code is less than 500
+          },
+        });
 
-    const status = response.status === STATUS_OK;
+    const status = response && response.status === STATUS_OK;
     return {
       status,
-      data: status ? new Recipe(response.data.data) : null,
+      data: status ? new Recipe(response.data.data) : response.data.message,
     };
   }
 
@@ -137,7 +141,7 @@ export class RecipeService {
     const status = response.status === STATUS_OK;
     return {
       status,
-      data: status ? new Recipe(response.data.data) : null,
+      data: status ? new Recipe(response.data.data) : response.data.message,
     };
   }
 }

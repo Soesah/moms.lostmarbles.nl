@@ -12,7 +12,9 @@ import (
 )
 
 var (
-	errNoRecipeListToSave = errors.New("No recipe list to be saved")
+	// ErrRecipeAlreadyExists is an error to show a duplicate recipe is being saved
+	ErrRecipeAlreadyExists = errors.New("A recipe by the same name already exists")
+	errNoRecipeListToSave  = errors.New("No recipe list to be saved")
 )
 
 // Controller is used to save and load recipes
@@ -241,6 +243,18 @@ func (c *Controller) Store(recipe models.Recipe, r *http.Request) (models.Recipe
 
 	if err != nil {
 		return recipe, err
+	}
+
+	var found = false
+
+	for _, re := range c.List {
+		if re.Slug == recipe.Slug {
+			found = true
+		}
+	}
+
+	if found {
+		return recipe, ErrRecipeAlreadyExists
 	}
 
 	id := strconv.Itoa(int(recipe.ID))

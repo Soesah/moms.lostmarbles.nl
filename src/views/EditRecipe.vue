@@ -86,7 +86,9 @@ export default {
     async saveRecipe(recipe) {
       const update = await this.$store.dispatch('saveRecipe', recipe);
 
-      this.$router.push(`/recipe/${update.slug}`);
+      if (update) {
+        this.$router.push(`/recipe/${update.slug}`);
+      }
     },
     cancel() {
       this.$router.push(`/recipe/${this.$route.params.slug}`);

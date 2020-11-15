@@ -214,10 +214,17 @@ export default new Vuex.Store({
         text: 'Bezig met opslaan...',
       });
       const data = await recipeService.save(recipe);
-      dispatch('notify', {
-        type: NotificationType.Success,
-        text: 'Recept opgeslagen',
-      });
+      if (data.status) {
+        dispatch('notify', {
+          type: NotificationType.Success,
+          text: 'Recept opgeslagen',
+        });
+      } else {
+        dispatch('notify', {
+          type: NotificationType.Error,
+          text: data.data,
+        });
+      }
 
       return data.status ? data.data : null;
     },

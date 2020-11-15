@@ -47,9 +47,9 @@ export default {
       showForm: false,
       note: {
         author: '',
-        paragraph: ''
-      }
-    }
+        paragraph: '',
+      },
+    };
   },
   computed: {
     ...mapState(['recipe']),
@@ -61,17 +61,17 @@ export default {
       }
       const result = await this.$store.dispatch('addNote', {
           recipe: this.recipe,
-          note: {...this.note, paragraph: this.note.paragraph.split('\n')}
+          note: {...this.note, paragraph: this.note.paragraph.split('\n')},
         });
 
       if (result) {
         this.note = {
           author: '',
-          paragraph: ''
-        }
+          paragraph: '',
+        };
         this.showForm = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>

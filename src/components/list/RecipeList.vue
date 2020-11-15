@@ -29,7 +29,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
 import Icon from '@/components/common/Icon.vue';
-import { MILLISECONDS_IN_DAY } from '@/util/info'
+import { MILLISECONDS_IN_DAY } from '@/util/info';
 
 export default {
   name: 'RecipeList',
@@ -50,11 +50,11 @@ export default {
     },
     navigate(recipe, byId = false) {
       if (byId) {
-        this.$router.push(`/recipe/by-id/${recipe.id}`)
+        this.$router.push(`/recipe/by-id/${recipe.id}`);
       } else {
-        this.$router.push(`/recipe/${recipe.slug}`)
+        this.$router.push(`/recipe/${recipe.slug}`);
       }
-    }
+    },
   },
   async created() {
     await this.$store.dispatch('getRecipes');

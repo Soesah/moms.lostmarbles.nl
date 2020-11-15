@@ -54,7 +54,7 @@ export default {
   },
   computed: {
     ...mapState(['categories', 'auth']),
-    ...mapGetters(['isAdmin'])
+    ...mapGetters(['isAdmin']),
   },
   created() {
     this.updated = this.recipe;
@@ -67,14 +67,13 @@ export default {
       this.$emit('cancel');
     },
     async remove() {
-      if(window.confirm('Are you sure you want to remove this recipe')) {
+      if (window.confirm('Are you sure you want to remove this recipe')) {
         const ok = await this.$store.dispatch('removeRecipe', this.recipe.id);
         if (ok) {
-          this.$router.push('/list')
+          this.$router.push('/list');
         }
       }
-
-    }
+    },
   },
   components: {
     RecipeField,

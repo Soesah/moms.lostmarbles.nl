@@ -135,3 +135,15 @@ func AddNoteToRecipe(w http.ResponseWriter, r *http.Request) {
 
 	httpext.SuccessDataAPI(w, "Ok", rec)
 }
+
+// ConvertRecipes adds a note to a recipe
+func ConvertRecipes(w http.ResponseWriter, r *http.Request) {
+	err := recipe.ConvertRecipes(r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessAPI(w, "Ok")
+}

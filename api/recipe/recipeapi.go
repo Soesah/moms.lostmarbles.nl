@@ -211,3 +211,27 @@ func DeleteRecipe(ID int64, r *http.Request) error {
 
 	return nil
 }
+
+// ConvertRecipes deletes a recipe
+func ConvertRecipes(r *http.Request) error {
+	c := Controller{}
+	err := c.LoadList(r)
+
+	if err != nil {
+		return err
+	}
+
+	for _, rl := range c.List {
+
+		recipe, err := c.Load(rl.ID, r)
+
+		if err != nil {
+			return err
+		}
+
+		c.StoreXML(recipe, r)
+
+	}
+
+	return nil
+}

@@ -72,6 +72,51 @@ func PutFile(file string, data []byte, r *http.Request) error {
 	return nil
 }
 
+// PutXMLFile uploads a new file to the bucket
+func PutXMLFile(file string, data []byte, r *http.Request) error {
+
+	conf := config.Get()
+
+	if conf.IsDev() {
+		dir, _ := os.Getwd()
+		err := ioutil.WriteFile(strings.Join([]string{dir, "/data/", file, ".xml"}, ""), data, 0777)
+
+		if err != nil {
+			return err
+		}
+
+		return nil
+
+	}
+
+	ctx := r.Context()
+	creds, err := google.FindDefaultCredentials(ctx, storage.ScopeReadWrite)
+	if err != nil {
+		return err
+	}
+	client, err := storage.NewClient(ctx, option.WithCredentials(creds))
+
+	if err != nil {
+		return err
+	}
+
+	path := strings.Join([]string{"data/", file, ".xml"}, "")
+
+	// store the file
+	bkt := client.Bucket(conf.BucketName)
+	obj := bkt.Object(path)
+
+	writer := obj.NewWriter(ctx)
+	_, err = writer.Write(data)
+	defer writer.Close()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // RemoveFile removes a new file from the bucket
 func RemoveFile(file string, r *http.Request) error {
 

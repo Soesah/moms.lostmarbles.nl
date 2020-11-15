@@ -31,6 +31,7 @@ func main() {
 
 		r.Route("/recipe", func(r chi.Router) {
 			r.Get("/new", handlers.GetNewRecipes)
+			r.Get("/convert", handlers.ConvertRecipes)
 			r.Group(func(r chi.Router) {
 				r.Use(middlewares.CookContext)
 				r.Get("/", handlers.GetRecipeList)

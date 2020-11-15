@@ -260,3 +260,19 @@ func (c *Controller) Store(recipe models.Recipe, r *http.Request) (models.Recipe
 
 	return recipe, nil
 }
+
+// StoreXML stores a recipe as XML
+func (c *Controller) StoreXML(recipe models.Recipe, r *http.Request) error {
+
+	xml := recipe.GetXML()
+	slug := recipe.Slug
+	path := strings.Join([]string{"recipes-xml/", slug}, "")
+
+	err := storage.PutXMLFile(path, []byte(xml), r)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

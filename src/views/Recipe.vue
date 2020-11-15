@@ -1,6 +1,9 @@
 <template>
   <main v-if="recipe" class="columns">
     <section class="column">
+      <div class="box">
+      <recipe-ingredients :recipe="recipe"></recipe-ingredients>
+      </div>
       <recipe-changes></recipe-changes>
     </section>
     <section class="column main">
@@ -16,6 +19,7 @@
 <script>
 import { mapState } from 'vuex';
 import RecipeChanges from '@/components/recipe/RecipeChanges';
+import RecipeIngredients from '@/components/recipe/RecipeIngredients';
 import RecipeContents from '@/components/recipe/RecipeContents';
 import RecipeNotes from '@/components/recipe/RecipeNotes';
 import RecipeCategory from '@/components/recipe/RecipeCategory';
@@ -79,6 +83,7 @@ export default {
   components: {
     RecipeChanges,
     RecipeContents,
+    RecipeIngredients,
     RecipeNotes,
     RecipeCategory,
     PageMenu,

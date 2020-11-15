@@ -16,7 +16,6 @@
         v-text="` De bereidingstijd bedraagt ${ recipe.preparation_time}.`"
       ></span>
     </p>
-    <recipe-ingredients :recipe="recipe"></recipe-ingredients>
     <recipe-steps :recipe="recipe"></recipe-steps>
   </section>
 </template>

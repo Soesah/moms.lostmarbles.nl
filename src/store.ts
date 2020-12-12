@@ -143,8 +143,8 @@ export default new Vuex.Store({
       const response = await categoryService.getList();
       commit('setCategories', response.data);
     },
-    async getRecipes({ commit }) {
-      const response = await recipeService.getList();
+    async getRecipes({ commit }, force = false) {
+      const response = await recipeService.getList(force);
       commit('setRecipes', response.data);
     },
     async getNewRecipes() {
@@ -219,6 +219,7 @@ export default new Vuex.Store({
           type: NotificationType.Success,
           text: 'Recept opgeslagen',
         });
+        dispatch('getRecipes', true);
       } else {
         dispatch('notify', {
           type: NotificationType.Error,

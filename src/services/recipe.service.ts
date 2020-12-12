@@ -77,8 +77,8 @@ export class RecipeService {
     };
   }
 
-  public async getList(): Promise<RecipeListResponse> {
-    if (this.recipes.length) {
+  public async getList(force: boolean = false): Promise<RecipeListResponse> {
+    if (this.recipes.length && !force) {
       return {
         status: true,
         data: this.recipes,

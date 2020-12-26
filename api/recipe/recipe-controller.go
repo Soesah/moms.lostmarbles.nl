@@ -245,15 +245,15 @@ func (c *Controller) Store(recipe models.Recipe, r *http.Request) (models.Recipe
 		return recipe, err
 	}
 
-	var found = false
+	var found models.RecipeItem
 
 	for _, re := range c.List {
 		if re.Slug == recipe.Slug {
-			found = true
+			found = re
 		}
 	}
 
-	if found {
+	if found.Name != "" && found.ID != recipe.ID {
 		return recipe, ErrRecipeAlreadyExists
 	}
 

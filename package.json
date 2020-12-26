@@ -18,7 +18,8 @@
     "major": "./bin/deploy.sh major",
     "minor": "./bin/deploy.sh minor",
     "patch": "./bin/deploy.sh patch",
-    "deploy": "yarn build && gcloud app deploy app.yaml --project moms-lost-marbles -q"
+    "deploy": "yarn build && gcloud app deploy app.yaml --project moms-lost-marbles -q",
+    "deploy:cron": "gcloud app deploy cron.yaml --project moms-lost-marbles -q"
   },
   "dependencies": {
     "axios": "^0.21.0",

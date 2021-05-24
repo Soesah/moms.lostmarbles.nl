@@ -67,7 +67,7 @@ func LoginCook(name string, r *http.Request) (models.Session, models.Auth, error
 		session.UserLevel = user.UserLevel
 		session.AuthorizedLevel = models.CookLevel
 		session.UUID = sessionUUID.String()
-		session.Expires = time.Now().Add(5 * time.Hour)
+		session.Expires = time.Now().Add(10 * time.Hour)
 
 		// store level in auth, to see if further login is required later
 		auth.Name = user.Name

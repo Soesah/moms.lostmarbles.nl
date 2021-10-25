@@ -9,6 +9,11 @@
           rows="4"
           :placeholder="`Stap ${index + 1}`"
         ></textarea>
+        <div class="field-option">
+          <button type="button" class="remove" @click="removeStep(index)">
+            x
+          </button>
+        </div>
       </div>
     </template>
     <div class="form-option">
@@ -18,10 +23,8 @@
 </template>
 
 <script>
-import RecipeIngredientFields from './RecipeIngredientFields';
-
 export default {
-  name: 'RecipeFormIngredients',
+  name: 'RecipeFormSteps',
   data() {
     return {
       val: [],
@@ -53,9 +56,10 @@ export default {
       ];
       this.update();
     },
-  },
-  components: {
-    RecipeIngredientFields,
+    removeStep(index) {
+      this.val.splice(index, 1);
+      this.update();
+    },
   },
 };
 </script>

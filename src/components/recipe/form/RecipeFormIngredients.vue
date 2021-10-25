@@ -7,7 +7,12 @@
       <div>Opmerking</div>
     </div>
     <template v-for="(ingredient, index) in val">
-      <recipe-ingredient-fields v-model="val[index]" :key="index"></recipe-ingredient-fields>
+      <recipe-ingredient-fields
+        v-model="val[index]"
+        :key="`${ingredient.name}-${index}`"
+        :index="index"
+        @remove="removeIngredient"
+      ></recipe-ingredient-fields>
     </template>
     <div class="form-option">
       <button type="button" @click="addIngredient">Ingredient toevoegen</button>
@@ -49,6 +54,10 @@ export default {
           name: '',
         },
       ];
+      this.update();
+    },
+    removeIngredient(index) {
+      this.val.splice(index, 1);
       this.update();
     },
   },

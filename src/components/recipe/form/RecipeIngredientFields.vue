@@ -14,6 +14,11 @@
       v-model="val.remark"
       @change="update"
     />
+    <div class="field-option">
+      <button type="button" class="remove" @click="removeIngredient(index)">
+        x
+      </button>
+    </div>
   </div>
 </template>
 
@@ -27,12 +32,20 @@ export default {
       },
     };
   },
+  props: {
+    index: {
+      type: Number,
+    },
+  },
   created() {
     this.val = this.$attrs.value;
   },
   methods: {
     update() {
       this.$emit('input', this.val);
+    },
+    removeIngredient() {
+      this.$emit('remove', this.index);
     },
   },
 };

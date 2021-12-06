@@ -9,7 +9,7 @@
     <template v-for="(ingredient, index) in val">
       <recipe-ingredient-fields
         v-model="val[index]"
-        :key="`${ingredient.name}-${index}`"
+        :key="`ingredient-${index}`"
         :index="index"
         @remove="removeIngredient"
       ></recipe-ingredient-fields>

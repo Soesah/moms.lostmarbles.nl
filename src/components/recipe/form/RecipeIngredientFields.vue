@@ -24,14 +24,7 @@
 
 <script>
 export default {
-  name: 'RecipeField',
-  data() {
-    return {
-      val: {
-        name: '',
-      },
-    };
-  },
+  name: 'RecipeIngredientsFields',
   props: {
     index: {
       type: Number,

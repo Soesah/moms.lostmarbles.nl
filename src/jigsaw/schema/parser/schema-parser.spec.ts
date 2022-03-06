@@ -20,7 +20,7 @@ describe('Schema Parser', () => {
     try {
       const domParser = new DOMParser();
       schema = domParser.parseFromString(source, 'text/xml');
-    } catch (e) {
+    } catch (e: any) {
       throw new Error(e.message);
     }
   };

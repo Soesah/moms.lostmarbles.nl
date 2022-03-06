@@ -34,7 +34,7 @@ describe('Schema Parser', () => {
     try {
       const domParser = new DOMParser();
       sourceDocument = domParser.parseFromString(source, 'text/xml');
-    } catch (e) {
+    } catch (e: any) {
       throw new Error(`Failed to parse schema parser source ${e.message}`);
     }
   };

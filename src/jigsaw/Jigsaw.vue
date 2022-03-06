@@ -9,11 +9,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { JigsawEditor } from '@/jigsaw/jigsaw.ts';
+import { JigsawEditor } from '@/jigsaw/jigsaw';
 import JigsawToolbar from '@/jigsaw/components/toolbar/JigsawToolbar.vue';
 import JigsawContextMenu from '@/jigsaw/components/menu/JigsawContextMenu.vue';
 import JigsawNodeToolbar from '@/jigsaw/components/toolbar/JigsawNodeToolbar.vue';
 import EditableContent from '@/jigsaw/components/EditableContent.vue';
+import { EditorEvent } from './core/event-emitter';
 
 const props = {
   xml: {
@@ -54,17 +55,16 @@ export default Vue.extend({
       this.config,
     );
 
-    // set the editor in the store
     this.$store.commit('jigsaw/setEditor', editor);
 
     editor.on('initialized', () => {
       this.ready = true;
     });
 
-    editor.on('changedSelection', (selection) => {
+    editor.on('changedSelection', (selection: EditorEvent) => {
       this.$store.commit('jigsaw/setSelection', selection);
     });
-    editor.on('changedFocus', (evt) => {
+    editor.on('changedFocus', (evt: EditorEvent) => {
       this.$store.commit('jigsaw/setContext', evt.data);
     });
   },

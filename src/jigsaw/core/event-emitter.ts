@@ -1,4 +1,4 @@
-interface EditorEvent {
+export interface EditorEvent {
   name: string;
   data?: any;
 }

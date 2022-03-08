@@ -1,3 +1,41 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import { Recipe } from '@/models/recipe.model';
+import { Actions } from '@/models/store.model';
+
+const store = useStore();
+const { recipe } = defineProps({
+  recipe: {
+    type: Recipe,
+    required: true,
+  },
+});
+
+const showForm = ref<boolean>(false);
+const note = ref({
+  author: '',
+  paragraph: '',
+});
+
+const addNote = async () => {
+  if (note.value.paragraph.length === 0) {
+    return;
+  }
+  const result = await store.dispatch(Actions.AddNote, {
+    recipe,
+    note: { ...note.value, paragraph: note.value.paragraph.split('\n') },
+  });
+
+  if (result) {
+    note.value = {
+      author: '',
+      paragraph: '',
+    };
+    showForm.value = false;
+  }
+};
+</script>
 <template>
   <section class="box box--tertiary">
     <h3>Notities</h3>
@@ -7,7 +45,8 @@
       <p v-for="p in note.paragraph" :key="p" v-text="p"></p>
     </section>
     <form
-      class="noteform" :class="{ hidden: !showForm }"
+      class="noteform"
+      :class="{ hidden: !showForm }"
       id="noteform"
       method="post"
       @submit.prevent="addNote"
@@ -29,49 +68,8 @@
       </div>
     </form>
     <div id="addnote" class="form-buttons note last-note" v-show="!showForm">
-      <button
-        type="button"
-
-        @click="showForm = true"
-      >Notitie maken</button>
+      <button type="button" @click="showForm = true">Notitie maken</button>
     </div>
     <div class="icon icon-beans"></div>
   </section>
 </template>
-<script>
-import { mapState } from 'vuex';
-export default {
-  name: 'RecipesNotes',
-  data: () => {
-    return {
-      showForm: false,
-      note: {
-        author: '',
-        paragraph: '',
-      },
-    };
-  },
-  computed: {
-    ...mapState(['recipe']),
-  },
-  methods: {
-    async addNote() {
-      if (this.note.paragraph.length === 0) {
-        return;
-      }
-      const result = await this.$store.dispatch('addNote', {
-          recipe: this.recipe,
-          note: {...this.note, paragraph: this.note.paragraph.split('\n')},
-        });
-
-      if (result) {
-        this.note = {
-          author: '',
-          paragraph: '',
-        };
-        this.showForm = false;
-      }
-    },
-  },
-};
-</script>

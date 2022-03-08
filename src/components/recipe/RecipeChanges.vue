@@ -1,59 +1,43 @@
+<script lang="ts" setup>
+import { onMounted, ref, watch } from 'vue';
+import { useStore } from 'vuex';
+import { Recipe } from '@/models/recipe.model';
+import { Change, changeText } from '@/models/changes.model';
+import Icon from '@/components/common/Icon.vue';
+import { longDate } from '@/components/common/filters/date.filter';
+
+const store = useStore();
+const { recipe } = defineProps({
+  recipe: {
+    type: Recipe,
+    required: true,
+  },
+});
+
+const changes = ref<Change[]>([]);
+
+const update = async () => {
+  const data = await store.dispatch('getRecipeChangeLog', recipe);
+  changes.value = data ? data : [];
+  store.dispatch('getUsers');
+};
+
+watch(recipe, update);
+
+onMounted(async () => {
+  await update();
+});
+</script>
 <template>
   <section class="box box--secondary" v-if="changes.length">
     <h2>Wijzigingen</h2>
     <ol class="changes">
       <li v-for="change in changes" :key="change.id">
-        {{ change.date | longDate }}
+        {{ longDate(change.date) }}
         <span v-text="`${change.user}`"></span>
         {{ changeText(change.type, recipe.name) }}.
       </li>
     </ol>
-    <icon name="icecream"></icon>
+    <Icon name="icecream"></Icon>
   </section>
 </template>
-<script>
-import Icon from '@/components/common/Icon.vue';
-import { mapState } from 'vuex';
-export default {
-  name: 'RecipeChanges',
-  data() {
-    return {
-      changes: [],
-    };
-  },
-  computed: {
-    ...mapState(['recipe']),
-  },
-  watch: {
-    recipe() {
-      this.update();
-    },
-  },
-  created() {
-    this.update();
-  },
-  methods: {
-    async update() {
-      const changes = await this.$store.dispatch(
-        'getRecipeChangeLog',
-        this.recipe,
-      );
-      this.changes = changes ? changes : [];
-      this.$store.dispatch('getUsers');
-    },
-    changeText(type, name) {
-      switch (type) {
-        case 'changed':
-          return `heeft wijzigen gemaakt`;
-        case 'created':
-          return `heeft een nieuw recept voor ${name} gemaakt`;
-        case 'add note':
-          return `heeft een notitie toegevoegd`;
-      }
-    },
-  },
-  components: {
-    Icon,
-  },
-};
-</script>

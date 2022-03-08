@@ -23,6 +23,7 @@ export interface MomsState {
 
 export enum Mutations {
   AddMenuItems = 'AddMenuItems',
+  RemoveMenuGroup = 'RemoveMenuGroup',
   SetSearch = 'SetSearch',
 }
 
@@ -30,6 +31,9 @@ export enum Actions {
   Login = 'Login',
   GetRecipes = 'GetRecipes',
   GetNewRecipes = 'GetNewRecipes',
+  GetRecipeBySlug = 'GetRecipeBySlug',
+  GetRecipeById = 'GetRecipeById',
   GetCategories = 'GetCategories',
   GetLatestChange = 'GetLatestChange',
+  AddNote = 'AddNote',
 }

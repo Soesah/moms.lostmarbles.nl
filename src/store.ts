@@ -86,7 +86,7 @@ export default createStore<MomsState>({
         ...state.menu,
       ];
     },
-    removeMenuGroup(state: MomsState, group: MenuGroup) {
+    [Mutations.RemoveMenuGroup](state: MomsState, group: MenuGroup) {
       state.menu = [...state.menu.filter((item) => item.group !== group)];
     },
     toggleEditing(state: MomsState, active: boolean) {
@@ -181,8 +181,11 @@ export default createStore<MomsState>({
         notes: [],
       });
     },
-    async getRecipeBySlug({ state, commit, dispatch }: Context, slug: string) {
-      await dispatch('getRecipes');
+    async [Actions.GetRecipeBySlug](
+      { state, commit, dispatch }: Context,
+      slug: string,
+    ) {
+      await dispatch(Actions.GetRecipes);
       const found = (state.recipes as Recipe[]).find(
         (rec: Recipe) => rec.slug === slug,
       );
@@ -192,8 +195,11 @@ export default createStore<MomsState>({
         commit('setRecipe', response.data);
       }
     },
-    async getRecipeById({ state, commit, dispatch }: Context, urlID: number) {
-      await dispatch('getRecipes');
+    async [Actions.GetRecipeById](
+      { state, commit, dispatch }: Context,
+      urlID: number,
+    ) {
+      await dispatch(Actions.GetRecipes);
       const found = (state.recipes as Recipe[]).find(
         (rec: Recipe) => rec.id === urlID,
       );
@@ -226,7 +232,7 @@ export default createStore<MomsState>({
           type: NotificationType.Success,
           text: 'Recept opgeslagen',
         });
-        dispatch('getRecipes', true);
+        dispatch(Actions.GetRecipes, true);
       } else {
         dispatch('notify', {
           type: NotificationType.Error,
@@ -236,7 +242,7 @@ export default createStore<MomsState>({
 
       return data.status ? data.data : null;
     },
-    async addNote(
+    async [Actions.AddNote](
       { state, dispatch, commit }: Context,
       d: NoteData,
     ): Promise<boolean> {

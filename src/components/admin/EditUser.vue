@@ -1,13 +1,45 @@
+<script lang="ts" setup>
+import { computed, onMounted, ref, watch } from 'vue';
+import { useStore } from 'vuex';
+import { User } from '@/models/user.model';
+import { Actions, Mutations } from '@/models/store.model';
+import UserFields from './UserFields.vue';
+
+const store = useStore();
+const user = ref<User | null>(null);
+const edit_user = computed<User>(() => store.state.edit_user);
+
+const update = () => {
+  user.value = edit_user.value ? edit_user.value.clone() : null;
+};
+
+watch(edit_user, update);
+onMounted(() => update);
+
+const close = () => {
+  store.commit(Mutations.SetEditUser, null);
+};
+const submit = () => {
+  store.dispatch(Actions.SaveUser, user.value);
+};
+
+const action = computed<string>(() =>
+  edit_user.value.id === -1 ? 'toevoegen' : 'wijzigen',
+);
+
+const capitalize = (text: string) =>
+  `${text.substring(0, 1).toUpperCase()}${text.substring(1)}`;
+</script>
 <template>
   <section class="box box--tertiary" v-if="user">
     <a @click.prevent="close()" class="box__close">𝖷</a>
     <form @submit.prevent="submit">
-      <h2>Gebruiker wijzigen</h2>
+      <h2>Gebruiker {{ action }}</h2>
       <p class="description">Wijzig de details van de gebruiker</p>
-      <user-fields :user="user"></user-fields>
+      <UserFields :user="user"></UserFields>
       <div class="form-buttons">
         <label></label>
-        <button type="submit">Wijzigen</button>
+        <button type="submit">{{ capitalize(action) }}</button>
       </div>
     </form>
     <dl>
@@ -16,45 +48,10 @@
       <dt>Chef</dt>
       <dd>Een chef kan de recepten lezen en wijzigen.</dd>
       <dt>Administrator</dt>
-      <dd>Een administrator kan de recepten lezen en wijzigen en ook de gebruikers beheren.</dd>
+      <dd>
+        Een administrator kan de recepten lezen en wijzigen en ook de gebruikers
+        beheren.
+      </dd>
     </dl>
   </section>
 </template>
-<script>
-import { mapState } from 'vuex';
-import UserFields from '@/components/admin/UserFields';
-
-export default {
-  name: 'EditUser',
-  data() {
-    return {
-      user: null,
-    };
-  },
-  computed: {
-    ...mapState(['edit_user']),
-  },
-  created() {
-    this.update();
-  },
-  watch: {
-    edit_user() {
-      this.update();
-    },
-  },
-  methods: {
-    update() {
-      this.user = this.edit_user.clone();
-    },
-    close(user) {
-      this.$store.commit('setEditUser', null);
-    },
-    submit() {
-      this.$store.dispatch('saveUser', this.user);
-    },
-  },
-  components: {
-    UserFields,
-  },
-};
-</script>

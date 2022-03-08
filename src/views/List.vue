@@ -40,7 +40,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  store.commit('removeMenuGroup', MenuGroup.List);
+  store.commit(Mutations.RemoveMenuGroup, MenuGroup.List);
 });
 </script>
 <template>

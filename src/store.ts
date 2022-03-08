@@ -62,7 +62,7 @@ export default createStore<MomsState>({
       const index = state.users.findIndex((u: User) => u.id === user.id);
       state.users.splice(index, 1, user);
     },
-    setEditUser(state: MomsState, user: User) {
+    [Mutations.SetEditUser](state: MomsState, user: User) {
       state.edit_user = user;
     },
     setCategories(state: MomsState, categories: Category[]) {
@@ -102,7 +102,7 @@ export default createStore<MomsState>({
     },
   },
   actions: {
-    async getUsers({ commit }: Context) {
+    async [Actions.GetUsers]({ commit }: Context) {
       const response = await userService.getList();
       commit('setUsers', response.data);
     },
@@ -128,7 +128,7 @@ export default createStore<MomsState>({
 
       commit('setAuth', defaultAuth);
     },
-    async saveUser({ commit, dispatch }: Context, user: User) {
+    async [Actions.SaveUser]({ commit, dispatch }: Context, user: User) {
       dispatch('notify', {
         type: NotificationType.Info,
         text: 'Bezig met opslaan...',
@@ -141,7 +141,7 @@ export default createStore<MomsState>({
         });
         commit('updateUser', response.data);
       }
-      commit('setEditUser', null);
+      commit(Mutations.SetEditUser, null);
     },
     async [Actions.GetCategories]({ commit }: Context) {
       const response = await categoryService.getList();

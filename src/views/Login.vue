@@ -1,3 +1,35 @@
+<script lang="ts" setup>
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
+import { MenuGroup } from '@/models/menu.model';
+import { AuthLevel } from '../models/auth.model';
+import PageMenu from '@/components/common/PageMenu.vue';
+import LoginChef from '@/components/user/LoginChef.vue';
+import LoginAdmin from '@/components/user/LoginAdmin.vue';
+import { Mutations } from '@/models/store.model';
+
+const store = useStore();
+const route = useRoute();
+const type = ref<string>('chef');
+
+onMounted(() => {
+  type.value = route.params.type as string;
+
+  store.commit(Mutations.AddMenuItems, [
+    {
+      label: 'Terug naar de lijst',
+      target: '/list',
+      group: MenuGroup.Recipe,
+      level: AuthLevel.Cook,
+    },
+  ]);
+});
+
+onUnmounted(() => {
+  store.commit(Mutations.RemoveMenuGroup, MenuGroup.Recipe);
+});
+</script>
 <template>
   <main class="columns">
     <section class="column main-large">
@@ -9,39 +41,3 @@
     </section>
   </main>
 </template>
-<script>
-import PageMenu from '@/components/common/PageMenu';
-import { MenuGroup } from '@/models/menu.model';
-import LoginChef from '@/components/user/LoginChef';
-import LoginAdmin from '@/components/user/LoginAdmin';
-import { AuthLevel } from '../models/auth.model';
-
-export default {
-  name: 'Login',
-  data() {
-    return {
-      type: 'chef',
-    };
-  },
-  created() {
-    this.type = this.$route.params.type;
-
-    this.$store.commit('addMenuItems', [
-      {
-        label: 'Terug naar de lijst',
-        target: '/list',
-        group: MenuGroup.Recipe,
-        level: AuthLevel.Cook,
-      },
-    ]);
-  },
-  destroyed() {
-    this.$store.commit('removeMenuGroup', MenuGroup.Recipe);
-  },
-  components: {
-    PageMenu,
-    LoginChef,
-    LoginAdmin,
-  },
-};
-</script>

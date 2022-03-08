@@ -61,8 +61,8 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  store.commit('removeMenuGroup', MenuGroup.Recipe);
-  store.commit('removeMenuGroup', MenuGroup.RecipeEdit);
+  store.commit(Mutations.RemoveMenuGroup, MenuGroup.Recipe);
+  store.commit(Mutations.RemoveMenuGroup, MenuGroup.RecipeEdit);
 });
 </script>
 <template>

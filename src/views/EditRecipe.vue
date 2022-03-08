@@ -8,7 +8,11 @@
         config="/config.json"
         @save="saveRecipe"
       ></jigsaw>-->
-      <recipe-form :recipe="recipe" @cancel="cancel" @updateRecipe="saveRecipe"></recipe-form>
+      <recipe-form
+        :recipe="recipe"
+        @cancel="cancel"
+        @updateRecipe="saveRecipe"
+      ></recipe-form>
     </section>
     <section class="column">
       <page-menu></page-menu>
@@ -36,7 +40,7 @@ export default {
   },
   created() {
     this.update();
-    this.$store.commit('addMenuItems', [
+    this.$store.commit(Mutations.AddMenuItems, [
       {
         label: 'Stoppen met bewerken',
         target: `/recipe/${this.$route.params.slug}`,
@@ -53,12 +57,12 @@ export default {
     this.$store.commit('toggleEditing', true);
   },
   destroyed() {
-    this.$store.commit('removeMenuGroup', MenuGroup.Admin);
+    this.$store.commit(Mutations.RemoveMenuGroup, MenuGroup.Admin);
     this.$store.commit('toggleEditing', false);
   },
   watch: {
     recipe() {
-      this.$store.commit('addMenuItems', [
+      this.$store.commit(Mutations.AddMenuItems, [
         {
           label: 'Terug naar recept',
           target: `/recipe/${this.recipe.slug}`,
@@ -81,7 +85,7 @@ export default {
       if (id) {
         this.$store.dispatch('getRecipeById', id);
       }
-      this.$store.dispatch('getCategories');
+      this.$store.dispatch(Actions.GetCategories);
     },
     async saveRecipe(recipe) {
       const update = await this.$store.dispatch('saveRecipe', recipe);

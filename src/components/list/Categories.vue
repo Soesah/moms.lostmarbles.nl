@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import { Actions } from '@/models/store.model';
 import Icon from '@/components/common/Icon.vue';
 
 const store = useStore();
@@ -9,7 +10,7 @@ const category_id = computed(() => store.state.category_id);
 const categories = computed(() => store.state.categories);
 
 onMounted(async () => {
-  await store.dispatch('getCategories');
+  await store.dispatch(Actions.GetCategories);
 });
 </script>
 <template>

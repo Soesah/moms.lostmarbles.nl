@@ -11,6 +11,7 @@ export interface UserData {
 export class User {
   public id: number;
   public name: string;
+  public password?: string;
   public email: string;
   public last_login_date: string;
   public user_level: AuthLevel;

@@ -1,12 +1,22 @@
+<script lang="ts" setup>
+import { User } from '@/models/user.model';
+
+const { user } = defineProps({
+  user: {
+    type: User,
+    required: true,
+  },
+});
+</script>
 <template>
   <div>
     <div class="form-item">
       <label for="focus">Naam</label>
-      <input type="text" placeholder="(naam)" v-model="user.name">
+      <input type="text" placeholder="(naam)" v-model="user.name" />
     </div>
     <div class="form-item">
       <label for="focus">Email</label>
-      <input type="text" placeholder="(email)" v-model="user.email">
+      <input type="text" placeholder="(email)" v-model="user.email" />
     </div>
     <div class="form-item">
       <label for="focus">Type</label>
@@ -18,15 +28,3 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'UserFields',
-  props: {
-    user: {
-      type: Object,
-      required: true,
-    },
-  },
-};
-</script>

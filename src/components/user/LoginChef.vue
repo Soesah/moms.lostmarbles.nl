@@ -1,13 +1,44 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { User } from '@/models/user.model';
+import { Actions } from '@/models/store.model';
+import Icon from '@/components/common/Icon.vue';
+import { vFocus } from '@/components/common/directives/focus.directive';
+
+const store = useStore();
+const router = useRouter();
+const auth = ref<Partial<User>>({ password: '' });
+const redirect = store.state.redirect;
+
+const submit = async () => {
+  const status = await store.dispatch(Actions.Login, {
+    type: 'chef',
+    auth: auth.value,
+  });
+
+  if (status) {
+    router.push(redirect ? redirect : '/list');
+  }
+};
+</script>
 <template>
   <section class="box">
     <form @submit.prevent="submit">
       <h2>Inloggen als chef</h2>
-      <p
-        class="description"
-      >Om een recept te kunnen bewerken of toe te voegen moet je eerst inloggen met een wachtwoord.</p>
+      <p class="description">
+        Om een recept te kunnen bewerken of toe te voegen moet je eerst inloggen
+        met een wachtwoord.
+      </p>
       <div class="form-item">
         <label for="focus">Wachtwoord</label>
-        <input type="text" v-model="user.password" v-focus placeholder="(watchwoord)" />
+        <input
+          type="text"
+          v-model="auth.password"
+          v-focus="true"
+          placeholder="(watchwoord)"
+        />
       </div>
       <div class="form-buttons">
         <label></label>
@@ -17,37 +48,3 @@
     <icon name="bowl2"></icon>
   </section>
 </template>
-<script>
-import { mapState } from 'vuex';
-import Icon from '@/components/common/Icon.vue';
-
-export default {
-  name: 'LoginChef',
-  data() {
-    return {
-      user: {
-        password: '',
-      },
-      // remember: false,
-    };
-  },
-  computed: {
-    ...mapState(['redirect']),
-  },
-  methods: {
-    async submit() {
-      const status = await this.$store.dispatch('login', {
-        type: 'chef',
-        auth: this.user,
-      });
-
-      if (status) {
-        this.$router.push(this.redirect ? this.redirect : '/list');
-      }
-    },
-  },
-  components: {
-    Icon,
-  },
-};
-</script>

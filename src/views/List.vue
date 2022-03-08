@@ -4,6 +4,7 @@ import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { MenuGroup } from '../models/menu.model';
 import { AuthLevel } from '../models/auth.model';
+import { Mutations } from '@/models/store.model';
 import Search from '@/components/list/Search.vue';
 import Categories from '@/components/list/Categories.vue';
 import RecipeList from '@/components/list/RecipeList.vue';
@@ -17,10 +18,12 @@ const update = async () => {
   await store.dispatch('selectCategoryBySlug', slug);
 };
 
+watch(route, update);
+
 onMounted(async () => {
   await update();
 
-  store.commit('addMenuItems', [
+  store.commit(Mutations.AddMenuItems, [
     {
       label: 'Nieuw recept toevoegen',
       target: '/recipe/new/edit',
@@ -39,8 +42,6 @@ onMounted(async () => {
 onUnmounted(() => {
   store.commit('removeMenuGroup', MenuGroup.List);
 });
-
-watch(route, update);
 </script>
 <template>
   <main class="columns">

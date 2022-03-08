@@ -1,3 +1,38 @@
+<script lang="ts" setup>
+import { computed, onMounted, ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { Recipe } from '@/models/recipe.model';
+import { Actions } from '@/models/store.model';
+import { THREE_MONTHS } from '@/util/info';
+import Icon from '@/components/common/Icon.vue';
+
+const store = useStore();
+const router = useRouter();
+const loading = ref<boolean>(false);
+
+const searchValue = computed(() => store.state.searchValue);
+const categoryName = () => store.getters.categoryName();
+const filteredRecipes = computed(() => store.getters.filteredRecipes);
+
+const isNew = (recipe: Recipe) => {
+  return Date.parse(recipe.creation_date) > Date.now() - THREE_MONTHS;
+};
+
+const navigate = (recipe: Recipe, byId: boolean = false) => {
+  if (byId) {
+    router.push(`/recipe/by-id/${recipe.id}`);
+  } else {
+    router.push(`/recipe/${recipe.slug}`);
+  }
+};
+
+onMounted(async () => {
+  loading.value = true;
+  await store.dispatch(Actions.GetRecipes);
+  loading.value = false;
+});
+</script>
 <template>
   <section class="box">
     <h2>
@@ -8,67 +43,28 @@
     </h2>
 
     <p v-if="loading">De recepten worden geladen...</p>
-    <ol>
+    <ol v-else>
       <li
         v-for="recipe in filteredRecipes"
         :key="recipe.id"
         class="recipe-list-item"
       >
         <i class="star-icon" v-if="isNew(recipe)" />
-        <span class="link"
+        <span
+          class="link"
           @click.shift="navigate(recipe, true)"
           @click.exact="navigate(recipe)"
           v-text="recipe.name"
         ></span>
-
       </li>
     </ol>
-    <icon name="ricebowl"></icon>
+    <Icon name="ricebowl"></Icon>
   </section>
 </template>
-<script>
-import { mapGetters, mapState } from 'vuex';
-import Icon from '@/components/common/Icon.vue';
-import { MILLISECONDS_IN_DAY } from '@/util/info';
-
-export default {
-  name: 'RecipeList',
-  data() {
-    return {
-      loading: true,
-    };
-  },
-  computed: {
-    ...mapState(['searchValue']),
-    ...mapGetters(['categoryName']),
-    ...mapGetters(['filteredRecipes']),
-  },
-  methods: {
-    isNew(recipe) {
-      const THREE_MONTHS = 31 * MILLISECONDS_IN_DAY;
-      return Date.parse(recipe.creation_date) > Date.now() - THREE_MONTHS;
-    },
-    navigate(recipe, byId = false) {
-      if (byId) {
-        this.$router.push(`/recipe/by-id/${recipe.id}`);
-      } else {
-        this.$router.push(`/recipe/${recipe.slug}`);
-      }
-    },
-  },
-  async created() {
-    await this.$store.dispatch('getRecipes');
-    this.loading = false;
-  },
-  components: {
-    Icon,
-  },
-};
-</script>
 <style scoped>
 .hidden {
   color: transparent;
   text-decoration: none;
-  border:none;
+  border: none;
 }
 </style>

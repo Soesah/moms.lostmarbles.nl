@@ -1,4 +1,5 @@
 import { createStore, ActionContext } from 'vuex';
+import { MomsState, Actions, Mutations } from './models/store.model';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
@@ -21,30 +22,6 @@ const authService = new AuthService();
 const userService = new UserService();
 const categoryService = new CategoryService();
 const recipeService = new RecipeService();
-
-interface MomsState {
-  auth: Auth;
-  notifications: Notification[];
-  redirect: string;
-  user: User | null;
-  edit_user: User | null;
-  users: User[];
-  categories: Category[];
-  category_id: number;
-  searchValue: string;
-  recipe: Recipe | null;
-  recipes: Recipe[];
-  menu: MenuItem[];
-  editing: boolean;
-}
-
-export enum StoreActions {
-  Login = 'Login',
-  GetRecipes = 'GetRecipes',
-  GetNewRecipes = 'GetNewRecipes',
-  GetCategories = 'GetCategories',
-  GetLatestChange = 'GetLatestChange',
-}
 
 type Context = ActionContext<MomsState, MomsState>;
 
@@ -100,10 +77,10 @@ export default createStore<MomsState>({
     selectCategory(state: MomsState, category: Category) {
       state.category_id = category ? category.id : -1;
     },
-    setSearch(state: MomsState, value: string) {
+    [Mutations.SetSearch](state: MomsState, value: string) {
       state.searchValue = value;
     },
-    addMenuItems(state: MomsState, items: MenuItem[]) {
+    [Mutations.AddMenuItems](state: MomsState, items: MenuItem[]) {
       state.menu = [
         ...items.filter((item) => item.level <= state.auth.level),
         ...state.menu,
@@ -136,7 +113,7 @@ export default createStore<MomsState>({
 
       return response.data;
     },
-    async [StoreActions.Login](
+    async [Actions.Login](
       { commit }: Context,
       { type, auth }: { type: string; auth: Auth },
     ): Promise<boolean> {
@@ -166,15 +143,15 @@ export default createStore<MomsState>({
       }
       commit('setEditUser', null);
     },
-    async [StoreActions.GetCategories]({ commit }: Context) {
+    async [Actions.GetCategories]({ commit }: Context) {
       const response = await categoryService.getList();
       commit('setCategories', response.data);
     },
-    async [StoreActions.GetRecipes]({ commit }: Context, force = false) {
+    async [Actions.GetRecipes]({ commit }: Context, force = false) {
       const response = await recipeService.getList(force);
       commit('setRecipes', response.data);
     },
-    async [StoreActions.GetNewRecipes]() {
+    async [Actions.GetNewRecipes]() {
       const response = await recipeService.getNewRecipes();
       return response.status ? response.data : [];
     },
@@ -182,7 +159,7 @@ export default createStore<MomsState>({
       { state, commit, dispatch }: Context,
       slug: string,
     ) {
-      await dispatch('getCategories');
+      await dispatch(Actions.GetCategories);
       const category = state.categories.find(
         (cat: Category) => cat.slug === slug,
       );
@@ -230,7 +207,7 @@ export default createStore<MomsState>({
       const data = await recipeService.remove(id);
       return data.status ? true : false;
     },
-    async [StoreActions.GetLatestChange](): Promise<Change | null> {
+    async [Actions.GetLatestChange](): Promise<Change | null> {
       const data = await recipeService.getLatestChange();
       return data.status ? data.data : null;
     },

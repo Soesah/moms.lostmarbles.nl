@@ -1,13 +1,9 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import axios from 'axios';
-import jigsaw from './jigsaw';
-import {
-  longDateFilter,
-  dateFilter,
-} from '@/components/common/filters/longDate.filter';
+// import jigsaw from './jigsaw';
 
 axios.interceptors.response.use(undefined, (err) => {
   if (err.response.status === 401) {
@@ -15,22 +11,8 @@ axios.interceptors.response.use(undefined, (err) => {
   }
 });
 
-Vue.use(jigsaw, { store });
-
-Vue.config.productionTip = false;
-
-Vue.filter('longDate', longDateFilter);
-Vue.filter('date', dateFilter);
-
-Vue.directive('focus', {
-  inserted: (el: any) => {
-    el.select();
-  },
-});
-
-
-new Vue({
-  router,
-  store,
-  render: (h) => h(App),
-}).$mount('#app');
+const app = createApp(App)
+  .use(router)
+  .use(store)
+  // .use(jigsaw, { store })
+  .mount('#app');

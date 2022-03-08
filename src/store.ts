@@ -1,11 +1,14 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore, ActionContext } from 'vuex';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { RecipeService } from './services/recipe.service';
 import { User } from '@/models/user.model';
-import { Notification, NotificationType } from '@/models/notification.model';
+import {
+  delays,
+  Notification,
+  NotificationType,
+} from '@/models/notification.model';
 import { Category } from './models/category.model';
 import { Recipe, NoteData } from '@/models/recipe.model';
 import { Change } from '@/models/changes.model';
@@ -19,20 +22,44 @@ const userService = new UserService();
 const categoryService = new CategoryService();
 const recipeService = new RecipeService();
 
-Vue.use(Vuex);
+interface MomsState {
+  auth: Auth;
+  notifications: Notification[];
+  redirect: string;
+  user: User | null;
+  edit_user: User | null;
+  users: User[];
+  categories: Category[];
+  category_id: number;
+  searchValue: string;
+  recipe: Recipe | null;
+  recipes: Recipe[];
+  menu: MenuItem[];
+  editing: boolean;
+}
 
-export default new Vuex.Store({
+export enum StoreActions {
+  Login = 'Login',
+  GetRecipes = 'GetRecipes',
+  GetNewRecipes = 'GetNewRecipes',
+  GetCategories = 'GetCategories',
+  GetLatestChange = 'GetLatestChange',
+}
+
+type Context = ActionContext<MomsState, MomsState>;
+
+export default createStore<MomsState>({
   state: {
     auth: defaultAuth,
-    notifications: [] as Notification[],
+    notifications: [],
     redirect: '',
     user: null,
     edit_user: null,
-    users: [] as User[],
+    users: [],
     categories: [],
+    category_id: -1,
     recipe: null,
     recipes: [],
-    category_id: -1,
     searchValue: '',
     menu: [
       {
@@ -45,72 +72,72 @@ export default new Vuex.Store({
     editing: false,
   },
   mutations: {
-    setAuth(state, auth: Auth) {
+    setAuth(state: MomsState, auth: Auth) {
       state.auth = auth;
     },
-    setRedirect(state, redirect: string) {
+    setRedirect(state: MomsState, redirect: string) {
       state.redirect = redirect;
     },
-    setUsers(state, users: User[]) {
+    setUsers(state: MomsState, users: User[]) {
       state.users = users;
     },
-    updateUser(state, user: User) {
+    updateUser(state: MomsState, user: User) {
       const index = state.users.findIndex((u: User) => u.id === user.id);
       state.users.splice(index, 1, user);
     },
-    setEditUser(state, user) {
+    setEditUser(state: MomsState, user: User) {
       state.edit_user = user;
     },
-    setCategories(state, categories) {
+    setCategories(state: MomsState, categories: Category[]) {
       state.categories = categories;
     },
-    setRecipes(state, recipes) {
+    setRecipes(state: MomsState, recipes: Recipe[]) {
       state.recipes = recipes;
     },
-    setRecipe(state, recipe) {
+    setRecipe(state: MomsState, recipe: Recipe) {
       state.recipe = recipe;
     },
-    selectCategory(state, category) {
+    selectCategory(state: MomsState, category: Category) {
       state.category_id = category ? category.id : -1;
     },
-    setSearch(state, value) {
+    setSearch(state: MomsState, value: string) {
       state.searchValue = value;
     },
-    addMenuItems(state, items: MenuItem[]) {
+    addMenuItems(state: MomsState, items: MenuItem[]) {
       state.menu = [
         ...items.filter((item) => item.level <= state.auth.level),
         ...state.menu,
       ];
     },
-    removeMenuGroup(state, group: MenuGroup) {
+    removeMenuGroup(state: MomsState, group: MenuGroup) {
       state.menu = [...state.menu.filter((item) => item.group !== group)];
     },
-    toggleEditing(state, active: boolean) {
+    toggleEditing(state: MomsState, active: boolean) {
       state.editing = active;
     },
-    notify(state, notification: Notification) {
+    notify(state: MomsState, notification: Notification) {
       state.notifications = [...state.notifications, notification];
     },
-    dismiss(state, uuid) {
+    dismiss(state: MomsState, uuid: string) {
       state.notifications = [
         ...state.notifications.filter((n) => n.uuid !== uuid),
       ];
     },
   },
   actions: {
-    async getUsers({ commit }) {
+    async getUsers({ commit }: Context) {
       const response = await userService.getList();
       commit('setUsers', response.data);
     },
-    async getAuth({ commit }): Promise<Auth> {
+    async getAuth({ commit }: Context): Promise<Auth> {
       const response = await authService.get();
 
       commit('setAuth', response.data);
 
       return response.data;
     },
-    async login(
-      { commit },
+    async [StoreActions.Login](
+      { commit }: Context,
       { type, auth }: { type: string; auth: Auth },
     ): Promise<boolean> {
       const response = await authService.login(auth, type);
@@ -119,12 +146,12 @@ export default new Vuex.Store({
 
       return response.status;
     },
-    async logout({ commit }) {
+    async logout({ commit }: Context) {
       await authService.logout();
 
       commit('setAuth', defaultAuth);
     },
-    async saveUser({ commit, dispatch }, user) {
+    async saveUser({ commit, dispatch }: Context, user: User) {
       dispatch('notify', {
         type: NotificationType.Info,
         text: 'Bezig met opslaan...',
@@ -139,26 +166,29 @@ export default new Vuex.Store({
       }
       commit('setEditUser', null);
     },
-    async getCategories({ commit }) {
+    async [StoreActions.GetCategories]({ commit }: Context) {
       const response = await categoryService.getList();
       commit('setCategories', response.data);
     },
-    async getRecipes({ commit }, force = false) {
+    async [StoreActions.GetRecipes]({ commit }: Context, force = false) {
       const response = await recipeService.getList(force);
       commit('setRecipes', response.data);
     },
-    async getNewRecipes() {
+    async [StoreActions.GetNewRecipes]() {
       const response = await recipeService.getNewRecipes();
       return response.status ? response.data : [];
     },
-    async selectCategoryBySlug({ state, commit, dispatch }, slug) {
+    async selectCategoryBySlug(
+      { state, commit, dispatch }: Context,
+      slug: string,
+    ) {
       await dispatch('getCategories');
       const category = state.categories.find(
         (cat: Category) => cat.slug === slug,
       );
       commit('selectCategory', category);
     },
-    async newRecipe({ state, commit }) {
+    async newRecipe({ commit }: Context) {
       commit('setRecipe', {
         id: null,
         category_id: 6,
@@ -174,7 +204,7 @@ export default new Vuex.Store({
         notes: [],
       });
     },
-    async getRecipeBySlug({ state, commit, dispatch }, slug) {
+    async getRecipeBySlug({ state, commit, dispatch }: Context, slug: string) {
       await dispatch('getRecipes');
       const found = (state.recipes as Recipe[]).find(
         (rec: Recipe) => rec.slug === slug,
@@ -185,7 +215,7 @@ export default new Vuex.Store({
         commit('setRecipe', response.data);
       }
     },
-    async getRecipeById({ state, commit, dispatch }, urlID) {
+    async getRecipeById({ state, commit, dispatch }: Context, urlID: number) {
       await dispatch('getRecipes');
       const found = (state.recipes as Recipe[]).find(
         (rec: Recipe) => rec.id === urlID,
@@ -196,11 +226,11 @@ export default new Vuex.Store({
         commit('setRecipe', response.data);
       }
     },
-    async removeRecipe({ state }, id: number): Promise<boolean> {
+    async removeRecipe(_: Context, id: number): Promise<boolean> {
       const data = await recipeService.remove(id);
       return data.status ? true : false;
     },
-    async getLatestChange(): Promise<Change | null> {
+    async [StoreActions.GetLatestChange](): Promise<Change | null> {
       const data = await recipeService.getLatestChange();
       return data.status ? data.data : null;
     },
@@ -208,7 +238,7 @@ export default new Vuex.Store({
       const data = await recipeService.getRecipeLatestChanges(recipe);
       return data.status ? data.data : [];
     },
-    async saveRecipe({ dispatch }, recipe: Recipe) {
+    async saveRecipe({ dispatch }: Context, recipe: Recipe) {
       dispatch('notify', {
         type: NotificationType.Info,
         text: 'Bezig met opslaan...',
@@ -229,7 +259,10 @@ export default new Vuex.Store({
 
       return data.status ? data.data : null;
     },
-    async addNote({ state, dispatch, commit }, d: NoteData): Promise<boolean> {
+    async addNote(
+      { state, dispatch, commit }: Context,
+      d: NoteData,
+    ): Promise<boolean> {
       const author = state.auth.name;
       dispatch('notify', {
         type: NotificationType.Info,
@@ -245,29 +278,23 @@ export default new Vuex.Store({
       }
       return data.status;
     },
-    notify({ commit, dispatch }, notification: Notification) {
+    notify({ commit, dispatch }: Context, notification: Notification) {
       const uuid = UUIDUtil.uuid4();
       commit('notify', { ...notification, uuid });
-      const delays: { [index: string]: number } = {
-        info: 2000,
-        success: 2500,
-        warning: 4500,
-        error: 5500,
-      };
       dispatch('dismiss', {
         uuid,
         text: notification.text,
         delay: delays[notification.type],
       });
     },
-    dismiss({ commit }, data) {
+    dismiss({ commit }: Context, data: { uuid: string; delay: number }) {
       setTimeout(() => {
         commit('dismiss', data.uuid);
       }, data.delay);
     },
   },
   getters: {
-    filteredRecipes: (state): Recipe[] => {
+    filteredRecipes: (state: MomsState): Recipe[] => {
       const spec = createRecipeSpecification(
         state.searchValue,
         state.category_id,
@@ -276,23 +303,22 @@ export default new Vuex.Store({
         .filter(spec)
         .sort((a: Recipe, b: Recipe) => (a.name > b.name ? 1 : -1));
     },
-    categoryName: (state) => (
-      category_id: number = state.category_id,
-      plural: boolean = true,
-    ) => {
-      const category = state.categories.find(
-        (cat: Category) => cat.id === category_id,
-      );
-      return category
-        ? plural
-          ? (category as Category).name_plural
-          : (category as Category).name_singular
-        : null;
-    },
-    isAdmin: (state) => {
+    categoryName:
+      (state: MomsState) =>
+      (category_id: number = state.category_id, plural: boolean = true) => {
+        const category = state.categories.find(
+          (cat: Category) => cat.id === category_id,
+        );
+        return category
+          ? plural
+            ? (category as Category).name_plural
+            : (category as Category).name_singular
+          : null;
+      },
+    isAdmin: (state: MomsState): boolean => {
       return state.auth.level === AuthLevel.Admin;
     },
-    isChef: (state) => {
+    isChef: (state: MomsState): boolean => {
       return state.auth.level === AuthLevel.Chef;
     },
   },

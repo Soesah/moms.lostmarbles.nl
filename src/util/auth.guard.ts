@@ -1,8 +1,8 @@
-import { Route } from 'vue-router';
+import { RouteLocationNormalized } from 'vue-router';
 import { AuthLevel } from '@/models/auth.model';
 import store from '@/store';
 
-export const verifyCook = async (to: Route, from: Route, next: any) => {
+export const verifyCook = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: any) => {
   const auth = await store.dispatch('getAuth');
 
   if (auth.level >= AuthLevel.Cook) {
@@ -15,7 +15,7 @@ export const verifyCook = async (to: Route, from: Route, next: any) => {
   });
 };
 
-export const verifyChef = async (to: Route, from: Route, next: any) => {
+export const verifyChef = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: any) => {
   const auth = await store.dispatch('getAuth');
 
   if (auth.authorizedLevel >= AuthLevel.Chef) {
@@ -29,7 +29,7 @@ export const verifyChef = async (to: Route, from: Route, next: any) => {
   });
 };
 
-export const verifyAdmin = async (to: Route, from: Route, next: any) => {
+export const verifyAdmin = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: any) => {
   const auth = await store.dispatch('getAuth');
 
   if (auth.authorizedLevel >= AuthLevel.Admin) {
@@ -43,7 +43,7 @@ export const verifyAdmin = async (to: Route, from: Route, next: any) => {
   });
 };
 
-export const logoutUser = async (to: Route, from: Route, next: any) => {
+export const logoutUser = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: any) => {
   store.dispatch('logout');
   next({
     path: '/',

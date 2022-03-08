@@ -23,7 +23,7 @@ const MONTHS: string[] = [
   'december',
 ];
 
-export const longDate = (date: Date): string => {
+export const formatDateLong = (date: Date): string => {
   const day = date.getDate();
   const dayOfTheWeek = date.getDay();
   const month = date.getMonth();
@@ -32,7 +32,7 @@ export const longDate = (date: Date): string => {
   return `${DAYS[dayOfTheWeek]} ${day} ${MONTHS[month]} ${year}`;
 };
 
-export const simpleDate = (date: Date): string => {
+export const formatDateSimple = (date: Date): string => {
   const day = date.getDate();
   const month = date.getMonth();
   const year = date.getFullYear();

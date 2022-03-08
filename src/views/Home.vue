@@ -1,27 +1,18 @@
+<script lang="ts" setup>
+import LoginCook from '@/components/user/LoginCook.vue';
+import NewRecipes from '@/components/list/NewRecipes.vue';
+import LatestChange from '@/components/list/LatestChange.vue';
+</script>
 <template>
   <main class="columns">
     <section class="column">
-      <login-cook></login-cook>
+      <LoginCook></LoginCook>
     </section>
     <section class="column">
-      <new-recipes></new-recipes>
+      <NewRecipes></NewRecipes>
     </section>
     <section class="column">
-      <latest-change></latest-change>
+      <LatestChange></LatestChange>
     </section>
   </main>
 </template>
-<script>
-import LoginCook from '@/components/user/LoginCook';
-import NewRecipes from '@/components/list/NewRecipes';
-import LatestChange from '@/components/list/LatestChange';
-
-export default {
-  name: 'Home',
-  components: {
-    LoginCook,
-    NewRecipes,
-    LatestChange,
-  },
-};
-</script>

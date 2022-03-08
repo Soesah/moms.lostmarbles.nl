@@ -1,24 +1,44 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { User } from '@/models/user.model';
+import { StoreActions } from '@/store';
+import Icon from '@/components/common/Icon.vue';
+import { vFocus } from '@/components/common/directives/focus.directive';
+
+const store = useStore();
+const router = useRouter();
+const auth = ref<Partial<User>>({ name: '' });
+const redirect = store.state.redirect;
+
+const submit = async () => {
+  const status = await store.dispatch(StoreActions.Login, {
+    type: 'cook',
+    auth: auth.value,
+  });
+
+  if (status) {
+    router.push(redirect ? redirect : '/list');
+  }
+};
+</script>
 <template>
   <section class="box box--tertiary">
     <form @submit.prevent="submit">
       <h2>Welkom</h2>
-      <p class="description">Om gebruik te kunnen maken van Mom's Lost Marbles dient u in te loggen.</p>
+      <p class="description">
+        Om gebruik te kunnen maken van Mom's Lost Marbles dient u in te loggen.
+      </p>
       <div class="form-item">
         <label for="focus">Naam</label>
-        <input type="text" v-model="user.name" v-focus placeholder="(naam)" />
-      </div>
-      <!-- <div class="form-item">
-        <label></label>
         <input
-          type="checkbox"
-          id="remember"
-          v-model="remember"
-          name="remember"
-          value="remember"
-          class="checkbox"
-        >
-        <label for="remember">Onthouden</label>
-      </div>-->
+          type="text"
+          v-model="auth.name"
+          v-focus="true"
+          placeholder="(naam)"
+        />
+      </div>
       <div class="form-buttons">
         <label></label>
         <button type="submit">Inloggen</button>
@@ -26,42 +46,8 @@
       <p class="description">
         Deze website gaat over en gebruikt
         <i>cookies</i>.
-        <!--Door 'onthouden' aan te vinken stopt u uw hand in de koekjestrommel.-->
       </p>
     </form>
-    <icon name="bowl2"></icon>
+    <Icon name="bowl2"></Icon>
   </section>
 </template>
-<script>
-import Icon from '@/components/common/Icon.vue';
-import { mapState } from 'vuex';
-export default {
-  name: 'LoginCook',
-  data() {
-    return {
-      user: {
-        name: '',
-      },
-      // remember: false,
-    };
-  },
-  computed: {
-    ...mapState(['redirect']),
-  },
-  methods: {
-    async submit() {
-      const status = await this.$store.dispatch('login', {
-        type: 'cook',
-        auth: this.user,
-      });
-
-      if (status) {
-        this.$router.push(this.redirect ? this.redirect : '/list');
-      }
-    },
-  },
-  components: {
-    Icon,
-  },
-};
-</script>

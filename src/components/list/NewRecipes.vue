@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { useStore } from 'vuex';
+import { StoreActions } from '@/store';
+import { Recipe } from '@/models/recipe.model';
+import Icon from '@/components/common/Icon.vue';
+import { longDate } from '@/components/common/filters/date.filter';
+
+const store = useStore();
+const categoryName = (id: number, plural: boolean) =>
+  store.getters.categoryName(id, plural);
+const recipes = ref<Recipe[]>([]);
+
+const persons = (recipe: Recipe): string => {
+  return parseInt(recipe.servings) === 1 ? 'persoon' : 'personen';
+};
+const servings = (recipe: Recipe): string => {
+  return recipe.servings ? ` voor ${recipe.servings} ${persons(recipe)}` : '';
+};
+
+onMounted(async () => {
+  await store.dispatch(StoreActions.GetCategories);
+  recipes.value = await store.dispatch(StoreActions.GetNewRecipes);
+});
+</script>
 <template>
   <section class="box">
     <h2>Nieuwe recepten</h2>
@@ -6,52 +31,17 @@
         <h4 v-text="recipe.name"></h4>
         <p>
           Een
-          <span class="category" v-text="categoryName(recipe.category_id, false)"></span>
+          <span
+            class="category"
+            v-text="categoryName(recipe.category_id, false)"
+          ></span>
           <span v-if="recipe.cook"> van {{ recipe.cook }}</span>
-          <span v-if="recipe.servings">{{ servings(recipe) }}</span>. Toegevoegd op
-          <span class="date">{{ recipe.creation_date | longDate }}</span>
+          <span v-if="recipe.servings">{{ servings(recipe) }}</span
+          >. Toegevoegd op
+          <span class="date">{{ longDate(recipe.creation_date) }}</span>
         </p>
       </li>
     </ol>
-    <!--p class="rsslink">
-        <a href="/rss/new-recipes">
-          <span class="icon icon-rss"></span>
-          <span class="rss-text">Volg de nieuwe recepten</span>
-        </a>
-    </p-->
-    <icon name="broccoli"></icon>
+    <Icon name="broccoli"></Icon>
   </section>
 </template>
-<script>
-import { mapGetters } from 'vuex';
-import Icon from '@/components/common/Icon.vue';
-
-export default {
-  name: 'NewRecipes',
-  data() {
-    return {
-      recipes: [],
-    };
-  },
-  computed: {
-    ...mapGetters(['categoryName']),
-  },
-  async created() {
-    await this.$store.dispatch('getCategories');
-    this.recipes = await this.$store.dispatch('getNewRecipes');
-  },
-  methods: {
-    servings(recipe) {
-      return recipe.servings
-        ? ` voor ${recipe.servings} ${this.persons(recipe)}`
-        : '';
-    },
-    persons(recipe) {
-      return recipe.servings === 1 ? 'persoon' : 'personen';
-    },
-  },
-  components: {
-    Icon,
-  },
-};
-</script>

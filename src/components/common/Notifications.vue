@@ -16,8 +16,9 @@
     </li>
   </ul>
 </template>
-<script>
+<script lang="ts">
 import { mapState } from 'vuex';
+import store from '@/store';
 
 export default {
   name: 'Notifications',
@@ -25,8 +26,8 @@ export default {
     ...mapState(['notifications']),
   },
   methods: {
-    dismiss(uuid) {
-      this.$store.commit('dismiss', uuid);
+    dismiss(uuid: string) {
+      store.commit('dismiss', uuid);
     },
   },
 };

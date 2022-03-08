@@ -1,3 +1,26 @@
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import { useStore } from 'vuex';
+import { Mutations } from '@/models/store.model';
+import Icon from '@/components/common/Icon.vue';
+import { vFocus } from '@/components/common/directives/focus.directive';
+
+const store = useStore();
+const searchValue = ref<string>('');
+
+onMounted(() => {
+  searchValue.value = store.state.searchValue;
+});
+
+const update = () => {
+  store.commit(Mutations.SetSearch, searchValue.value);
+};
+
+const clear = () => {
+  searchValue.value = '';
+  update();
+};
+</script>
 <template>
   <section class="box box--tertiary">
     <form @submit.prevent="update">
@@ -11,41 +34,19 @@
           type="text"
           name="search"
           v-model="searchValue"
-          v-focus
+          v-focus="true"
           @input="update"
           placeholder="(ei, boerenkool, kip)"
         />
-        <button v-if="searchValue !== ''" class="search__clear-button icon-only" @click="clear()">
+        <button
+          v-if="searchValue !== ''"
+          class="search__clear-button icon-only"
+          @click="clear()"
+        >
           <i class="icon icon-close"></i>
         </button>
       </div>
     </form>
-    <icon name="mushroom"></icon>
+    <Icon name="mushroom"></Icon>
   </section>
 </template>
-<script>
-import Icon from '@/components/common/Icon.vue';
-export default {
-  name: 'Search',
-  data() {
-    return {
-      searchValue: '',
-    };
-  },
-  created() {
-    this.searchValue = this.$store.state.searchValue;
-  },
-  methods: {
-    update() {
-      this.$store.commit('setSearch', this.searchValue);
-    },
-    clear() {
-      this.searchValue = '';
-      this.update();
-    },
-  },
-  components: {
-    Icon,
-  },
-};
-</script>

@@ -25,16 +25,16 @@ export default createRouter({
       beforeEnter: verifyCook,
       component: List,
     },
-    // {
-    //   path: '/list/search/:value',
-    //   beforeEnter: verifyCook,
-    //   component: List,
-    // },
-    // {
-    //   path: '/list/category/:slug',
-    //   beforeEnter: verifyCook,
-    //   component: List,
-    // },
+    {
+      path: '/list/search/:value',
+      beforeEnter: verifyCook,
+      component: List,
+    },
+    {
+      path: '/list/category/:slug',
+      beforeEnter: verifyCook,
+      component: List,
+    },
     // {
     //   path: '/recipe/new/edit',
     //   beforeEnter: verifyChef,

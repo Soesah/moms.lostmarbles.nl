@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { User } from '@/models/user.model';
-import { StoreActions } from '@/store';
+import { Actions } from '@/models/store.model';
 import Icon from '@/components/common/Icon.vue';
 import { vFocus } from '@/components/common/directives/focus.directive';
 
@@ -13,7 +13,7 @@ const auth = ref<Partial<User>>({ name: '' });
 const redirect = store.state.redirect;
 
 const submit = async () => {
-  const status = await store.dispatch(StoreActions.Login, {
+  const status = await store.dispatch(Actions.Login, {
     type: 'cook',
     auth: auth.value,
   });

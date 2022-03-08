@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import { Change } from '@/models/changes.model';
-import { StoreActions } from '@/store';
+import { Actions } from '@/models/store.model';
 import Icon from '@/components/common/Icon.vue';
 import { longDate } from '@/components/common/filters/date.filter';
 
@@ -10,7 +10,7 @@ const store = useStore();
 const latestChange = ref<Change | null>(null);
 
 onMounted(async () => {
-  latestChange.value = await store.dispatch(StoreActions.GetLatestChange);
+  latestChange.value = await store.dispatch(Actions.GetLatestChange);
 });
 </script>
 <template>

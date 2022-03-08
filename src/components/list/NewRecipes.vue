@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
-import { StoreActions } from '@/store';
 import { Recipe } from '@/models/recipe.model';
+import { Actions } from '@/models/store.model';
 import Icon from '@/components/common/Icon.vue';
 import { longDate } from '@/components/common/filters/date.filter';
 
@@ -19,8 +19,8 @@ const servings = (recipe: Recipe): string => {
 };
 
 onMounted(async () => {
-  await store.dispatch(StoreActions.GetCategories);
-  recipes.value = await store.dispatch(StoreActions.GetNewRecipes);
+  await store.dispatch(Actions.GetCategories);
+  recipes.value = await store.dispatch(Actions.GetNewRecipes);
 });
 </script>
 <template>

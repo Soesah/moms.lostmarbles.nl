@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { Recipe } from '@/models/recipe.model';
 import { Change, changeText } from '@/models/changes.model';
+import { Actions } from '@/models/store.model';
 import Icon from '@/components/common/Icon.vue';
 import { longDate } from '@/components/common/filters/date.filter';
 
@@ -19,7 +20,7 @@ const changes = ref<Change[]>([]);
 const update = async () => {
   const data = await store.dispatch('getRecipeChangeLog', recipe);
   changes.value = data ? data : [];
-  store.dispatch('getUsers');
+  store.dispatch(Actions.GetUsers);
 };
 
 watch(recipe, update);

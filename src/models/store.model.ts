@@ -25,6 +25,7 @@ export enum Mutations {
   AddMenuItems = 'AddMenuItems',
   RemoveMenuGroup = 'RemoveMenuGroup',
   SetSearch = 'SetSearch',
+  SetEditUser = 'SetEditUser',
 }
 
 export enum Actions {
@@ -35,5 +36,7 @@ export enum Actions {
   GetRecipeById = 'GetRecipeById',
   GetCategories = 'GetCategories',
   GetLatestChange = 'GetLatestChange',
+  GetUsers = 'GetUsers',
+  SaveUser = 'SaveUser',
   AddNote = 'AddNote',
 }

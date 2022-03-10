@@ -1,3 +1,81 @@
+<script lang="ts" setup>
+import { computed, onMounted, onUnmounted, watch } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute, useRouter } from 'vue-router';
+import { Recipe } from '@/models/recipe.model';
+import { AuthLevel } from '../models/auth.model';
+import { MenuGroup } from '@/models/menu.model';
+import { Actions, Mutations } from '@/models/store.model';
+import PageMenu from '@/components/common/PageMenu.vue';
+import RecipeForm from '@/components/recipe/form/RecipeForm.vue';
+
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
+const recipe = computed<Recipe>(() => store.state.recipe);
+
+onMounted(() => {
+  update();
+  store.commit(Mutations.AddMenuItems, [
+    {
+      label: 'Stoppen met bewerken',
+      target: `/recipe/${route.params.slug}`,
+      group: MenuGroup.Admin,
+      level: AuthLevel.Cook,
+    },
+    {
+      label: 'Terug naar de lijst',
+      target: '/list',
+      group: MenuGroup.Admin,
+      level: AuthLevel.Cook,
+    },
+  ]);
+  store.commit(Mutations.SetEditing, true);
+});
+
+onUnmounted(() => {
+  store.commit(Mutations.RemoveMenuGroup, MenuGroup.Admin);
+  store.commit(Mutations.SetEditing, false);
+});
+
+watch(recipe, () => {
+  store.commit(Mutations.AddMenuItems, [
+    {
+      label: 'Terug naar recept',
+      target: `/recipe/${recipe.value.slug}`,
+      group: MenuGroup.Admin,
+      level: AuthLevel.Cook,
+    },
+  ]);
+});
+
+const update = () => {
+  const slug = route.params.slug;
+  const id = route.params.id;
+  if (!slug && !id) {
+    store.dispatch(Actions.NewRecipe);
+  }
+  if (slug) {
+    store.dispatch(Actions.GetRecipeBySlug, slug);
+  }
+  if (id) {
+    store.dispatch(Actions.GetRecipeById, id);
+  }
+  store.dispatch(Actions.GetCategories);
+};
+
+const saveRecipe = async (recipe: Recipe) => {
+  const update = await store.dispatch(Actions.SaveRecipe, recipe);
+
+  if (update) {
+    router.push(`/recipe/${update.slug}`);
+  }
+};
+
+const cancel = () => {
+  router.push(`/recipe/${route.params.slug}`);
+};
+</script>
 <template>
   <main class="columns">
     <section class="column main-large" v-if="recipe">
@@ -8,99 +86,14 @@
         config="/config.json"
         @save="saveRecipe"
       ></jigsaw>-->
-      <recipe-form
+      <RecipeForm
         :recipe="recipe"
         @cancel="cancel"
         @updateRecipe="saveRecipe"
-      ></recipe-form>
+      ></RecipeForm>
     </section>
     <section class="column">
-      <page-menu></page-menu>
+      <PageMenu></PageMenu>
     </section>
   </main>
 </template>
-<script>
-import PageMenu from '@/components/common/PageMenu';
-import RecipeForm from '@/components/recipe/form/RecipeForm.vue';
-import { MenuGroup } from '@/models/menu.model';
-import { AuthLevel } from '../models/auth.model';
-import { mapState } from 'vuex';
-
-export default {
-  name: 'EditRecipe',
-  computed: {
-    ...mapState(['recipe']),
-    xml() {
-      if (this.recipe) {
-        return `/api/recipe/${this.recipe.id}/${this.recipe.category_id}/xml`;
-      }
-
-      return '';
-    },
-  },
-  created() {
-    this.update();
-    this.$store.commit(Mutations.AddMenuItems, [
-      {
-        label: 'Stoppen met bewerken',
-        target: `/recipe/${this.$route.params.slug}`,
-        group: MenuGroup.Admin,
-        level: AuthLevel.Cook,
-      },
-      {
-        label: 'Terug naar de lijst',
-        target: '/list',
-        group: MenuGroup.Admin,
-        level: AuthLevel.Cook,
-      },
-    ]);
-    this.$store.commit('toggleEditing', true);
-  },
-  destroyed() {
-    this.$store.commit(Mutations.RemoveMenuGroup, MenuGroup.Admin);
-    this.$store.commit('toggleEditing', false);
-  },
-  watch: {
-    recipe() {
-      this.$store.commit(Mutations.AddMenuItems, [
-        {
-          label: 'Terug naar recept',
-          target: `/recipe/${this.recipe.slug}`,
-          group: MenuGroup.Admin,
-          level: AuthLevel.Cook,
-        },
-      ]);
-    },
-  },
-  methods: {
-    update() {
-      const slug = this.$route.params.slug;
-      const id = this.$route.params.id;
-      if (!slug && !id) {
-        this.$store.dispatch('newRecipe');
-      }
-      if (slug) {
-        this.$store.dispatch('getRecipeBySlug', slug);
-      }
-      if (id) {
-        this.$store.dispatch('getRecipeById', id);
-      }
-      this.$store.dispatch(Actions.GetCategories);
-    },
-    async saveRecipe(recipe) {
-      const update = await this.$store.dispatch('saveRecipe', recipe);
-
-      if (update) {
-        this.$router.push(`/recipe/${update.slug}`);
-      }
-    },
-    cancel() {
-      this.$router.push(`/recipe/${this.$route.params.slug}`);
-    },
-  },
-  components: {
-    PageMenu,
-    RecipeForm,
-  },
-};
-</script>

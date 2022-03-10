@@ -1,3 +1,27 @@
+<script lang="ts" setup>
+import { PropType } from 'vue';
+import { Ingredient } from '@/models/recipe.model';
+import { InputComposable } from './input.composable';
+
+const { index, modelValue } = defineProps({
+  index: {
+    type: Number,
+    default: -1,
+  },
+  modelValue: {
+    type: Object as PropType<Ingredient>,
+    default: () => ({ name: '' }),
+  },
+});
+
+const emit = defineEmits(['update:modelValue', 'remove']);
+
+const { val, update } = InputComposable<Ingredient>(modelValue, emit);
+
+const removeIngredient = (index: number) => {
+  emit('remove', index);
+};
+</script>
 <template>
   <div class="form-item form-multiple">
     <label></label>
@@ -21,25 +45,3 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'RecipeIngredientsFields',
-  props: {
-    index: {
-      type: Number,
-    },
-  },
-  created() {
-    this.val = this.$attrs.value;
-  },
-  methods: {
-    update() {
-      this.$emit('input', this.val);
-    },
-    removeIngredient() {
-      this.$emit('remove', this.index);
-    },
-  },
-};
-</script>

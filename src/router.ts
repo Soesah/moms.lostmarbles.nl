@@ -34,31 +34,31 @@ export default createRouter({
       beforeEnter: verifyCook,
       component: List,
     },
-    // {
-    //   path: '/recipe/new/edit',
-    //   beforeEnter: verifyChef,
-    //   component: EditRecipe,
-    // },
+    {
+      path: '/recipe/new/edit',
+      beforeEnter: verifyChef,
+      component: EditRecipe,
+    },
     {
       path: '/recipe/by-id/:id',
       beforeEnter: verifyCook,
       component: Recipe,
     },
-    // {
-    //   path: '/recipe/by-id/:id/edit',
-    //   beforeEnter: verifyCook,
-    //   component: EditRecipe,
-    // },
+    {
+      path: '/recipe/by-id/:id/edit',
+      beforeEnter: verifyCook,
+      component: EditRecipe,
+    },
     {
       path: '/recipe/:slug',
       beforeEnter: verifyCook,
       component: Recipe,
     },
-    // {
-    //   path: '/recipe/:slug/edit',
-    //   beforeEnter: verifyChef,
-    //   component: EditRecipe,
-    // },
+    {
+      path: '/recipe/:slug/edit',
+      beforeEnter: verifyChef,
+      component: EditRecipe,
+    },
     {
       path: '/admin',
       beforeEnter: verifyAdmin,
@@ -76,7 +76,7 @@ export default createRouter({
     },
     {
       path: '/user/logout',
-      redirect: '/user/logout',
+      redirect: '/',
       beforeEnter: logoutUser,
     },
   ],

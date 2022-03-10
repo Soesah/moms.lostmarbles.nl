@@ -1,3 +1,38 @@
+<script lang="ts" setup>
+import { PropType } from 'vue';
+import { Ingredient } from '@/models/recipe.model';
+import { InputComposable } from './input.composable';
+import RecipeIngredientFields from './RecipeIngredientFields.vue';
+
+const { modelValue } = defineProps({
+  label: {
+    type: String,
+    required: true,
+  },
+  modelValue: {
+    type: Object as PropType<Ingredient[]>,
+    default: () => [],
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const { val, update } = InputComposable<Ingredient[]>(modelValue, emit);
+
+const addIngredient = () => {
+  val.value = [
+    ...val.value,
+    {
+      name: '',
+    },
+  ];
+  update();
+};
+const removeIngredient = (index: number) => {
+  val.value.splice(index, 1);
+  update();
+};
+</script>
 <template>
   <div v-if="val">
     <h3 v-text="label"></h3>
@@ -6,63 +41,15 @@
       <div>Naam</div>
       <div>Opmerking</div>
     </div>
-    <template v-for="(ingredient, index) in val">
-      <recipe-ingredient-fields
+    <template v-for="(ingredient, index) in val" :key="`ingredient-${index}`">
+      <RecipeIngredientFields
         v-model="val[index]"
-        :key="`ingredient-${index}`"
         :index="index"
         @remove="removeIngredient"
-      ></recipe-ingredient-fields>
+      ></RecipeIngredientFields>
     </template>
     <div class="form-option">
       <button type="button" @click="addIngredient">Ingredient toevoegen</button>
     </div>
   </div>
 </template>
-
-<script>
-import RecipeIngredientFields from './RecipeIngredientFields';
-
-export default {
-  name: 'RecipeFormIngredients',
-  data() {
-    return {
-      val: [],
-    };
-  },
-  created() {
-    this.val = this.$attrs.value;
-  },
-  props: {
-    label: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      default: 'text',
-    },
-  },
-  methods: {
-    update() {
-      this.$emit('input', this.val);
-    },
-    addIngredient() {
-      this.val = [
-        ...this.val,
-        {
-          name: '',
-        },
-      ];
-      this.update();
-    },
-    removeIngredient(index) {
-      this.val.splice(index, 1);
-      this.update();
-    },
-  },
-  components: {
-    RecipeIngredientFields,
-  },
-};
-</script>

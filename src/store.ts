@@ -89,8 +89,8 @@ export default createStore<MomsState>({
     [Mutations.RemoveMenuGroup](state: MomsState, group: MenuGroup) {
       state.menu = [...state.menu.filter((item) => item.group !== group)];
     },
-    toggleEditing(state: MomsState, active: boolean) {
-      state.editing = active;
+    [Mutations.SetEditing](state: MomsState, editing: boolean) {
+      state.editing = editing;
     },
     notify(state: MomsState, notification: Notification) {
       state.notifications = [...state.notifications, notification];
@@ -123,7 +123,8 @@ export default createStore<MomsState>({
 
       return response.status;
     },
-    async logout({ commit }: Context) {
+    async [Actions.Logout]({ commit }: Context) {
+      console.log('logout');
       await authService.logout();
 
       commit('setAuth', defaultAuth);
@@ -165,7 +166,7 @@ export default createStore<MomsState>({
       );
       commit('selectCategory', category);
     },
-    async newRecipe({ commit }: Context) {
+    async [Actions.NewRecipe]({ commit }: Context) {
       commit('setRecipe', {
         id: null,
         category_id: 6,
@@ -209,7 +210,7 @@ export default createStore<MomsState>({
         commit('setRecipe', response.data);
       }
     },
-    async removeRecipe(_: Context, id: number): Promise<boolean> {
+    async [Actions.RemoveRecipe](_: Context, id: number): Promise<boolean> {
       const data = await recipeService.remove(id);
       return data.status ? true : false;
     },
@@ -221,7 +222,7 @@ export default createStore<MomsState>({
       const data = await recipeService.getRecipeLatestChanges(recipe);
       return data.status ? data.data : [];
     },
-    async saveRecipe({ dispatch }: Context, recipe: Recipe) {
+    async [Actions.SaveRecipe]({ dispatch }: Context, recipe: Recipe) {
       dispatch('notify', {
         type: NotificationType.Info,
         text: 'Bezig met opslaan...',

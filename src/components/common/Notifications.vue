@@ -1,3 +1,14 @@
+<script lang="ts" setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const notifications = computed(() => store.state.notifications);
+
+const dismiss = (uuid: string) => {
+  store.commit('dismiss', uuid);
+};
+</script>
 <template>
   <ul class="notifications" v-if="notifications.length">
     <li
@@ -16,19 +27,3 @@
     </li>
   </ul>
 </template>
-<script lang="ts">
-import { mapState } from 'vuex';
-import store from '@/store';
-
-export default {
-  name: 'Notifications',
-  computed: {
-    ...mapState(['notifications']),
-  },
-  methods: {
-    dismiss(uuid: string) {
-      store.commit('dismiss', uuid);
-    },
-  },
-};
-</script>

@@ -26,12 +26,10 @@ const update = async () => {
   if (id) {
     await store.dispatch(Actions.GetRecipeById, parseInt(id, 10));
   }
-};
-watch(route, update);
-
-watch(recipe.value, (r: Recipe) => {
   const siteName = 'Moms Lost Marbles';
-  document.title = r ? `${r.name} - ${siteName}` : siteName;
+  document.title = recipe.value
+    ? `${recipe.value.name} - ${siteName}`
+    : siteName;
   document.body.scrollIntoView();
 
   store.commit(Mutations.RemoveMenuGroup, MenuGroup.RecipeEdit);
@@ -39,13 +37,14 @@ watch(recipe.value, (r: Recipe) => {
     {
       label: 'Recept bewerken',
       target: route.params.slug
-        ? `/recipe/${r.slug}/edit`
-        : `/recipe/by-id/${r.id}/edit`,
+        ? `/recipe/${recipe.value.slug}/edit`
+        : `/recipe/by-id/${recipe.value.id}/edit`,
       group: MenuGroup.RecipeEdit,
       level: AuthLevel.Chef,
     },
   ]);
-});
+};
+watch(route, update);
 
 onMounted(async () => {
   await update();

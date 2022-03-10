@@ -1,8 +1,42 @@
+<script lang="ts" setup>
+import { PropType } from 'vue';
+import { Step } from '@/models/recipe.model';
+import { InputComposable } from './input.composable';
+
+const { modelValue } = defineProps({
+  label: {
+    type: String,
+    required: true,
+  },
+  modelValue: {
+    type: Object as PropType<Step[]>,
+    default: () => [],
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const { val, update } = InputComposable<Step[]>(modelValue, emit);
+
+const addStep = () => {
+  val.value = [
+    ...val.value,
+    {
+      contents: '',
+    },
+  ];
+  update();
+};
+const removeStep = (index: number) => {
+  val.value.splice(index, 1);
+  update();
+};
+</script>
 <template>
   <div v-if="val">
     <h3 v-text="label"></h3>
-    <template v-for="(step, index) in val">
-      <div class="form-item" :key="index">
+    <template v-for="(step, index) in val" :key="index">
+      <div class="form-item">
         <label></label>
         <textarea
           v-model="val[index].contents"
@@ -21,45 +55,3 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'RecipeFormSteps',
-  data() {
-    return {
-      val: [],
-    };
-  },
-  created() {
-    this.val = this.$attrs.value;
-  },
-  props: {
-    label: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      default: 'text',
-    },
-  },
-  methods: {
-    update() {
-      this.$emit('input', this.val);
-    },
-    addStep() {
-      this.val = [
-        ...this.val,
-        {
-          name: '',
-        },
-      ];
-      this.update();
-    },
-    removeStep(index) {
-      this.val.splice(index, 1);
-      this.update();
-    },
-  },
-};
-</script>

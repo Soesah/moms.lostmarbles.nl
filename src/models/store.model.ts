@@ -26,14 +26,19 @@ export enum Mutations {
   RemoveMenuGroup = 'RemoveMenuGroup',
   SetSearch = 'SetSearch',
   SetEditUser = 'SetEditUser',
+  SetEditing = 'SetEditing',
 }
 
 export enum Actions {
   Login = 'Login',
+  Logout = 'Logout',
   GetRecipes = 'GetRecipes',
   GetNewRecipes = 'GetNewRecipes',
   GetRecipeBySlug = 'GetRecipeBySlug',
   GetRecipeById = 'GetRecipeById',
+  NewRecipe = 'NewRecipe',
+  SaveRecipe = 'SaveRecipe',
+  RemoveRecipe = 'RemoveRecipe',
   GetCategories = 'GetCategories',
   GetLatestChange = 'GetLatestChange',
   GetUsers = 'GetUsers',

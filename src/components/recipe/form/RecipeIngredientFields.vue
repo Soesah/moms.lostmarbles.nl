@@ -40,7 +40,7 @@ const removeIngredient = (index: number) => {
     />
     <div class="field-option">
       <button type="button" class="remove" @click="removeIngredient(index)">
-        x
+        <i class="icon icon-close"></i>
       </button>
     </div>
   </div>

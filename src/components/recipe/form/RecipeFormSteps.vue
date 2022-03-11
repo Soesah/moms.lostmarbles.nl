@@ -45,7 +45,7 @@ const removeStep = (index: number) => {
         ></textarea>
         <div class="field-option">
           <button type="button" class="remove" @click="removeStep(index)">
-            x
+            <i class="icon icon-close"></i>
           </button>
         </div>
       </div>

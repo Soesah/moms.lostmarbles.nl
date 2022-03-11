@@ -15,11 +15,11 @@ const persons = computed(() => {
 <template>
   <section class="summary" v-if="recipe.servings || recipe.preparation_time">
     <div class="servings" v-if="recipe.servings">
-      <div class="icon icon-person"></div>
+      <i class="icon icon-restaurant"></i>
       {{ recipe.servings }} {{ persons }}
     </div>
     <div class="preparation-time" v-if="recipe.preparation_time">
-      <div class="icon icon-clock"></div>
+      <i class="icon icon-schedule"></i>
       {{ recipe.preparation_time }}
     </div>
   </section>

@@ -72,8 +72,12 @@ const remove = async () => {
       v-model="updated.steps"
     ></RecipeFormSteps>
     <div class="form-option">
-      <button type="submit">Opslaan</button>
-      <button v-if="isAdmin" type="button" @click="remove">Remove</button>
+      <button type="submit">
+        <i class="icon icon-approve"></i>&nbsp;Opslaan
+      </button>
+      <button v-if="isAdmin" type="button" @click="remove">
+        <i class="icon icon-forbidden"></i>&nbsp;Remove
+      </button>
       <button type="button" @click="cancel">Stoppen</button>
     </div>
   </form>

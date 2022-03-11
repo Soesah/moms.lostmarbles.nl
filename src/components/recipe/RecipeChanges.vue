@@ -18,7 +18,7 @@ const { recipe } = defineProps({
 const changes = ref<Change[]>([]);
 
 const update = async () => {
-  const data = await store.dispatch('getRecipeChangeLog', recipe);
+  const data = await store.dispatch(Actions.GetRecipeChangeLog, recipe);
   changes.value = data ? data : [];
   store.dispatch(Actions.GetUsers);
 };

@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import { Mutations } from '@/models/store.model';
 
 const store = useStore();
 const notifications = computed(() => store.state.notifications);
 
 const dismiss = (uuid: string) => {
-  store.commit('dismiss', uuid);
+  store.commit(Mutations.DismissNotification, uuid);
 };
 </script>
 <template>

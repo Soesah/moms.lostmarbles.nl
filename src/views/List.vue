@@ -4,7 +4,7 @@ import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { MenuGroup } from '../models/menu.model';
 import { AuthLevel } from '../models/auth.model';
-import { Mutations } from '@/models/store.model';
+import { Actions, Mutations } from '@/models/store.model';
 import Search from '@/components/list/Search.vue';
 import Categories from '@/components/list/Categories.vue';
 import RecipeList from '@/components/list/RecipeList.vue';
@@ -15,7 +15,7 @@ const route = useRoute();
 
 const update = async () => {
   const slug = route.params.slug;
-  await store.dispatch('selectCategoryBySlug', slug);
+  await store.dispatch(Actions.SelectCategoryBySlug, slug);
 };
 
 watch(route, update);

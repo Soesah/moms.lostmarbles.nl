@@ -49,32 +49,32 @@ export default createStore<MomsState>({
     editing: false,
   },
   mutations: {
-    setAuth(state: MomsState, auth: Auth) {
+    [Mutations.SetAuth](state: MomsState, auth: Auth) {
       state.auth = auth;
     },
-    setRedirect(state: MomsState, redirect: string) {
+    [Mutations.SetRedirect](state: MomsState, redirect: string) {
       state.redirect = redirect;
     },
-    setUsers(state: MomsState, users: User[]) {
+    [Mutations.SetUsers](state: MomsState, users: User[]) {
       state.users = users;
     },
-    updateUser(state: MomsState, user: User) {
+    [Mutations.UpdateUser](state: MomsState, user: User) {
       const index = state.users.findIndex((u: User) => u.id === user.id);
       state.users.splice(index, 1, user);
     },
     [Mutations.SetEditUser](state: MomsState, user: User) {
       state.edit_user = user;
     },
-    setCategories(state: MomsState, categories: Category[]) {
+    [Mutations.SetCategories](state: MomsState, categories: Category[]) {
       state.categories = categories;
     },
-    setRecipes(state: MomsState, recipes: Recipe[]) {
+    [Mutations.SetRecipes](state: MomsState, recipes: Recipe[]) {
       state.recipes = recipes;
     },
-    setRecipe(state: MomsState, recipe: Recipe) {
+    [Mutations.SetRecipe](state: MomsState, recipe: Recipe) {
       state.recipe = recipe;
     },
-    selectCategory(state: MomsState, category: Category) {
+    [Mutations.SelectCategory](state: MomsState, category: Category) {
       state.category_id = category ? category.id : -1;
     },
     [Mutations.SetSearch](state: MomsState, value: string) {
@@ -92,10 +92,10 @@ export default createStore<MomsState>({
     [Mutations.SetEditing](state: MomsState, editing: boolean) {
       state.editing = editing;
     },
-    notify(state: MomsState, notification: Notification) {
+    [Mutations.AddNotification](state: MomsState, notification: Notification) {
       state.notifications = [...state.notifications, notification];
     },
-    dismiss(state: MomsState, uuid: string) {
+    [Mutations.DismissNotification](state: MomsState, uuid: string) {
       state.notifications = [
         ...state.notifications.filter((n) => n.uuid !== uuid),
       ];
@@ -104,12 +104,12 @@ export default createStore<MomsState>({
   actions: {
     async [Actions.GetUsers]({ commit }: Context) {
       const response = await userService.getList();
-      commit('setUsers', response.data);
+      commit(Mutations.SetUsers, response.data);
     },
-    async getAuth({ commit }: Context): Promise<Auth> {
+    async [Actions.GetAuth]({ commit }: Context): Promise<Auth> {
       const response = await authService.get();
 
-      commit('setAuth', response.data);
+      commit(Mutations.SetAuth, response.data);
 
       return response.data;
     },
@@ -119,7 +119,7 @@ export default createStore<MomsState>({
     ): Promise<boolean> {
       const response = await authService.login(auth, type);
 
-      commit('setAuth', response.data);
+      commit(Mutations.SetAuth, response.data);
 
       return response.status;
     },
@@ -127,36 +127,36 @@ export default createStore<MomsState>({
       console.log('logout');
       await authService.logout();
 
-      commit('setAuth', defaultAuth);
+      commit(Mutations.SetAuth, defaultAuth);
     },
     async [Actions.SaveUser]({ commit, dispatch }: Context, user: User) {
-      dispatch('notify', {
+      dispatch(Actions.AddNotification, {
         type: NotificationType.Info,
         text: 'Bezig met opslaan...',
       });
       const response = await userService.update(user);
       if (response.status) {
-        dispatch('notify', {
+        dispatch(Actions.AddNotification, {
           type: NotificationType.Success,
           text: 'Gebruiker opgeslagen',
         });
-        commit('updateUser', response.data);
+        commit(Mutations.UpdateUser, response.data);
       }
       commit(Mutations.SetEditUser, null);
     },
     async [Actions.GetCategories]({ commit }: Context) {
       const response = await categoryService.getList();
-      commit('setCategories', response.data);
+      commit(Mutations.SetCategories, response.data);
     },
     async [Actions.GetRecipes]({ commit }: Context, force = false) {
       const response = await recipeService.getList(force);
-      commit('setRecipes', response.data);
+      commit(Mutations.SetRecipes, response.data);
     },
     async [Actions.GetNewRecipes]() {
       const response = await recipeService.getNewRecipes();
       return response.status ? response.data : [];
     },
-    async selectCategoryBySlug(
+    async [Actions.SelectCategoryBySlug](
       { state, commit, dispatch }: Context,
       slug: string,
     ) {
@@ -164,10 +164,10 @@ export default createStore<MomsState>({
       const category = state.categories.find(
         (cat: Category) => cat.slug === slug,
       );
-      commit('selectCategory', category);
+      commit(Mutations.SelectCategory, category);
     },
     async [Actions.NewRecipe]({ commit }: Context) {
-      commit('setRecipe', {
+      commit(Mutations.SetRecipe, {
         id: null,
         category_id: 6,
         name: '',
@@ -193,7 +193,7 @@ export default createStore<MomsState>({
       if (found) {
         const { id } = found;
         const response = await recipeService.get(id);
-        commit('setRecipe', response.data);
+        commit(Mutations.SetRecipe, response.data);
       }
     },
     async [Actions.GetRecipeById](
@@ -207,7 +207,7 @@ export default createStore<MomsState>({
       if (found) {
         const { id } = found;
         const response = await recipeService.get(id);
-        commit('setRecipe', response.data);
+        commit(Mutations.SetRecipe, response.data);
       }
     },
     async [Actions.RemoveRecipe](_: Context, id: number): Promise<boolean> {
@@ -218,24 +218,24 @@ export default createStore<MomsState>({
       const data = await recipeService.getLatestChange();
       return data.status ? data.data : null;
     },
-    async getRecipeChangeLog({}, recipe: Recipe): Promise<Change[]> {
+    async [Actions.GetRecipeChangeLog]({}, recipe: Recipe): Promise<Change[]> {
       const data = await recipeService.getRecipeLatestChanges(recipe);
       return data.status ? data.data : [];
     },
     async [Actions.SaveRecipe]({ dispatch }: Context, recipe: Recipe) {
-      dispatch('notify', {
+      dispatch(Actions.AddNotification, {
         type: NotificationType.Info,
         text: 'Bezig met opslaan...',
       });
       const data = await recipeService.save(recipe);
       if (data.status) {
-        dispatch('notify', {
+        dispatch(Actions.AddNotification, {
           type: NotificationType.Success,
           text: 'Recept opgeslagen',
         });
         dispatch(Actions.GetRecipes, true);
       } else {
-        dispatch('notify', {
+        dispatch(Actions.AddNotification, {
           type: NotificationType.Error,
           text: data.data,
         });
@@ -248,32 +248,38 @@ export default createStore<MomsState>({
       d: NoteData,
     ): Promise<boolean> {
       const author = state.auth.name;
-      dispatch('notify', {
+      dispatch(Actions.AddNotification, {
         type: NotificationType.Info,
         text: 'Bezig met opslaan...',
       });
       const data = await recipeService.addNote(d.recipe, { ...d.note, author });
-      dispatch('notify', {
+      dispatch(Actions.AddNotification, {
         type: NotificationType.Success,
         text: 'Notitie toegevoegd',
       });
       if (data.status) {
-        commit('setRecipe', data.data);
+        commit(Mutations.SetRecipe, data.data);
       }
       return data.status;
     },
-    notify({ commit, dispatch }: Context, notification: Notification) {
+    [Actions.AddNotification](
+      { commit, dispatch }: Context,
+      notification: Notification,
+    ) {
       const uuid = UUIDUtil.uuid4();
-      commit('notify', { ...notification, uuid });
-      dispatch('dismiss', {
+      commit(Mutations.AddNotification, { ...notification, uuid });
+      dispatch(Actions.DismissNotification, {
         uuid,
         text: notification.text,
         delay: delays[notification.type],
       });
     },
-    dismiss({ commit }: Context, data: { uuid: string; delay: number }) {
+    [Actions.DismissNotification](
+      { commit }: Context,
+      data: { uuid: string; delay: number },
+    ) {
       setTimeout(() => {
-        commit('dismiss', data.uuid);
+        commit(Mutations.DismissNotification, data.uuid);
       }, data.delay);
     },
   },

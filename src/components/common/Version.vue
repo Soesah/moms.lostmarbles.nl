@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import versionInfo from '@/version.json';
 import { Version } from '@/models/version.model';
 import { computed } from 'vue';

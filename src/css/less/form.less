@@ -21,6 +21,7 @@ form {
       margin-right: 0;
     }
   }
+  display: flex;
 }
 
 .form-buttons button {
@@ -31,6 +32,7 @@ form {
   margin-top: 0.5em;
   padding-left: 22%;
   display: flex;
+  white-space: nowrap;
   button {
     margin-left: 0.5em;
     width: 200px;
@@ -120,6 +122,12 @@ button {
   cursor: hand;
   width: 100%;
   flex: 6;
+  &[disabled] {
+    background-color: gray;
+    border-color: #404040;
+    color: lightgrey;
+    opacity: 0.5;
+  }
 }
 
 .icon-only {
@@ -129,7 +137,7 @@ button {
   border: none;
 }
 
-button:hover {
+button:not([disabled]):hover {
   background-color: #5b662b;
 }
 
@@ -142,7 +150,14 @@ button:hover {
 }
 
 .field-option {
-  .remove {
+  display: flex;
+  align-items: flex-start;
+  align-content: flex-start;
+
+  &.icon-buttons {
+    width: 60px;
+  }
+  button {
     text-align: center;
     padding: 4px 2px 3px;
     font-weight: bold;

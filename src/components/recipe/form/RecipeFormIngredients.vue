@@ -32,6 +32,19 @@ const removeIngredient = (index: number) => {
   val.value.splice(index, 1);
   update();
 };
+
+const moveIngredient = (fromIndex: number, toIndex: number) => {
+  const items = [...val.value];
+  val.value = [];
+  update();
+  console.log(items.map((i) => i.name));
+  const item = { ...items[fromIndex] };
+  items.splice(fromIndex, 1);
+  items.splice(toIndex, 0, item);
+  console.log(items.map((i) => i.name));
+  val.value = [...items];
+  update();
+};
 </script>
 <template>
   <div v-if="val">
@@ -41,11 +54,13 @@ const removeIngredient = (index: number) => {
       <div>Naam</div>
       <div>Opmerking</div>
     </div>
-    <template v-for="(ingredient, index) in val" :key="`ingredient-${index}`">
+    <template v-for="(_, index) in val" :key="`ingredient-${index}`">
       <RecipeIngredientFields
         v-model="val[index]"
         :index="index"
+        :count="val.length"
         @remove="removeIngredient"
+        @move="moveIngredient"
       ></RecipeIngredientFields>
     </template>
     <div class="form-option">

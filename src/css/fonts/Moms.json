@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "name": "Jigsaw",
+    "name": "Moms",
     "lastOpened": 0,
-    "created": 1552722295184
+    "created": 1647025608994
   },
   "iconSets": [
     {
@@ -30,7 +30,11 @@
         {
           "ligatures": "access_time, query_builder, schedule",
           "id": 4,
-          "order": 0
+          "order": 43,
+          "prevSize": 24,
+          "code": 59573,
+          "name": "schedule",
+          "tempChar": ""
         },
         {
           "ligatures": "accessibility",
@@ -74,7 +78,7 @@
           "prevSize": 24,
           "code": 57669,
           "name": "add",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "add_a_photo",
@@ -234,7 +238,7 @@
         {
           "ligatures": "archive",
           "id": 44,
-          "order": 32,
+          "order": 0,
           "prevSize": 24,
           "code": 57673,
           "name": "archive",
@@ -771,7 +775,7 @@
         {
           "ligatures": "check_box",
           "id": 149,
-          "order": 33,
+          "order": 0,
           "prevSize": 24,
           "code": 59444,
           "name": "check_box_checked",
@@ -780,7 +784,7 @@
         {
           "ligatures": "check_box_outline_blank",
           "id": 150,
-          "order": 34,
+          "order": 0,
           "prevSize": 24,
           "code": 59445,
           "name": "check_box_outline_blank",
@@ -827,7 +831,7 @@
           "prevSize": 24,
           "code": 58829,
           "name": "close",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "clear_all",
@@ -872,7 +876,7 @@
         {
           "ligatures": "code",
           "id": 166,
-          "order": 21,
+          "order": 0,
           "prevSize": 24,
           "code": 59503,
           "name": "xml",
@@ -1190,7 +1194,7 @@
           "prevSize": 24,
           "code": 58897,
           "name": "forbidden",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "do_not_disturb_off",
@@ -1214,7 +1218,7 @@
           "prevSize": 24,
           "code": 59510,
           "name": "approve",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "done_all",
@@ -1654,7 +1658,7 @@
         {
           "ligatures": "format_align_center",
           "id": 320,
-          "order": 3,
+          "order": 0,
           "prevSize": 24,
           "code": 57908,
           "name": "format_align_center",
@@ -1663,7 +1667,7 @@
         {
           "ligatures": "format_align_justify",
           "id": 321,
-          "order": 4,
+          "order": 0,
           "prevSize": 24,
           "code": 57909,
           "name": "format_align_justify",
@@ -1672,7 +1676,7 @@
         {
           "ligatures": "format_align_left",
           "id": 322,
-          "order": 5,
+          "order": 0,
           "prevSize": 24,
           "code": 57910,
           "name": "format_align_left",
@@ -1681,7 +1685,7 @@
         {
           "ligatures": "format_align_right",
           "id": 323,
-          "order": 6,
+          "order": 0,
           "prevSize": 24,
           "code": 57911,
           "name": "format_align_right",
@@ -1690,7 +1694,7 @@
         {
           "ligatures": "format_bold",
           "id": 324,
-          "order": 2,
+          "order": 0,
           "prevSize": 24,
           "code": 57912,
           "name": "format_bold",
@@ -1729,7 +1733,7 @@
         {
           "ligatures": "format_italic",
           "id": 331,
-          "order": 7,
+          "order": 0,
           "prevSize": 24,
           "code": 57919,
           "name": "format_italic",
@@ -1743,7 +1747,7 @@
         {
           "ligatures": "format_list_bulleted",
           "id": 333,
-          "order": 8,
+          "order": 0,
           "prevSize": 24,
           "code": 57921,
           "name": "format_list_bulleted",
@@ -1752,7 +1756,7 @@
         {
           "ligatures": "format_list_numbered",
           "id": 334,
-          "order": 9,
+          "order": 0,
           "prevSize": 24,
           "code": 57922,
           "name": "format_list_numbered",
@@ -1766,7 +1770,7 @@
         {
           "ligatures": "format_quote",
           "id": 336,
-          "order": 10,
+          "order": 0,
           "prevSize": 24,
           "code": 57924,
           "name": "format_quote",
@@ -1800,7 +1804,7 @@
         {
           "ligatures": "format_underlined",
           "id": 342,
-          "order": 16,
+          "order": 0,
           "prevSize": 24,
           "code": 57929,
           "name": "format_underlined",
@@ -1994,7 +1998,7 @@
         {
           "ligatures": "help",
           "id": 380,
-          "order": 12,
+          "order": 0,
           "prevSize": 24,
           "code": 59527,
           "name": "help",
@@ -2098,11 +2102,11 @@
         {
           "ligatures": "info",
           "id": 400,
-          "order": 15,
+          "order": 41,
           "prevSize": 24,
           "code": 59534,
           "name": "info",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "info_outline",
@@ -2161,7 +2165,7 @@
           "prevSize": 24,
           "code": 58131,
           "name": "chevron_down",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "keyboard_arrow_left",
@@ -2170,7 +2174,7 @@
           "prevSize": 24,
           "code": 58132,
           "name": "chevron_left",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "keyboard_arrow_right",
@@ -2179,7 +2183,7 @@
           "prevSize": 24,
           "code": 58133,
           "name": "chevron_right",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "keyboard_arrow_up",
@@ -2188,7 +2192,7 @@
           "prevSize": 24,
           "code": 58134,
           "name": "chevron_up",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "keyboard_backspace",
@@ -3198,7 +3202,7 @@
         {
           "ligatures": "refresh",
           "id": 616,
-          "order": 29,
+          "order": 0,
           "prevSize": 24,
           "code": 58837,
           "name": "redo",
@@ -3211,7 +3215,7 @@
           "prevSize": 24,
           "code": 57691,
           "name": "remove",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "remove_circle_outline",
@@ -3251,7 +3255,7 @@
         {
           "ligatures": "replay",
           "id": 625,
-          "order": 40,
+          "order": 0,
           "prevSize": 24,
           "code": 57410,
           "name": "undo",
@@ -3294,12 +3298,16 @@
           "prevSize": 24,
           "code": 57346,
           "name": "warning",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "restaurant",
           "id": 633,
-          "order": 0
+          "order": 42,
+          "prevSize": 24,
+          "code": 58732,
+          "name": "restaurant",
+          "tempChar": ""
         },
         {
           "ligatures": "restore_page",
@@ -3458,7 +3466,7 @@
           "prevSize": 24,
           "code": 59576,
           "name": "settings",
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "ligatures": "settings_applications",
@@ -4053,7 +4061,7 @@
         {
           "ligatures": "unarchive",
           "id": 783,
-          "order": 35,
+          "order": 0,
           "prevSize": 24,
           "code": 57705,
           "name": "unarchive",
@@ -4257,7 +4265,7 @@
         {
           "ligatures": "wallpaper",
           "id": 823,
-          "order": 30,
+          "order": 0,
           "prevSize": 24,
           "code": 57788,
           "name": "format_insert_image",
@@ -16216,7 +16224,6 @@
       "colorThemeIdx": 0
     }
   ],
-  "uid": -1,
   "preferences": {
     "showGlyphs": true,
     "showCodes": true,
@@ -16226,11 +16233,11 @@
     "fontPref": {
       "prefix": "icon-",
       "metadata": {
-        "fontFamily": "jigsaw-icons",
+        "fontFamily": "moms-icons",
         "majorVersion": 1,
         "minorVersion": 0,
-        "fontURL": "https://www.front-crafter.nl/jigsaw",
-        "description": "Icons for the Jigsaw XML Editor"
+        "fontURL": "https://moms.lostmarbles.nl",
+        "description": "Icons for Moms Lost Marbles"
       },
       "metrics": {
         "emSize": 1024,
@@ -16256,5 +16263,6 @@
     },
     "historySize": 50,
     "gridSize": 16
-  }
+  },
+  "uid": -1
 }

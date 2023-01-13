@@ -1,16 +1,11 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { Recipe } from '@/models/recipe.model';
 import { Actions } from '@/models/store.model';
 
 const store = useStore();
-const { recipe } = defineProps({
-  recipe: {
-    type: Recipe,
-    required: true,
-  },
-});
+const recipe = computed<Recipe>(() => store.state.recipe);
 
 const showForm = ref<boolean>(false);
 const note = ref({
@@ -23,7 +18,7 @@ const addNote = async () => {
     return;
   }
   const result = await store.dispatch(Actions.AddNote, {
-    recipe,
+    recipe: recipe.value,
     note: { ...note.value, paragraph: note.value.paragraph.split('\n') },
   });
 
@@ -38,7 +33,7 @@ const addNote = async () => {
 </script>
 <template>
   <section class="box box--tertiary">
-    <h3>Notities</h3>
+    <h3>Notities voor {{ recipe.name }}</h3>
     <p v-if="!recipe.notes">Geen notities...</p>
     <section class="note" v-for="(note, index) in recipe.notes" :key="index">
       <div class="author" v-text="note.author"></div>

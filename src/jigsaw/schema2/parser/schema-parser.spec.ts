@@ -432,7 +432,7 @@ describe('Schema Parser', () => {
     });
   });
 
-  fdescribe('Recipe schema with complexContent and extension', () => {
+  describe('Recipe schema with complexContent and extension', () => {
     beforeEach(() => {
       arrange(schemaDocument6);
       parser = new SchemaParser(sourceDocument);

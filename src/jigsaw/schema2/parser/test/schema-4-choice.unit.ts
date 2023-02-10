@@ -3,7 +3,7 @@
   mixed elements
 */
 
-export const schemaWidthChoice = `<?xml version="1.0"?>
+export const schemaWithChoice = `<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:element name="doc">

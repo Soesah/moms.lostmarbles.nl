@@ -155,6 +155,8 @@ export class SchemaParser {
     const { type, complexType } = this.parseSchemaType(name, el);
     schemaEl.setSchemaType(type);
 
+    console.log(name, type, !!complexType, complexType?.getAttribute('name'));
+
     if (complexType) {
       const isMixed = getSchemaAttributeMixed(
         complexType.getAttribute(SchemaAttributes.Mixed),
@@ -217,8 +219,6 @@ export class SchemaParser {
       throw new Error(`Could not parse custom type "${type}"`);
     }
 
-    this.addComplexType(type, complexType);
-
     return complexType;
   }
 
@@ -271,6 +271,8 @@ export class SchemaParser {
       }
     });
 
+    // this.addComplexType(hashCode(sequenceEl.outerHTML), complexType);
+
     return complexType;
   }
 
@@ -314,6 +316,8 @@ export class SchemaParser {
       complexType.addElement(element);
     });
 
+    // this.addComplexType(hashCode(sequenceEl.outerHTML), complexType);
+
     return complexType;
   }
 
@@ -346,12 +350,12 @@ export class SchemaParser {
         throw new Error(`Unable to parse complexContent ${actionEl.tagName}`);
     }
 
-    // console.log(
-    //   'complexType',
-    //   sourceComplexType.outerHTML,
-    //   'actionEl',
-    //   actionEl.outerHTML,
-    // );
+    console.log(
+      'complexType',
+      sourceComplexType.outerHTML,
+      'actionEl',
+      actionEl.outerHTML,
+    );
     // use the complex content
     // use the sequence or choice or simpleType
     // apply the extension or restriction

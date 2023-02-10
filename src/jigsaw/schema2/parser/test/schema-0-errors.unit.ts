@@ -1,4 +1,4 @@
-export const schemaDocument2a = `<?xml version="1.0"?>
+export const schemaNamelessElement = `<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:element name="doc">
@@ -11,14 +11,14 @@ export const schemaDocument2a = `<?xml version="1.0"?>
 
 </xs:schema>`;
 
-export const schemaDocument2b = `<?xml version="1.0"?>
+export const schemaNoTypeElement = `<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:element name="doc"/>
 
 </xs:schema>`;
 
-export const schemaDocument2c = `<?xml version="1.0"?>
+export const schemaEmptyComplexType = `<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:element name="doc">
@@ -27,7 +27,7 @@ export const schemaDocument2c = `<?xml version="1.0"?>
 
 </xs:schema>`;
 
-export const schemaDocument2d = `<?xml version="1.0"?>
+export const schemaNamelessAttribute = `<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:element name="doc">
@@ -38,7 +38,7 @@ export const schemaDocument2d = `<?xml version="1.0"?>
 
 </xs:schema>`;
 
-export const schemaDocument2e = `<?xml version="1.0"?>
+export const schemaNoTypeAttribute = `<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:element name="doc">
@@ -49,7 +49,7 @@ export const schemaDocument2e = `<?xml version="1.0"?>
 
 </xs:schema>`;
 
-export const schemaDocument2f = `<?xml version="1.0"?>
+export const schemaNoCustomTypeAttribute = `<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:element name="doc">

@@ -8,16 +8,16 @@ export enum SchemaAttributeType {
 }
 
 export enum SchemaElementType {
-  String,
-  Decimal,
-  Integer,
-  Boolean,
-  Date,
-  Time,
-  Empty,
-  ComplexTypeChoice,
-  ComplexTypeSequence,
-  ComplexContent,
+  String = 'string',
+  Decimal = 'decimal',
+  Integer = 'integer',
+  Boolean = 'boolean',
+  Date = 'date',
+  Time = 'time',
+  Empty = 'empty',
+  ComplexTypeChoice = 'complextypechoice',
+  ComplexTypeSequence = 'complextypesequence',
+  ComplexContent = 'complexcontent',
 }
 
 export enum SchemaSimpleType {

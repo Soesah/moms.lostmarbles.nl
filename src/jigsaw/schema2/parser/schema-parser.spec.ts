@@ -1,20 +1,24 @@
 import { SchemaParser } from './schema-parser';
+// test files
+import { simpleSchema } from './test/schema-single-root.unit';
 import {
-  schemaDocument1,
-  schemaDocument2,
   schemaDocument2a,
   schemaDocument2b,
-  schemaDocument2c,
   schemaDocument2d,
   schemaDocument2e,
   schemaDocument2f,
-  schemaDocument2g,
-  schemaDocument3,
-  schemaDocument4,
-  schemaDocument5,
-  schemaDocument6,
-  schemaDocument7,
-} from './schema-parser.unit';
+  schemaDocument2c,
+} from './test/schema-errors.unit';
+import { schemaWithOnlyAttribute } from './test/schema-attributes.unit';
+import { schemaDocumentWithRefs } from './test/schema-refs.unit';
+import { SchemaChoice } from '../definition/schema-choice';
+import { SchemaElement } from '../definition/schema-element';
+import { schemaWidthChoice } from './test/schema-choice.unit';
+import { schemaWithTypeRefs } from './test/schema-type-refs.unit';
+import { schemaWithAbstracts } from './test/schema-abstracts.unit';
+import { schemaWithExtension } from './test/schema-extension.unit';
+import { schemaRecipe } from './test/schema-recipe.unit';
+
 import { SchemaDocument } from '../schema-document';
 import {
   SchemaElementType,
@@ -22,8 +26,6 @@ import {
   SchemaAttributeType,
 } from '../definition/schema.info';
 import { SchemaSequence } from '../definition/schema-sequence';
-import { SchemaChoice } from '../definition/schema-choice';
-import { SchemaElement } from '../definition/schema-element';
 
 describe('Schema Parser', () => {
   let sourceDocument: Document;
@@ -105,7 +107,7 @@ describe('Schema Parser', () => {
 
   describe('Schema with an empty element, but with attributes', () => {
     beforeEach(() => {
-      arrange(schemaDocument2g);
+      arrange(schemaWithOnlyAttribute);
       parser = new SchemaParser(sourceDocument);
       schema = parser.parse();
     });
@@ -130,7 +132,7 @@ describe('Schema Parser', () => {
 
   describe('Schema with sequence', () => {
     beforeEach(() => {
-      arrange(schemaDocument2);
+      arrange(simpleSchema);
       parser = new SchemaParser(sourceDocument);
       schema = parser.parse();
     });
@@ -172,7 +174,7 @@ describe('Schema Parser', () => {
 
   describe('Schema with references', () => {
     beforeEach(() => {
-      arrange(schemaDocument3);
+      arrange(schemaDocumentWithRefs);
       parser = new SchemaParser(sourceDocument);
       schema = parser.parse();
     });
@@ -226,7 +228,7 @@ describe('Schema Parser', () => {
 
   describe('Schema with choice', () => {
     beforeEach(() => {
-      arrange(schemaDocument4);
+      arrange(schemaWidthChoice);
       parser = new SchemaParser(sourceDocument);
       schema = parser.parse();
     });
@@ -290,7 +292,7 @@ describe('Schema Parser', () => {
 
   describe('Schema with type references', () => {
     beforeEach(() => {
-      arrange(schemaDocument5);
+      arrange(schemaWithTypeRefs);
       parser = new SchemaParser(sourceDocument);
       schema = parser.parse();
     });
@@ -364,7 +366,7 @@ describe('Schema Parser', () => {
 
   describe('Schema with abstract elements', () => {
     beforeEach(() => {
-      arrange(schemaDocument7);
+      arrange(schemaWithAbstracts);
       parser = new SchemaParser(sourceDocument);
       schema = parser.parse();
     });
@@ -434,7 +436,7 @@ describe('Schema Parser', () => {
 
   describe('Recipe schema with complexContent and extension', () => {
     beforeEach(() => {
-      arrange(schemaDocument6);
+      arrange(schemaWithExtension);
       parser = new SchemaParser(sourceDocument);
       schema = parser.parse();
     });
@@ -442,11 +444,16 @@ describe('Schema Parser', () => {
     it('should parse the schema correctly', () => {
       expect(schema.rootElements.length).toBe(2);
     });
+
+    it('should parse the author element correctly', () => {
+      const element = schema.getElement('author');
+      expect(element.attributes.length).toEqual(1);
+    });
   });
 
   xdescribe('Recipe schema with recurring structures', () => {
     beforeEach(() => {
-      arrange(schemaDocument1);
+      arrange(schemaRecipe);
       parser = new SchemaParser(sourceDocument);
       schema = parser.parse();
     });

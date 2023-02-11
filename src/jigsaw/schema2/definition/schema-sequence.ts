@@ -17,9 +17,15 @@ export class SchemaSequenceItem {
 }
 
 export class SchemaSequence {
+  public hash: string;
   public type: SchemaElementType = SchemaElementType.ComplexTypeSequence;
   public isMixed: boolean = false;
+  public isRecursive: boolean = false;
   public elements: SchemaSequenceItem[] = [];
+
+  constructor(hash: string) {
+    this.hash = hash;
+  }
 
   public addElement(
     element: SchemaElement | SchemaChoice,
@@ -36,5 +42,9 @@ export class SchemaSequence {
   public getElement(name: string): SchemaElement | SchemaChoice | null {
     const item = this.elements.find((element) => element.name === name);
     return item ? item.element : null;
+  }
+
+  public setRecursive(isRecursive: boolean) {
+    this.isRecursive = isRecursive;
   }
 }

@@ -5,12 +5,22 @@ import { SchemaSequence } from './schema-sequence';
 
 export class SchemaElement {
   public name: string;
+  public path: string = '';
   public type: SchemaElementType = SchemaElementType.String;
   public complexType?: SchemaChoice | SchemaSequence;
   public attributes: SchemaAttribute[] = [];
 
   constructor(name: string) {
     this.name = name;
+  }
+
+  public setPath(path: string) {
+    this.path = path;
+  }
+
+  public get lastPath(): string {
+    const parts = this.path.split('/');
+    return parts[parts.length - 1];
   }
 
   public setSchemaType(type: SchemaElementType) {

@@ -158,3 +158,5 @@ export const schemaRecipe = `<?xml version="1.0"?>
   <xs:element name="superscript" type="text-type" substitutionGroup="inline.abstract"/>
 
 </xs:schema>`;
+
+// step[mixed]/emphasis[mixed]/emphasis

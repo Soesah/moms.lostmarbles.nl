@@ -16,6 +16,7 @@ import { schemaWithTypeRefs } from './test/schema-5-type-refs.unit';
 import { schemaWithAbstracts } from './test/schema-6-abstracts.unit';
 import { schemaWithExtension } from './test/schema-7-extension.unit';
 import { schemaRecipe } from './test/schema-8-recipe.unit';
+import { schemaArticle } from './test/schema-9-complex.unit';
 
 import { SchemaChoice } from '../definition/schema-choice';
 import { SchemaElement } from '../definition/schema-element';
@@ -454,7 +455,7 @@ describe('Schema Parser', () => {
     });
   });
 
-  xdescribe('Recipe schema with recurring structures', () => {
+  describe('Recipe schema with recurring structures', () => {
     beforeEach(() => {
       arrange(schemaRecipe);
       parser = new SchemaParser(sourceDocument);
@@ -462,7 +463,77 @@ describe('Schema Parser', () => {
     });
 
     it('should parse the schema correctly', () => {
-      expect(schema.rootElements.length).toBe(1);
+      expect(schema.rootElements.length).toBe(18);
+    });
+  });
+
+  describe('Article schema with recurring structures', () => {
+    beforeEach(() => {
+      arrange(schemaArticle);
+      parser = new SchemaParser(sourceDocument);
+      schema = parser.parse();
+    });
+
+    it('should parse the schema correctly', () => {
+      expect(schema.rootElements.length).toBe(4);
+    });
+    it('should parse the rootelements correctly', () => {
+      expect(schema.rootElements.map((el) => el.name)).toEqual([
+        'article',
+        'section',
+        'title',
+        'item',
+      ]);
+    });
+    xit('should parse the article element correctly', () => {
+      const complexType = schema.getElement('article').complexType;
+      if (!complexType) {
+        throw new Error('Testing wrong schema');
+      }
+
+      expect(complexType.elements.map((el) => el.name)).toEqual([
+        'title',
+        'paragraph',
+        'list',
+        'section',
+      ]);
+
+      expect(complexType.isRecursive).toBe(false);
+      expect(
+        schema.getElement('article').attributes.map((attr) => attr.name),
+      ).toEqual(['id']);
+    });
+    it('should parse the section element correctly', () => {
+      const complexType = schema.getElement('section').complexType;
+      if (!complexType) {
+        throw new Error('Testing wrong schema');
+      }
+      expect(complexType.isRecursive).toBe(true);
+      expect(complexType.elements.map((el) => el.name)).toEqual([
+        'title',
+        'paragraph',
+        'list',
+        'section',
+      ]);
+
+      expect(
+        schema.getElement('section').attributes.map((attr) => attr.name),
+      ).toEqual(['id']);
+    });
+    it('should parse the paragraph element correctly', () => {
+      const complexType = schema.getElement('section/paragraph').complexType;
+      if (!complexType) {
+        throw new Error('Testing wrong schema');
+      }
+
+      expect(complexType.isMixed).toBe(true);
+
+      expect(complexType.elements.map((el) => el.name)).toEqual([
+        'emphasis',
+        'strong',
+      ]);
+
+      expect(schema.getElement('section/paragraph').attributes.length).toBe(0);
     });
   });
 });

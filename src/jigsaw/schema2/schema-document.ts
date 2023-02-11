@@ -30,10 +30,21 @@ export class SchemaDocument {
   }
 
   public getElement(name: string): SchemaElement {
-    const el = this.rootElements.find((element) => element.name === name);
-    if (!el) {
-      throw new Error(`Schema document does not define the ${name} element`);
+    if (name.indexOf('/') === -1) {
+      const el = this.rootElements.find((element) => element.name === name);
+      if (!el) {
+        throw new Error(`Schema document does not define the ${name} element`);
+      }
+      return el;
     }
-    return el;
+    // ugly, should be smarter
+    const parts = name.split('/');
+    const el = this.rootElements.find((element) => element.name === parts[0]);
+    if (!el) {
+      throw new Error(
+        `Schema document does not define the ${parts[0]} element`,
+      );
+    }
+    return el.getElement(parts[1]) as SchemaElement;
   }
 }

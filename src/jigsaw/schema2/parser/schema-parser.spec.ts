@@ -485,7 +485,7 @@ describe('Schema Parser', () => {
         'item',
       ]);
     });
-    xit('should parse the article element correctly', () => {
+    it('should parse the article element correctly', () => {
       const complexType = schema.getElement('article').complexType;
       if (!complexType) {
         throw new Error('Testing wrong schema');

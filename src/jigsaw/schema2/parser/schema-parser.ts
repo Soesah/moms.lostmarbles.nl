@@ -312,7 +312,7 @@ export class SchemaParser {
       });
     }
 
-    if (parent.lastPath === name) {
+    if (parent.lastPath === name && parent.path !== name) {
       complexType.setRecursive(true);
     }
 
@@ -368,7 +368,7 @@ export class SchemaParser {
       });
     }
 
-    if (parent.lastPath === name) {
+    if (parent.lastPath === name && parent.path !== name) {
       complexType.setRecursive(true);
     }
 

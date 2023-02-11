@@ -3,6 +3,7 @@ import {
   SchemaElements,
   SchemaAttributes,
   SchemaElementType,
+  SchemaComplexType,
 } from '../definition/schema.info';
 import {
   getChildElementsByTagName,
@@ -12,6 +13,7 @@ import {
   getSchemaAttributeUse,
   getSchemaAttributeOccurs,
   getSchemaAttributeMixed,
+  hashCode,
 } from './schema-parser.utils';
 import { SchemaElement } from '../definition/schema-element';
 import { SchemaAttribute } from '../definition/schema-attribute';
@@ -21,6 +23,7 @@ import { SchemaChoice } from '../definition/schema-choice';
 export class SchemaParser {
   public schema: Document;
   public complexTypes: Map<string, Element> = new Map();
+  public parsedComplexTypes: Map<string, SchemaComplexType> = new Map();
   public abstractElements: Map<string, Element[]> = new Map();
 
   constructor(schema: Document) {
@@ -46,6 +49,14 @@ export class SchemaParser {
 
   public getComplexType(name: string): Element | undefined {
     return this.complexTypes.get(name);
+  }
+
+  public addParsedComplexType(name: string, complexType: SchemaComplexType) {
+    this.parsedComplexTypes.set(name, complexType);
+  }
+
+  public getParsedComplexType(name: string): SchemaComplexType | undefined {
+    return this.parsedComplexTypes.get(name);
   }
 
   private parseAbstractElements() {
@@ -155,33 +166,18 @@ export class SchemaParser {
     const { type, complexType } = this.parseSchemaType(name, el);
     schemaEl.setSchemaType(type);
 
-    console.log(name, type, !!complexType, complexType?.getAttribute('name'));
-
     if (complexType) {
-      const isMixed = getSchemaAttributeMixed(
-        complexType.getAttribute(SchemaAttributes.Mixed),
+      schemaEl.setComplexType(
+        this.parseComplexType(type, complexType, schemaEl),
       );
 
-      if (type === SchemaElementType.ComplexTypeSequence && complexType) {
-        schemaEl.setComplexType(
-          this.parseComplexTypeSequence(complexType.firstElementChild),
-        );
-      }
-
-      if (type === SchemaElementType.ComplexTypeChoice && complexType) {
-        schemaEl.setComplexType(
-          this.parseComplexTypeChoice(complexType.firstElementChild, isMixed),
-        );
-      }
-
-      if (type === SchemaElementType.ComplexContent && complexType) {
-        schemaEl.setComplexType(
-          this.parseComplexContent(complexType.firstElementChild, isMixed),
-        );
-      }
-
-      schemaEl.setAttributes(...this.parseAttributes(complexType));
+      schemaEl.setAttributes(
+        ...schemaEl.attributes, // copy over from what complexContent might have set
+        ...this.parseAttributes(complexType),
+      );
     }
+
+    // console.log(name, schemaEl);
 
     return schemaEl;
   }
@@ -220,6 +216,33 @@ export class SchemaParser {
     }
 
     return complexType;
+  }
+
+  private parseComplexType(
+    type: SchemaElementType,
+    complexType: Element,
+    schemaEl?: SchemaElement,
+  ): SchemaComplexType {
+    const isMixed = getSchemaAttributeMixed(
+      complexType.getAttribute(SchemaAttributes.Mixed),
+    );
+
+    if (type === SchemaElementType.ComplexTypeSequence && complexType) {
+      return this.parseComplexTypeSequence(complexType.firstElementChild);
+    }
+
+    if (type === SchemaElementType.ComplexTypeChoice && complexType) {
+      return this.parseComplexTypeChoice(
+        complexType.firstElementChild,
+        isMixed,
+      );
+    }
+
+    if (type === SchemaElementType.ComplexContent && complexType) {
+      return this.parseComplexContent(complexType.firstElementChild, schemaEl);
+    }
+
+    return new SchemaSequence();
   }
 
   private parseComplexTypeSequence(
@@ -271,7 +294,7 @@ export class SchemaParser {
       }
     });
 
-    // this.addComplexType(hashCode(sequenceEl.outerHTML), complexType);
+    this.addParsedComplexType(hashCode(sequenceEl.outerHTML), complexType);
 
     return complexType;
   }
@@ -316,14 +339,14 @@ export class SchemaParser {
       complexType.addElement(element);
     });
 
-    // this.addComplexType(hashCode(sequenceEl.outerHTML), complexType);
+    this.addParsedComplexType(hashCode(choiceEl.outerHTML), complexType);
 
     return complexType;
   }
 
   private parseComplexContent(
     contentEl: Element | null,
-    isMixed: boolean,
+    schemaEl?: SchemaElement,
   ): SchemaChoice | SchemaSequence {
     if (!contentEl || !contentEl.firstElementChild) {
       throw new Error('Content has no element or content');
@@ -336,6 +359,8 @@ export class SchemaParser {
       );
     }
     const sourceComplexType = this.parseReferenceType(base);
+    const type = getTypeFromComplexType(sourceComplexType);
+    const complexType = this.parseComplexType(type, sourceComplexType);
 
     if (!sourceComplexType) {
       throw new Error(`No complexType found named ${base}`);
@@ -345,22 +370,15 @@ export class SchemaParser {
       case SchemaElements.Restriction:
         break;
       case SchemaElements.Extension:
+        if (schemaEl) {
+          schemaEl.setAttributes(...this.parseAttributes(actionEl));
+        }
         break;
       default:
         throw new Error(`Unable to parse complexContent ${actionEl.tagName}`);
     }
 
-    console.log(
-      'complexType',
-      sourceComplexType.outerHTML,
-      'actionEl',
-      actionEl.outerHTML,
-    );
-    // use the complex content
-    // use the sequence or choice or simpleType
-    // apply the extension or restriction
-
-    return new SchemaChoice();
+    return complexType;
   }
 
   private getReferenceElement(name: string): Element | undefined {

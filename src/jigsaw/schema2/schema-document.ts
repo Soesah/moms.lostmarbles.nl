@@ -1,4 +1,7 @@
+import { SchemaChoice } from './definition/schema-choice';
 import { SchemaElement } from './definition/schema-element';
+import { SchemaSequence } from './definition/schema-sequence';
+import { SchemaComplexType } from './definition/schema.info';
 
 export class SchemaDocument {
   public rootElements: SchemaElement[] = [];

@@ -99,7 +99,7 @@ export const getSchemaElementType = (
 // get the type from the complexType
 export const getTypeFromComplexType = (
   complexType: Element,
-): SchemaElementType | null => {
+): SchemaElementType => {
   const complexTypeElement = complexType.firstElementChild;
 
   if (complexTypeElement) {
@@ -113,11 +113,8 @@ export const getTypeFromComplexType = (
       case SchemaElements.Attribute:
         return SchemaElementType.Empty;
     }
-  } else {
-    return SchemaElementType.Empty;
   }
-
-  return null;
+  return SchemaElementType.Empty;
 };
 
 // gets child elements by type, or all if no type is provided

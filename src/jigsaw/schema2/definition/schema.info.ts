@@ -1,3 +1,6 @@
+import { SchemaChoice } from './schema-choice';
+import { SchemaSequence } from './schema-sequence';
+
 export enum SchemaAttributeType {
   String,
   Decimal,
@@ -8,16 +11,16 @@ export enum SchemaAttributeType {
 }
 
 export enum SchemaElementType {
-  String = 'string',
-  Decimal = 'decimal',
-  Integer = 'integer',
-  Boolean = 'boolean',
-  Date = 'date',
-  Time = 'time',
-  Empty = 'empty',
-  ComplexTypeChoice = 'complextypechoice',
-  ComplexTypeSequence = 'complextypesequence',
-  ComplexContent = 'complexcontent',
+  String,
+  Decimal,
+  Integer,
+  Boolean,
+  Date,
+  Time,
+  Empty,
+  ComplexTypeChoice,
+  ComplexTypeSequence,
+  ComplexContent,
 }
 
 export enum SchemaSimpleType {
@@ -65,3 +68,5 @@ export enum SchemaConstants {
   One = '1',
   True = 'true',
 }
+
+export type SchemaComplexType = SchemaChoice | SchemaSequence;

@@ -445,8 +445,11 @@ describe('Schema Parser', () => {
       expect(schema.rootElements.length).toBe(2);
     });
 
-    xit('should parse the author element correctly', () => {
+    it('should parse the author element correctly', () => {
       const element = schema.getElement('author');
+
+      expect(element.type).toEqual(SchemaElementType.ComplexContent);
+      expect(element.complexType?.elements.length).toEqual(2);
       expect(element.attributes.length).toEqual(1);
     });
   });

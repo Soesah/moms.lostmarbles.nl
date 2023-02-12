@@ -49,9 +49,9 @@ editor.on('changedFocus', (evt: EditorEvent) => {
 </script>
 <template>
   <div class="editor" v-if="ready">
-    <JigsawToolbar></JigsawToolbar>
-    <EditableContent></EditableContent>
-    <JigsawContextMenu></JigsawContextMenu>
-    <JigsawNodeToolbar></JigsawNodeToolbar>
+    <!-- <JigsawToolbar /> -->
+    <EditableContent />
+    <!-- <JigsawContextMenu />
+    <JigsawNodeToolbar /> -->
   </div>
 </template>

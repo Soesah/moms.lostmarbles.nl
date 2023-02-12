@@ -18,9 +18,9 @@ export type ComplexNodes = ComplexNode | ComplexText;
 export class ComplexNode extends ComplexNodeBase {
   public uuid: string;
   public name: string;
-  public structure: ComplexChoice | ComplexSequence | null = null;
   public attributes: ComplexAttribute[] = [];
   public schema: SchemaElement;
+  public childNodes: ComplexNodes[] = [];
 
   constructor(
     name: string,
@@ -43,10 +43,6 @@ export class ComplexNode extends ComplexNodeBase {
       this.schema.complexType &&
       this.schema.complexType.isMixed
     );
-  }
-
-  get childNodes(): ComplexNode[] {
-    return this.structure ? this.structure.nodes : [];
   }
 
   get firstChild(): ComplexNodes {
@@ -125,12 +121,8 @@ export class ComplexNode extends ComplexNodeBase {
       : [this, ...path];
   }
 
-  public setStructure(structure: ComplexSequence | ComplexChoice) {
-    this.structure = structure;
-  }
-
   public setChildNodes(childNodes: ComplexNodes[]) {
-    // this.childNodes = [...childNodes];
+    this.childNodes = [...childNodes];
   }
 
   public setAttributes(attributes: ComplexAttribute[]) {

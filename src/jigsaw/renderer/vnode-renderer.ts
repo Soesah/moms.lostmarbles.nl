@@ -10,7 +10,6 @@ export class VNodeRenderer {
   private schema: SchemaDocument;
 
   constructor(h: any, document: ComplexDocument) {
-    console.log({ h, document, schema: document.schema });
     this.h = h;
     this.xml = document.getXML(true);
     this.schema = document.schema;
@@ -71,6 +70,6 @@ export class VNodeRenderer {
     const node = getElementByXpath(this.xml, `//*[@*[. = "${nodeId}"]]`);
     const nodeName = node.nodeName;
 
-    return false; //this.schema.isMixed(nodeName);
+    return this.schema.isMixed(nodeName);
   }
 }

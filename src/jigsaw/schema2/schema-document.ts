@@ -47,4 +47,10 @@ export class SchemaDocument {
     }
     return el.getElement(parts[1]) as SchemaElement;
   }
+
+  public isMixed(name: string): boolean {
+    const element = this.getElement(name);
+
+    return element.complexType ? element.complexType.isMixed : false;
+  }
 }

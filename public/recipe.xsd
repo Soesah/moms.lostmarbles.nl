@@ -16,10 +16,14 @@
         <xs:element ref="notes" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="id" type="xs:integer" use="required"/>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="creation_date" type="xs:string" use="required"/>
+      <xs:attribute name="modification_date" type="xs:string" use="required"/>
       <xs:attribute name="slug" type="xs:string" use="required"/>
       <xs:attribute name="servings" type="xs:string" use="required"/>
       <xs:attribute name="preparation_time" type="xs:string" use="required"/>
       <xs:attribute name="category_id" type="xs:integer" use="required"/>
+      <xs:attribute name="xml:lang" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 

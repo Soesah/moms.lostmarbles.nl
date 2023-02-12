@@ -23,6 +23,14 @@ export class SchemaElement {
     return parts[parts.length - 1];
   }
 
+  public get isComplexType(): boolean {
+    return [
+      SchemaElementType.ComplexTypeChoice,
+      SchemaElementType.ComplexTypeSequence,
+      SchemaElementType.ComplexContent,
+    ].includes(this.type);
+  }
+
   public setSchemaType(type: SchemaElementType) {
     this.type = type;
   }
@@ -38,7 +46,7 @@ export class SchemaElement {
   public getElement(name: string): SchemaElement | SchemaChoice {
     if (!this.complexType) {
       throw new Error(
-        `Cannot call getElement on non-complexType element ${this.name}`,
+        `Cannot call getElement(${name}) on non-complexType element ${this.name}`,
       );
     }
 
@@ -49,5 +57,39 @@ export class SchemaElement {
       );
     }
     return el;
+  }
+
+  public getAttribute(name: string): SchemaAttribute {
+    if (!this.complexType) {
+      throw new Error(
+        `Cannot call getAttribute(${name}) on non-complexType element ${this.name}`,
+      );
+    }
+    const schemaAttribute = this.attributes.find((a) => a.name === name);
+
+    if (!schemaAttribute) {
+      throw new Error(
+        `Attribute ${name} is not defined by element ${this.name}`,
+      );
+    }
+    return schemaAttribute;
+  }
+
+  public getMinOccurs(name: string): number {
+    // if (this.complexType) {
+    //   const occ = this.complexType.elements.find((def) => {
+    //     if (isSchemaElementOccurance(def)) {
+    //       return def.name === name;
+    //     } else if (isSchemaChoice(def)) {
+    //       // console.log(def);
+    //       return 1;
+    //     }
+    //   });
+    //   if (occ) {
+    //     return occ.min;
+    //   }
+    // }
+    return 1;
+    throw new Error(`${name} is not a child of ${this.name}`);
   }
 }

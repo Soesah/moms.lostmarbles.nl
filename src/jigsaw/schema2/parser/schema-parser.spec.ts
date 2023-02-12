@@ -465,6 +465,36 @@ describe('Schema Parser', () => {
     it('should parse the schema correctly', () => {
       expect(schema.rootElements.length).toBe(18);
     });
+    it('should parse the recipe element correctly', () => {
+      const complexType = schema.getElement('recipe').complexType;
+      if (!complexType) {
+        throw new Error('Testing wrong schema');
+      }
+
+      expect(complexType.elements.map((el) => el.name)).toEqual([
+        'image',
+        'title',
+        'cook',
+        'servings',
+        'preparation-time',
+        'description',
+        'ingredients',
+        'preparation',
+        'notes',
+      ]);
+
+      expect(complexType.isRecursive).toBe(false);
+      expect(
+        schema.getElement('recipe').attributes.map((attr) => attr.name),
+      ).toEqual([
+        'id',
+        'slug',
+        'servings',
+        'preparation_time',
+        'category_id',
+        'xml:lang',
+      ]);
+    });
   });
 
   describe('Article schema with recurring structures', () => {

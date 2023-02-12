@@ -1,8 +1,8 @@
-import { SchemaAttribute } from '../../schema/definition/schema-attribute';
 import {
   SchemaAttributeUse,
-  SchemaType,
-} from '../../schema/definition/schema-definition';
+  SchemaAttributeType,
+} from '@/jigsaw/schema2/definition/schema.info';
+import { SchemaAttribute } from '../../schema2/definition/schema-attribute';
 
 export class ComplexAttribute {
   public name: string;
@@ -15,7 +15,7 @@ export class ComplexAttribute {
     this.schema = schema;
   }
 
-  get type(): SchemaType {
+  get type(): SchemaAttributeType {
     return this.schema.type;
   }
 

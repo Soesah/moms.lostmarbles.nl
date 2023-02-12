@@ -4,8 +4,8 @@ import { ComplexSequence } from '../structure/complex-sequence';
 import { ComplexText } from './complex-text';
 import { ComplexAttribute } from './complex-attribute';
 import { UUIDUtil } from '../../util/uuid.util';
-import { SchemaElement } from '../../schema/definition/schema-element';
-import { SchemaType } from '../../schema/definition/schema-definition';
+import { SchemaElement } from '../../schema2/definition/schema-element';
+import { SchemaElementType } from '../../schema2/definition/schema.info';
 import {
   ComplexNodeBase,
   isText,
@@ -41,7 +41,7 @@ export class ComplexNode extends ComplexNodeBase {
     return !!(
       this.schema.isComplexType &&
       this.schema.complexType &&
-      this.schema.complexType.mixed
+      this.schema.complexType.isMixed
     );
   }
 
@@ -76,7 +76,7 @@ export class ComplexNode extends ComplexNodeBase {
   public canRemoveChild(child: ComplexNodes): boolean {
     if (isText(child)) {
       // a text node can be removed from a string typed element
-      return this.schema.type === SchemaType.String;
+      return this.schema.type === SchemaElementType.String;
     } else if (isComment(child)) {
       return true;
     } else if (isElement(child)) {

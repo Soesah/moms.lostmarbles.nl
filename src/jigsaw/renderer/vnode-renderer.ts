@@ -1,5 +1,5 @@
 import { VNode } from 'vue';
-import { SchemaDocument } from '../schema/schema-document';
+import { SchemaDocument } from '../schema2/schema-document';
 import { getElementByXpath } from '../util/dom.util';
 import { NodeType } from '../core/info';
 import { ComplexDocument } from '../document/complex-document';
@@ -10,6 +10,7 @@ export class VNodeRenderer {
   private schema: SchemaDocument;
 
   constructor(h: any, document: ComplexDocument) {
+    console.log({ h, document, schema: document.schema });
     this.h = h;
     this.xml = document.getXML(true);
     this.schema = document.schema;
@@ -70,6 +71,6 @@ export class VNodeRenderer {
     const node = getElementByXpath(this.xml, `//*[@*[. = "${nodeId}"]]`);
     const nodeName = node.nodeName;
 
-    return this.schema.isMixed(nodeName);
+    return false; //this.schema.isMixed(nodeName);
   }
 }

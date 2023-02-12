@@ -28,14 +28,9 @@ const { xml, stylesheet, schema, config } = defineProps({
   },
 });
 
-const ready = ref<boolean>(true);
+const ready = ref<boolean>(false);
 
-const editor = new JigsawEditor(
-  xml as string,
-  stylesheet as string,
-  schema as string,
-  config as string,
-);
+const editor = new JigsawEditor(xml, stylesheet, schema, config);
 
 editor.on('initialized', () => {
   ready.value = true;

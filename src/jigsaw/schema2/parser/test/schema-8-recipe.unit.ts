@@ -20,6 +20,7 @@ export const schemaRecipe = `<?xml version="1.0"?>
       <xs:attribute name="servings" type="xs:string" use="required"/>
       <xs:attribute name="preparation_time" type="xs:string" use="required"/>
       <xs:attribute name="category_id" type="xs:integer" use="required"/>
+      <xs:attribute name="xml:lang" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
 

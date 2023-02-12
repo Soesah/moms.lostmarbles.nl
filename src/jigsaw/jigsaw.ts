@@ -126,7 +126,9 @@ export class JigsawEditor extends EventEmitter {
     const config = await this.http.getJSON(configfile);
 
     // create a complex document representation of the xml
+    console.log(xml, xsd);
     this.document = new ComplexDocument(xml, xsd);
+    console.log(this.document);
     this.nodeConfig = new NodeConfiguration(config as NodeConfig[]);
 
     // enrich the xsl to output uuids

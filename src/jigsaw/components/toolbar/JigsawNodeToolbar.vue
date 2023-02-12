@@ -9,18 +9,18 @@ const editor = computed<JigsawEditor>(() => store.state.editor);
 const context = computed(() => store.state.context);
 
 const path = computed(() => {
-  if (context) {
-    return context.value.getPath().map((n) => n.name);
+  if (context.value) {
+    return context.value.getPath().map((n: any) => n.name);
   }
-  return editor.value.getPath().map((n) => n.name);
+  // return editor.value.getPath().map((n) => n.name);
 });
 
-const getPrettyName = (node) => {
+const getPrettyName = (node: string) => {
   return editor.value.nodeConfig.getNodePrettyName(node);
 };
-const activate = (f) => {
-  // console.log(f);
-};
+// const activate = (f) => {
+//   // console.log(f);
+// };
 </script>
 <template>
   <nav class="node-toolbar">

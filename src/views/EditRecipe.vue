@@ -8,11 +8,20 @@ import { MenuGroup } from '@/models/menu.model';
 import { Actions, Mutations } from '@/models/store.model';
 import PageMenu from '@/components/common/PageMenu.vue';
 import RecipeForm from '@/components/recipe/form/RecipeForm.vue';
+import Jigsaw from '@/jigsaw/Jigsaw.vue';
 
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
 const recipe = computed<Recipe>(() => store.state.recipe);
+
+const xml = computed<string>(() => {
+  if (recipe.value) {
+    return `/api/recipe/${recipe.value.id}/xml`;
+  }
+
+  return '';
+});
 
 onMounted(() => {
   update();
@@ -79,18 +88,18 @@ const cancel = () => {
 <template>
   <main class="columns">
     <section class="column main-large" v-if="recipe">
-      <!-- <jigsaw
+      <Jigsaw
         :xml="xml"
         schema="/recipe.xsd"
         stylesheet="/recipe.xsl"
         config="/config.json"
         @save="saveRecipe"
-      ></jigsaw>-->
-      <RecipeForm
+      ></Jigsaw>
+      <!-- <RecipeForm
         :recipe="recipe"
         @cancel="cancel"
         @updateRecipe="saveRecipe"
-      ></RecipeForm>
+      ></RecipeForm> -->
     </section>
     <section class="column">
       <PageMenu></PageMenu>

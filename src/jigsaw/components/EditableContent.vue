@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, h } from 'vue';
 import { JigsawState } from '../store';
 import { mapState } from 'vuex';
 import { JigsawEditor } from '../jigsaw';
@@ -8,10 +8,10 @@ export default defineComponent({
   name: 'EditableContent',
   computed: {
     ...mapState('jigsaw', {
-      editor: (state) => (state as JigsawState).editor as JigsawEditor,
+      editor: (state: any) => (state as JigsawState).editor as JigsawEditor,
     }),
   },
-  render(h: any) {
+  render() {
     const renderer = this.editor.getRenderer(h);
     const xhtml = this.editor.getXHTML();
     const handler = this.editor.handleDomEvent.bind(this.editor);

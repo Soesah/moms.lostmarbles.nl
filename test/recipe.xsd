@@ -20,6 +20,7 @@
       <xs:attribute name="servings" type="xs:string" use="required"/>
       <xs:attribute name="preparation_time" type="xs:string" use="required"/>
       <xs:attribute name="category_id" type="xs:integer" use="required"/>
+      <xs:attribute name="xml:lang" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -142,9 +143,9 @@
   <!-- basic elements -->
   <xs:element name="paragraph" type="text-type" substitutionGroup="block.abstract"/>
 
-  <xs:element name="list" type="list-type"  substitutionGroup="block.abstract"/>
+  <xs:element name="list" type="list-type" substitutionGroup="block.abstract"/>
 
-  <xs:element name="ordered-list" type="list-type"  substitutionGroup="block.abstract"/>
+  <xs:element name="ordered-list" type="list-type" substitutionGroup="block.abstract"/>
 
   <xs:element name="item" type="text-type"/>
 

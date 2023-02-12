@@ -2,8 +2,8 @@ import { NodeType } from '../core/info';
 import { ComplexText } from './elements/complex-text';
 import { ComplexNode } from './elements/complex-node';
 import { ComplexAttribute } from './elements/complex-attribute';
-import { SchemaParser } from '../schema/parser/schema-parser';
-import { SchemaDocument } from '../schema/schema-document';
+import { SchemaParser } from '../schema2/parser/schema-parser';
+import { SchemaDocument } from '../schema2/schema-document';
 import { SchemaContentTypes } from '../schema/definition/schema-complex-type';
 
 export class ComplexDocument {
@@ -11,9 +11,9 @@ export class ComplexDocument {
   public schema: SchemaDocument;
 
   constructor(document: Document, xsd: Document) {
-    const parser = new SchemaParser();
+    const parser = new SchemaParser(xsd);
+    this.schema = parser.parse();
 
-    this.schema = parser.parse(xsd);
     this.root = this.parseComplexNode(document.documentElement, null, 0);
   }
 

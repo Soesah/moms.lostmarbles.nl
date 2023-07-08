@@ -27,7 +27,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var update models.User
 	err := decoder.Decode(&update)
-	u, err := user.UpdateUser(update, r)
+	u, err := user.CreateUser(update, r)
 
 	if err != nil {
 		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)

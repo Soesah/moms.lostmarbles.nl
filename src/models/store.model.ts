@@ -56,6 +56,7 @@ export enum Actions {
   GetLatestChange = 'GetLatestChange',
   GetUsers = 'GetUsers',
   SaveUser = 'SaveUser',
+  UpdateUser = 'UpdateUser',
   AddNote = 'AddNote',
   AddNotification = 'AddNotification',
   DismissNotification = 'DismissNotification',

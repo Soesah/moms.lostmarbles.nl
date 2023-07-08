@@ -20,7 +20,11 @@ const close = () => {
   store.commit(Mutations.SetEditUser, null);
 };
 const submit = () => {
-  store.dispatch(Actions.SaveUser, user.value);
+  if (edit_user.value.id === -1) {
+    store.dispatch(Actions.SaveUser, user.value);
+  } else {
+    store.dispatch(Actions.UpdateUser, user.value);
+  }
 };
 
 const action = computed<string>(() =>

@@ -134,6 +134,21 @@ export default createStore<MomsState>({
         type: NotificationType.Info,
         text: 'Bezig met opslaan...',
       });
+      const response = await userService.create(user);
+      if (response.status) {
+        dispatch(Actions.AddNotification, {
+          type: NotificationType.Success,
+          text: 'Gebruiker opgeslagen',
+        });
+        commit(Mutations.UpdateUser, response.data);
+      }
+      commit(Mutations.SetEditUser, null);
+    },
+    async [Actions.UpdateUser]({ commit, dispatch }: Context, user: User) {
+      dispatch(Actions.AddNotification, {
+        type: NotificationType.Info,
+        text: 'Bezig met opslaan...',
+      });
       const response = await userService.update(user);
       if (response.status) {
         dispatch(Actions.AddNotification, {

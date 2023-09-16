@@ -10,5 +10,6 @@ type Ingredient struct {
 type IngredientRef struct {
 	ID     int64  `json:"id"`
 	Amount string `json:"amount"`
+	Unit   string `json:"unit"`
 	Notes  string `json:"notes,omitempty"`
 }

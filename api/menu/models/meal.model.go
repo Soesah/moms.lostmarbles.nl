@@ -1,18 +1,19 @@
 package models
 
+// Meal is a dish that can be cookes with its ingredients. It denotes it base (carbohydrate) and type (protein)
 type Meal struct {
-	ID          int64           `json:"id"`
-	Name        string          `json:"name"`
-	Ingredients []IngredientRef `json:"ingredients"`
-	// filter values
-	Vegetarian bool `json:"vegetarian,omitempty"`
-	Chicken    bool `json:"chicken,omitempty"`
-	Beef       bool `json:"beef,omitempty"`
-	Pork       bool `json:"pork,omitempty"`
-	Fish       bool `json:"fish,omitempty"`
-	Pasta      bool `json:"pasta,omitempty"`
-	Rice       bool `json:"rice,omitempty"`
-	Potatoes   bool `json:"potatoes,omitempty"`
+	ID             int64           `json:"id"`
+	Name           string          `json:"name"`
+	Ingredients    []IngredientRef `json:"ingredients"`
+	BasePasta      bool            `json:"base_pasta,omitempty"`
+	BaseNoodles    bool            `json:"base_noodles,omitempty"`
+	BaseRice       bool            `json:"base_rice,omitempty"`
+	BasePotatoes   bool            `json:"base_potatoes,omitempty"`
+	TypeVegetarian bool            `json:"type_vegetarian,omitempty"`
+	TypeChicken    bool            `json:"type_chicken,omitempty"`
+	TypeBeef       bool            `json:"type_beef,omitempty"`
+	TypePork       bool            `json:"type_pork,omitempty"`
+	TypeFish       bool            `json:"type_fish,omitempty"`
 }
 
 type MealRef struct {

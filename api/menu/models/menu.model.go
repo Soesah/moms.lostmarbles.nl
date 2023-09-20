@@ -12,6 +12,7 @@ type Menu struct {
 	Wednesday MealRef   `json:"wednesday"`
 	Thursday  MealRef   `json:"thursday"`
 	Friday    MealRef   `json:"friday"`
+	NextWeek  string    `json:"next_week"`
 }
 
 type MenuData struct {

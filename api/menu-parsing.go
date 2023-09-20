@@ -11,68 +11,11 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/Soesah/moms.lostmarbles.nl/api/menu/models"
 )
 
 var DateFormat = "Mon, 2 Jan 2006 15:04:05 -0700"
-
-type MenuDay struct {
-	Date      time.Time `json:"date,omitempty"`
-	Meal      string    `json:"meal,omitempty"`
-	Urls      []string  `json:"urls,omitempty"`
-	LeftOvers bool      `json:"left_over,omitempty"`
-}
-
-type Ingredient struct {
-	Name     string `json:"name,omitempty"`
-	Amount   string `json:"amount,omitempty"`
-	Notes    string `json:"notes,omitempty"`
-	Optional bool   `json:"optional,omitempty"`
-}
-
-type Menu struct {
-	ID          int          `json:"id,omitempty"`
-	File        string       `json:"file,omitempty"`
-	Date        time.Time    `json:"date,omitempty"`
-	Subject     string       `json:"subject,omitempty"`
-	Year        int          `json:"year,omitempty"`
-	Week        int          `json:"week,omitempty"`
-	Saturday    MenuDay      `json:"saturday,omitempty"`
-	Sunday      MenuDay      `json:"sunday,omitempty"`
-	Monday      MenuDay      `json:"monday,omitempty"`
-	Tuesday     MenuDay      `json:"tuesday,omitempty"`
-	Wednesday   MenuDay      `json:"wednesday,omitempty"`
-	Thursday    MenuDay      `json:"thursday,omitempty"`
-	Friday      MenuDay      `json:"friday,omitempty"`
-	NextWeek    string       `json:"next_week,omitempty"`
-	Ingredients []Ingredient `json:"ingredients"`
-	Analyzed    bool         `json:"analyzed"`
-}
-
-func (m Menu) IsValid() bool {
-	isValid := true
-
-	if m.Date.IsZero() {
-		isValid = false
-	}
-
-	if m.Subject == "" {
-		isValid = false
-	}
-
-	if m.Saturday.Date.Weekday() != time.Saturday {
-		isValid = false
-	}
-
-	if m.Saturday.Meal == "" || m.Monday.Meal == "" || m.Tuesday.Meal == "" || m.Wednesday.Meal == "" || m.Thursday.Meal == "" || m.Friday.Meal == "" {
-		isValid = false
-	}
-
-	if m.Saturday.Date.IsZero() || m.Monday.Date.IsZero() || m.Tuesday.Date.IsZero() || m.Wednesday.Date.IsZero() || m.Thursday.Date.IsZero() || m.Friday.Date.IsZero() {
-		isValid = false
-	}
-
-	return isValid
-}
 
 func main() {
 
@@ -82,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var menus []Menu
+	var menus []models.ParsedMenu
 
 	for i := 0; i < len(files); i++ {
 		file := files[i]
@@ -218,13 +161,13 @@ func parseIngredient(s string) (string, string, bool) {
 	return ingredient, notes, optionalRe.MatchString(s)
 }
 
-func emailToMenu(email string, file string, id int) Menu {
+func emailToMenu(email string, file string, id int) models.ParsedMenu {
 
-	var menu Menu
+	var menu models.ParsedMenu
 
 	menu.ID = id + 1
 	menu.File = file
-	menu.Ingredients = make([]Ingredient, 0)
+	menu.Ingredients = make([]models.ParsedIngredient, 0)
 
 	lines := strings.Split(email, "\n")
 
@@ -313,7 +256,7 @@ func emailToMenu(email string, file string, id int) Menu {
 		satRe := regexp.MustCompile(`(Zaterdag|Saturday|Sat)\s?:`)
 		if satRe.MatchString(line) && !htmlRe.MatchString(line) {
 			m := getParams(`:(\s?|\s+)(?P<meal>.+)`, line)
-			menu.Saturday = MenuDay{
+			menu.Saturday = models.ParsedMenuDay{
 				Meal:      getMeal(m["meal"], nextLines...),
 				Urls:      getUrls(nextLines...),
 				Date:      weekStartDate,
@@ -325,7 +268,7 @@ func emailToMenu(email string, file string, id int) Menu {
 		sunRe := regexp.MustCompile(`(Zondag|Sunday|Sun)\s?:`)
 		if sunRe.MatchString(line) && !htmlRe.MatchString(line) {
 			m := getParams(`:(\s?|\s+)(?P<meal>.+)`, line)
-			menu.Sunday = MenuDay{
+			menu.Sunday = models.ParsedMenuDay{
 				Meal:      getMeal(m["meal"], nextLines...),
 				Urls:      getUrls(nextLines...),
 				Date:      weekStartDate,
@@ -337,7 +280,7 @@ func emailToMenu(email string, file string, id int) Menu {
 		monRe := regexp.MustCompile(`(Maandag|Monday|Mon)\s?:`)
 		if monRe.MatchString(line) && !htmlRe.MatchString(line) {
 			m := getParams(`:(\s?|\s+)(?P<meal>.+)`, line)
-			menu.Monday = MenuDay{
+			menu.Monday = models.ParsedMenuDay{
 				Meal:      getMeal(m["meal"], nextLines...),
 				Urls:      getUrls(nextLines...),
 				Date:      weekStartDate,
@@ -353,7 +296,7 @@ func emailToMenu(email string, file string, id int) Menu {
 		tueRe := regexp.MustCompile(`(Dinsdag|Tuesday|Tue)\s?:`)
 		if tueRe.MatchString(line) && !htmlRe.MatchString(line) {
 			m := getParams(`:(\s?|\s+)(?P<meal>.+)`, line)
-			menu.Tuesday = MenuDay{
+			menu.Tuesday = models.ParsedMenuDay{
 				Meal:      getMeal(m["meal"], nextLines...),
 				Urls:      getUrls(nextLines...),
 				Date:      weekStartDate,
@@ -365,7 +308,7 @@ func emailToMenu(email string, file string, id int) Menu {
 		wedRe := regexp.MustCompile(`(Woensdag|Wednesday|Wed)\s?:`)
 		if wedRe.MatchString(line) && !htmlRe.MatchString(line) {
 			m := getParams(`:(\s?|\s+)(?P<meal>.+)`, line)
-			menu.Wednesday = MenuDay{
+			menu.Wednesday = models.ParsedMenuDay{
 				Meal:      getMeal(m["meal"], nextLines...),
 				Urls:      getUrls(nextLines...),
 				Date:      weekStartDate,
@@ -377,7 +320,7 @@ func emailToMenu(email string, file string, id int) Menu {
 		thuRe := regexp.MustCompile(`(Donderdag|Thursday|Thu)\s?:`)
 		if thuRe.MatchString(line) && !htmlRe.MatchString(line) {
 			m := getParams(`:(\s?|\s+)(?P<meal>.+)`, line)
-			menu.Thursday = MenuDay{
+			menu.Thursday = models.ParsedMenuDay{
 				Meal:      getMeal(m["meal"], nextLines...),
 				Urls:      getUrls(nextLines...),
 				Date:      weekStartDate,
@@ -389,7 +332,7 @@ func emailToMenu(email string, file string, id int) Menu {
 		friRe := regexp.MustCompile(`(Vrijdag|Friday|Fri)\s?:`)
 		if friRe.MatchString(line) && !htmlRe.MatchString(line) {
 			m := getParams(`:(\s?|\s+)(?P<meal>.+)`, line)
-			menu.Friday = MenuDay{
+			menu.Friday = models.ParsedMenuDay{
 				Meal:      getMeal(m["meal"], nextLines...),
 				Urls:      getUrls(nextLines...),
 				Date:      weekStartDate,
@@ -404,7 +347,7 @@ func emailToMenu(email string, file string, id int) Menu {
 			ingredient, notes, optional := parseIngredient(line)
 
 			if ingredient != "" {
-				menu.Ingredients = append(menu.Ingredients, Ingredient{
+				menu.Ingredients = append(menu.Ingredients, models.ParsedIngredient{
 					Name:     ingredient,
 					Amount:   "",
 					Notes:    notes,

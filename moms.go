@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -73,6 +72,14 @@ func main() {
 			})
 		})
 
+		r.Route("/menu", func(r chi.Router) {
+			r.Get("/analyze", handlers.GetFirstNotAnalyzed)
+			r.Put("/analyze/:id", handlers.UpdateAnalyzed)
+			r.Post("/ingredient", handlers.CreateIngredient)
+			r.Post("/meal", handlers.CreateMeal)
+			r.Post("/", handlers.CreateMenu)
+		})
+
 		r.Route("/user", func(r chi.Router) {
 			r.Use(middlewares.CookContext)
 			r.Get("/", handlers.GetUserList)
@@ -119,7 +126,7 @@ func main() {
 	http.Handle("/", r)
 
 	if conf.IsDev() {
-		log.Print(fmt.Sprintf("Dev server listening on port %d", 8182))
+		log.Printf("Dev server listening on port %d", 8182)
 		log.Fatal(http.ListenAndServe(":8182", r))
 	} else {
 		log.Fatal(http.ListenAndServe(":8080", r))

@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 // Meal is a dish that can be cookes with its ingredients. It denotes it base (carbohydrate) and type (protein)
 type Meal struct {
 	ID             int64           `json:"id"`
@@ -14,11 +16,14 @@ type Meal struct {
 	TypeBeef       bool            `json:"type_beef,omitempty"`
 	TypePork       bool            `json:"type_pork,omitempty"`
 	TypeFish       bool            `json:"type_fish,omitempty"`
+	VariationOf    int64           `json:"variation_of,omitempty"`
+	RecipeURL      string          `json:"recipe_url,omitempty"`
 }
 
 type MealRef struct {
-	ID    int64  `json:"id,omitempty"` // ID of Meal
-	Date  bool   `json:"date"`
-	Out   bool   `json:"out"` // Eating out
-	Notes string `json:"notes,omitempty"`
+	ID        int64     `json:"id,omitempty"` // ID of Meal
+	Date      time.Time `json:"date"`
+	Out       bool      `json:"out,omitempty"`        // Eating out
+	LeftOvers bool      `json:"left_overs,omitempty"` // Eating left overs
+	Notes     string    `json:"notes,omitempty"`
 }

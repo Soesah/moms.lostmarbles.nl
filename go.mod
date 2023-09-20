@@ -1,6 +1,6 @@
 module github.com/Soesah/moms.lostmarbles.nl
 
-go 1.17
+go 1.21
 
 require (
 	cloud.google.com/go/storage v1.1.2

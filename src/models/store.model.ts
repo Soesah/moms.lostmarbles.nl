@@ -58,6 +58,7 @@ export enum Actions {
   SaveUser = 'SaveUser',
   UpdateUser = 'UpdateUser',
   AddNote = 'AddNote',
+  UploadMenuEmail = 'UploadMenuEmail',
   AddNotification = 'AddNotification',
   DismissNotification = 'DismissNotification',
 }

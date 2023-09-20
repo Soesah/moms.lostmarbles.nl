@@ -4,6 +4,7 @@ import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { RecipeService } from './services/recipe.service';
+import { MenuService } from './services/menu.service';
 import { User } from '@/models/user.model';
 import {
   delays,
@@ -22,6 +23,7 @@ const authService = new AuthService();
 const userService = new UserService();
 const categoryService = new CategoryService();
 const recipeService = new RecipeService();
+const menuService = new MenuService();
 
 type Context = ActionContext<MomsState, MomsState>;
 
@@ -257,6 +259,9 @@ export default createStore<MomsState>({
       }
 
       return data.status ? data.data : null;
+    },
+    async [Actions.UploadMenuEmail]({}: Context, data: FormData) {
+      return menuService.upload(data);
     },
     async [Actions.AddNote](
       { state, dispatch, commit }: Context,

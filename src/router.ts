@@ -5,6 +5,7 @@ import Home from '@/views/Home.vue';
 import List from '@/views/List.vue';
 import Recipe from '@/views/Recipe.vue';
 import EditRecipe from '@/views/EditRecipe.vue';
+import AnalyzeMenu from '@/views/AnalyzeMenu.vue';
 import {
   verifyCook,
   verifyChef,
@@ -58,6 +59,10 @@ export default createRouter({
       path: '/recipe/:slug/edit',
       beforeEnter: verifyChef,
       component: EditRecipe,
+    },
+    {
+      path: '/menu/analyze',
+      component: AnalyzeMenu,
     },
     {
       path: '/admin',

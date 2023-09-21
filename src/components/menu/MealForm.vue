@@ -19,39 +19,37 @@ import VegetarianIcon from './icons/VegetarianIcon.vue';
     </div>
     <div>
       <div class="flex">
+        <button class="icon-button" title="Chicken">
+          <ChickenIcon :size="40"></ChickenIcon>
+        </button>
         <button class="icon-button" title="Beef">
           <BeefIcon :size="40"></BeefIcon>
         </button>
-        <button class="icon-button" title="Bread">
-          <BreadIcon :size="40"></BreadIcon>
-        </button>
-        <button class="icon-button" title="Chicken">
-          <ChickenIcon :size="40"></ChickenIcon>
+        <button class="icon-button" title="Pork">
+          <PorkIcon :size="40"></PorkIcon>
         </button>
         <button class="icon-button" title="Fish">
           <FishIcon :size="40"></FishIcon>
         </button>
+        <button class="icon-button" title="Vegetarian">
+          <VegetarianIcon :size="40"></VegetarianIcon>
+        </button>
       </div>
       <div class="flex">
+        <button class="icon-button" title="Rice">
+          <RiceIcon :size="40"></RiceIcon>
+        </button>
+        <button class="icon-button" title="Potato">
+          <PotatoIcon :size="40"></PotatoIcon>
+        </button>
         <button class="icon-button" title="Noodles">
           <NoodlesIcon :size="40"></NoodlesIcon>
         </button>
         <button class="icon-button" title="Pasta">
           <PastaIcon :size="40"></PastaIcon>
         </button>
-        <button class="icon-button" title="Pork">
-          <PorkIcon :size="40"></PorkIcon>
-        </button>
-        <button class="icon-button" title="Potato">
-          <PotatoIcon :size="40"></PotatoIcon>
-        </button>
-        <button class="icon-button" title="Rice">
-          <RiceIcon :size="40"></RiceIcon>
-        </button>
-      </div>
-      <div class="flex">
-        <button class="icon-button" title="Vegetarian">
-          <VegetarianIcon :size="40"></VegetarianIcon>
+        <button class="icon-button" title="Bread">
+          <BreadIcon :size="40"></BreadIcon>
         </button>
       </div>
     </div>

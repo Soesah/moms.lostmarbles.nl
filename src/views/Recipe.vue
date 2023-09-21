@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { Recipe } from '@/models/recipe.model';
-import { MenuGroup } from '../models/menu.model';
+import { MenuGroup } from '../models/navigation.model';
 import { AuthLevel } from '../models/auth.model';
 import { Actions, Mutations } from '@/models/store.model';
 import RecipeIngredients from '@/components/recipe/RecipeIngredients.vue';
@@ -82,3 +82,4 @@ onUnmounted(() => {
     </section>
   </main>
 </template>
+../models/navigation.model

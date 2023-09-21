@@ -1,6 +1,12 @@
+import { ParsedMenu } from '@/models/menu.model';
 import axios, { AxiosStatic } from 'axios';
 
 const STATUS_OK = 200;
+
+interface DataResponse<T> {
+  status: boolean;
+  data: T | string;
+}
 
 export class MenuService {
   public $http: AxiosStatic;
@@ -10,8 +16,8 @@ export class MenuService {
     this.$http = axios;
   }
 
-  public async upload(data: FormData): Promise<any> {
-    const response = await this.$http.post(`${this.path}`, data);
+  public async analyze(): Promise<DataResponse<ParsedMenu>> {
+    const response = await this.$http.get(`${this.path}/analyze`);
     const status = response.status === STATUS_OK;
     return {
       status,

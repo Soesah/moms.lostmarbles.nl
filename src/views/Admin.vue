@@ -2,7 +2,7 @@
 import { computed, onMounted, onUnmounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import { MenuGroup } from '@/models/menu.model';
+import { MenuGroup } from '@/models/navigation.model';
 import { User } from '@/models/user.model';
 import { AuthLevel } from '../models/auth.model';
 import { Actions, Mutations } from '@/models/store.model';
@@ -10,6 +10,7 @@ import Users from '@/components/admin/Users.vue';
 import AddUser from '@/components/admin/AddUser.vue';
 import EditUser from '@/components/admin/EditUser.vue';
 import PageMenu from '@/components/common/PageMenu.vue';
+import PageTitle from '@/components/common/PageTitle.vue';
 
 const store = useStore();
 const route = useRoute();
@@ -62,6 +63,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
+  <PageTitle></PageTitle>
   <main class="columns">
     <section class="column main">
       <Users></Users>
@@ -72,3 +74,4 @@ onUnmounted(() => {
     </section>
   </main>
 </template>
+@/models/navigation.model

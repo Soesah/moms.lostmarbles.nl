@@ -14,7 +14,7 @@ import {
 import { Category } from './models/category.model';
 import { Recipe, NoteData } from '@/models/recipe.model';
 import { Change } from '@/models/changes.model';
-import { MenuItem, MenuGroup } from './models/menu.model';
+import { MenuItem, MenuGroup } from './models/navigation.model';
 import { createRecipeSpecification } from './specification/recipe.specification';
 import { Auth, AuthLevel, defaultAuth } from '@/models/auth.model';
 import { UUIDUtil } from './util/uuid.util';
@@ -260,8 +260,8 @@ export default createStore<MomsState>({
 
       return data.status ? data.data : null;
     },
-    async [Actions.UploadMenuEmail]({}: Context, data: FormData) {
-      return menuService.upload(data);
+    async [Actions.AnalyzeMenu]({}: Context) {
+      return menuService.analyze();
     },
     async [Actions.AddNote](
       { state, dispatch, commit }: Context,

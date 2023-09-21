@@ -2,11 +2,12 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import { MenuGroup } from '@/models/menu.model';
+import { MenuGroup } from '@/models/navigation.model';
 import { AuthLevel } from '../models/auth.model';
 import PageMenu from '@/components/common/PageMenu.vue';
 import LoginChef from '@/components/user/LoginChef.vue';
 import LoginAdmin from '@/components/user/LoginAdmin.vue';
+import PageTitle from '@/components/common/PageTitle.vue';
 import { Mutations } from '@/models/store.model';
 
 const store = useStore();
@@ -31,6 +32,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
+  <PageTitle></PageTitle>
   <main class="columns">
     <section class="column main-large">
       <login-chef v-if="type === 'chef'"></login-chef>
@@ -41,3 +43,4 @@ onUnmounted(() => {
     </section>
   </main>
 </template>
+@/models/navigation.model

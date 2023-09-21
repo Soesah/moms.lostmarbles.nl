@@ -4,10 +4,11 @@ import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { Recipe } from '@/models/recipe.model';
 import { AuthLevel } from '../models/auth.model';
-import { MenuGroup } from '@/models/menu.model';
+import { MenuGroup } from '@/models/navigation.model';
 import { Actions, Mutations } from '@/models/store.model';
 import PageMenu from '@/components/common/PageMenu.vue';
 import RecipeForm from '@/components/recipe/form/RecipeForm.vue';
+import PageTitle from '@/components/common/PageTitle.vue';
 
 const store = useStore();
 const router = useRouter();
@@ -77,6 +78,7 @@ const cancel = () => {
 };
 </script>
 <template>
+  <PageTitle></PageTitle>
   <main class="columns">
     <section class="column main-large" v-if="recipe">
       <!-- <jigsaw
@@ -97,3 +99,4 @@ const cancel = () => {
     </section>
   </main>
 </template>
+@/models/navigation.model

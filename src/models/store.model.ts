@@ -1,6 +1,6 @@
 import { Auth } from './auth.model';
 import { Category } from './category.model';
-import { MenuItem } from './menu.model';
+import { MenuItem } from './navigation.model';
 import { Recipe } from './recipe.model';
 import { User } from './user.model';
 import { Notification } from './notification.model';
@@ -58,7 +58,7 @@ export enum Actions {
   SaveUser = 'SaveUser',
   UpdateUser = 'UpdateUser',
   AddNote = 'AddNote',
-  UploadMenuEmail = 'UploadMenuEmail',
+  AnalyzeMenu = 'AnalyzeMenu',
   AddNotification = 'AddNotification',
   DismissNotification = 'DismissNotification',
 }

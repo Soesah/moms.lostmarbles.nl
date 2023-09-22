@@ -7,9 +7,10 @@ import (
 	"github.com/go-chi/chi"
 )
 
-//ServeDir servies any file of a directory
+// ServeDir servies any file of a directory
 func ServeDir(r chi.Router, path string, root http.Dir) {
 	filePath := path
+
 	if strings.HasSuffix(filePath, "*") {
 		filePath = filePath[:len(filePath)-1]
 	}
@@ -20,7 +21,7 @@ func ServeDir(r chi.Router, path string, root http.Dir) {
 	}))
 }
 
-//ServeFile serves a single file
+// ServeFile serves a single file
 func ServeFile(r chi.Router, path string, filePath string) {
 	r.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, filePath)

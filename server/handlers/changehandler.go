@@ -72,6 +72,11 @@ func GetRecipeChanges(w http.ResponseWriter, r *http.Request) {
 
 	users, err := user.GetUserList(r)
 
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	for _, c := range changes {
 		log = append(log, Change{
 			User: getUserName(users, c.UserID),

@@ -18,6 +18,7 @@ import { MenuItem, MenuGroup } from './models/navigation.model';
 import { createRecipeSpecification } from './specification/recipe.specification';
 import { Auth, AuthLevel, defaultAuth } from '@/models/auth.model';
 import { UUIDUtil } from './util/uuid.util';
+import { Ingredient, Meal, Menu } from './models/menu.model';
 
 const authService = new AuthService();
 const userService = new UserService();
@@ -260,9 +261,6 @@ export default createStore<MomsState>({
 
       return data.status ? data.data : null;
     },
-    async [Actions.AnalyzeMenu]({}: Context) {
-      return menuService.analyze();
-    },
     async [Actions.AddNote](
       { state, dispatch, commit }: Context,
       d: NoteData,
@@ -301,6 +299,55 @@ export default createStore<MomsState>({
       setTimeout(() => {
         commit(Mutations.DismissNotification, data.uuid);
       }, data.delay);
+    },
+    async [Actions.AnalyzeMenu]({}: Context) {
+      const response = await menuService.analyze();
+      return response.data;
+    },
+    async [Actions.CreateIngredient](
+      {}: Context,
+      data: Ingredient,
+    ): Promise<Ingredient> {
+      const response = await menuService.createIngredient(data);
+      return response.data;
+    },
+    async [Actions.UpdateIngredient](
+      {}: Context,
+      data: Ingredient,
+    ): Promise<Ingredient> {
+      const response = await menuService.updateIngredient(data);
+      return response.data;
+    },
+    async [Actions.RemoveIngredient](
+      {}: Context,
+      data: Ingredient,
+    ): Promise<boolean> {
+      const response = await menuService.removeIngredient(data);
+      return response.data;
+    },
+    async [Actions.CreateMeal]({}: Context, data: Meal): Promise<Meal> {
+      const response = await menuService.createMeal(data);
+      return response.data;
+    },
+    async [Actions.UpdateMeal]({}: Context, data: Meal): Promise<Meal> {
+      const response = await menuService.updateMeal(data);
+      return response.data;
+    },
+    async [Actions.RemoveMeal]({}: Context, data: Meal): Promise<boolean> {
+      const response = await menuService.removeMeal(data);
+      return response.data;
+    },
+    async [Actions.CreateMenu]({}: Context, data: Menu): Promise<Menu> {
+      const response = await menuService.createMenu(data);
+      return response.data;
+    },
+    async [Actions.UpdateMenu]({}: Context, data: Menu): Promise<Menu> {
+      const response = await menuService.updateMenu(data);
+      return response.data;
+    },
+    async [Actions.RemoveMenu]({}: Context, data: Menu): Promise<boolean> {
+      const response = await menuService.removeMenu(data);
+      return response.data;
     },
   },
   getters: {

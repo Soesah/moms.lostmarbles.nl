@@ -49,8 +49,44 @@ func CreateMeal(w http.ResponseWriter, r *http.Request) {
 	httpext.SuccessAPI(w, "Ok")
 }
 
+// UpdateIngredient
+func UpdateIngredient(w http.ResponseWriter, r *http.Request) {
+
+	httpext.SuccessAPI(w, "Ok")
+}
+
+// RemoveIngredient
+func RemoveIngredient(w http.ResponseWriter, r *http.Request) {
+
+	httpext.SuccessAPI(w, "Ok")
+}
+
+// UpdateMeal
+func UpdateMeal(w http.ResponseWriter, r *http.Request) {
+
+	httpext.SuccessAPI(w, "Ok")
+}
+
+// RemoveMeal
+func RemoveMeal(w http.ResponseWriter, r *http.Request) {
+
+	httpext.SuccessAPI(w, "Ok")
+}
+
 // CreateMenu
 func CreateMenu(w http.ResponseWriter, r *http.Request) {
+
+	httpext.SuccessAPI(w, "Ok")
+}
+
+// UpdateMenu
+func UpdateMenu(w http.ResponseWriter, r *http.Request) {
+
+	httpext.SuccessAPI(w, "Ok")
+}
+
+// RemoveMenu
+func RemoveMenu(w http.ResponseWriter, r *http.Request) {
 
 	httpext.SuccessAPI(w, "Ok")
 }

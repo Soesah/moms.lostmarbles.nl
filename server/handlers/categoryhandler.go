@@ -29,6 +29,12 @@ func CreateCategory(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var create models.Category
 	err := decoder.Decode(&create)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	cat, err := category.UpdateCategory(create, r)
 
 	if err != nil {
@@ -58,6 +64,12 @@ func UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var update models.Category
 	err := decoder.Decode(&update)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	cat, err := category.UpdateCategory(update, r)
 
 	if err != nil {

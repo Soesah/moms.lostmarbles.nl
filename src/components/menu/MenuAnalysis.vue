@@ -11,7 +11,7 @@ const parsed = ref<ParsedMenu>();
 onMounted(async () => {
   const d = await store.dispatch(Actions.AnalyzeMenu);
 
-  parsed.value = d.data.data;
+  parsed.value = d;
 });
 
 const submit = () => {};

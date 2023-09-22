@@ -27,6 +27,12 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var update models.User
 	err := decoder.Decode(&update)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	u, err := user.CreateUser(update, r)
 
 	if err != nil {
@@ -48,6 +54,12 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var update models.User
 	err := decoder.Decode(&update)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	u, err := user.UpdateUser(update, r)
 
 	if err != nil {

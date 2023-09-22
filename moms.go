@@ -75,9 +75,15 @@ func main() {
 		r.Route("/menu", func(r chi.Router) {
 			r.Get("/analyze", handlers.GetFirstNotAnalyzed)
 			r.Put("/analyze/:id", handlers.UpdateAnalyzed)
-			r.Post("/ingredient", handlers.CreateIngredient)
-			r.Post("/meal", handlers.CreateMeal)
 			r.Post("/", handlers.CreateMenu)
+			r.Put("/", handlers.UpdateMenu)
+			r.Delete("/id", handlers.RemoveMenu)
+			r.Post("/ingredient", handlers.CreateIngredient)
+			r.Put("/ingredient", handlers.UpdateIngredient)
+			r.Delete("/ingredient/:id", handlers.RemoveIngredient)
+			r.Post("/meal", handlers.CreateMeal)
+			r.Put("/meal", handlers.UpdateMeal)
+			r.Delete("/meal:id", handlers.RemoveMeal)
 		})
 
 		r.Route("/user", func(r chi.Router) {

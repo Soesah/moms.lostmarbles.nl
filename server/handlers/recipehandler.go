@@ -28,6 +28,12 @@ func AddRecipe(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var update models.Recipe
 	err := decoder.Decode(&update)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	rec, err := recipe.AddRecipe(update, r)
 
 	if err == recipe.ErrRecipeAlreadyExists {
@@ -100,6 +106,12 @@ func UpdateRecipe(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var update models.Recipe
 	err := decoder.Decode(&update)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	rec, err := recipe.UpdateRecipe(update, r)
 
 	if err != nil {
@@ -131,6 +143,12 @@ func AddNoteToRecipe(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var update models.Recipe
 	err := decoder.Decode(&update)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	rec, err := recipe.UpdateRecipeWithNote(update, r)
 
 	if err != nil {

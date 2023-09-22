@@ -6,6 +6,7 @@ import "time"
 type Meal struct {
 	ID             int64           `json:"id"`
 	Name           string          `json:"name"`
+	NameVariations []string        `json:"name_variations"`
 	Ingredients    []IngredientRef `json:"ingredients"`
 	BasePasta      bool            `json:"base_pasta,omitempty"`
 	BaseNoodles    bool            `json:"base_noodles,omitempty"`
@@ -18,7 +19,7 @@ type Meal struct {
 	TypePork       bool            `json:"type_pork,omitempty"`
 	TypeFish       bool            `json:"type_fish,omitempty"`
 	VariationOf    int64           `json:"variation_of,omitempty"`
-	RecipeURL      string          `json:"recipe_url,omitempty"`
+	RecipeURLs     []string        `json:"recipe_urls,omitempty"`
 }
 
 type MealRef struct {

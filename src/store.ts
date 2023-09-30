@@ -19,6 +19,7 @@ import { createRecipeSpecification } from './specification/recipe.specification'
 import { Auth, AuthLevel, defaultAuth } from '@/models/auth.model';
 import { UUIDUtil } from './util/uuid.util';
 import { Ingredient, Meal, Menu } from './models/menu.model';
+import { modalStore } from './components/common/modal/modal.store';
 
 const authService = new AuthService();
 const userService = new UserService();
@@ -29,6 +30,9 @@ const menuService = new MenuService();
 type Context = ActionContext<MomsState, MomsState>;
 
 export default createStore<MomsState>({
+  modules: {
+    ms: modalStore,
+  },
   state: {
     auth: defaultAuth,
     notifications: [],

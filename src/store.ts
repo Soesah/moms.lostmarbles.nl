@@ -1,10 +1,12 @@
 import { createStore, ActionContext } from 'vuex';
-import { MomsState, Actions, Mutations } from './models/store.model';
+// services
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { RecipeService } from './services/recipe.service';
 import { MenuService } from './services/menu.service';
+// models
+import { MomsState, Actions, Mutations } from './models/store.model';
 import { User } from '@/models/user.model';
 import {
   delays,
@@ -17,9 +19,12 @@ import { Change } from '@/models/changes.model';
 import { MenuItem, MenuGroup } from './models/navigation.model';
 import { createRecipeSpecification } from './specification/recipe.specification';
 import { Auth, AuthLevel, defaultAuth } from '@/models/auth.model';
-import { UUIDUtil } from './util/uuid.util';
 import { Ingredient, Meal, Menu } from './models/menu.model';
+// modules
 import { modalStore } from './components/common/modal/modal.store';
+import { menuStore } from './components/menu/menu.store';
+// utils
+import { UUIDUtil } from './util/uuid.util';
 
 const authService = new AuthService();
 const userService = new UserService();
@@ -32,6 +37,7 @@ type Context = ActionContext<MomsState, MomsState>;
 export default createStore<MomsState>({
   modules: {
     ms: modalStore,
+    us: menuStore,
   },
   state: {
     auth: defaultAuth,

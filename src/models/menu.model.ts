@@ -39,7 +39,7 @@ export interface Meal {
   type_pork: boolean;
   type_fish: boolean;
   variation_of: string;
-  recipe_url: string[];
+  recipe_urls: string[];
 }
 
 interface IngredientRef {
@@ -52,8 +52,9 @@ interface IngredientRef {
 export interface Ingredient {
   id: number;
   name: string;
+  name_variations: string[];
   type: string;
-  notes: string;
+  notes?: string;
 }
 
 // export/import model
@@ -71,16 +72,16 @@ export interface ParsedMenu {
   wednesday: ParsedMenuDay;
   thursday: ParsedMenuDay;
   friday: ParsedMenuDay;
-  next_week: ParsedMenuDay;
+  next_week: string;
   ingredients: ParsedIngredient[];
   analyzed: boolean;
 }
 
-interface ParsedMenuDay {
+export interface ParsedMenuDay {
   date: string;
   meal: string;
-  urls: string[];
-  left_over: boolean;
+  urls?: string[];
+  left_over?: boolean;
 }
 
 interface ParsedIngredient {
@@ -89,3 +90,22 @@ interface ParsedIngredient {
   notes: string;
   optional: boolean;
 }
+
+export const baseMenu: Meal = {
+  id: -1,
+  name: '',
+  name_variations: [],
+  ingredients: [],
+  base_rice: false,
+  base_potatoes: false,
+  base_noodles: false,
+  base_pasta: false,
+  base_bread: false,
+  type_chicken: false,
+  type_beef: false,
+  type_pork: false,
+  type_fish: false,
+  type_vegetarian: false,
+  variation_of: '',
+  recipe_urls: [],
+};

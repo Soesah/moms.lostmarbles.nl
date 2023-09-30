@@ -20,6 +20,7 @@ type Meal struct {
 	TypeFish       bool            `json:"type_fish,omitempty"`
 	VariationOf    int64           `json:"variation_of,omitempty"`
 	RecipeURLs     []string        `json:"recipe_urls,omitempty"`
+	HasLeftOvers   bool            `json:"has_left_overs,omitempty"`
 }
 
 type MealRef struct {

@@ -20,6 +20,7 @@ var DateFormat = "Mon, 2 Jan 2006 15:04:05 -0700"
 func main() {
 
 	files, err := filepath.Glob("./menu-emails/**/*.eml")
+	// files, err := filepath.Glob("./menu-emails/2023/Menu week 39.eml")
 
 	if err != nil {
 		log.Fatal(err)
@@ -101,7 +102,7 @@ func cleanLine(str string) string {
 }
 
 func getMeal(s string, nextLines ...string) string {
-	urlRe := regexp.MustCompile(`<(?P<url>http\s?://.+)>`)
+	urlRe := regexp.MustCompile(`<(?P<url>https?://.+)>`)
 	isDayRe := regexp.MustCompile(`Zaterdag|Saturday|Sat|Zondag|Sunday|Sun|Maandag|Monday|Mon|Dinsdag|Tuesday|Tue|Woensdag|Wednesday|Wed|Donderdag|Thursday|Thu|Vrijdag|Friday|Fri`)
 
 	s = urlRe.ReplaceAllString(s, "")
@@ -133,7 +134,7 @@ func getUrls(lines ...string) []string {
 		if isDayRe.MatchString(line) || line == "" {
 			break
 		}
-		m := getParams(`<(?P<url>http\s?://.+)>`, line)
+		m := getParams(`<(?P<url>https?://.+)>`, line)
 		if m["url"] != "" {
 			urls = append(urls, m["url"])
 		}

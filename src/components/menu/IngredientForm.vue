@@ -1,36 +1,33 @@
 <script lang="ts" setup>
-import { PropType, reactive, watch } from 'vue';
-import { Ingredient, ParsedMenuDay } from '@/models/menu.model';
+import { computed, reactive, watch } from 'vue';
+import {
+  Ingredient,
+  ParsedIngredient,
+  baseIngredient,
+} from '@/models/menu.model';
+import { useStore } from 'vuex';
 
-const props = defineProps({
-  parsed: {
-    type: Object as PropType<ParsedMenuDay>,
-    required: true,
-  },
-});
+const store = useStore();
 
-const meal = reactive<Ingredient>({
-  id: -1,
-  name: '',
-  name_variations: [],
-  type: '',
-  notes: '',
-});
+const parsed = computed<ParsedIngredient>(
+  () => store.state.us.parsedIngredient,
+);
+const ingredient = reactive<Ingredient>({ ...baseIngredient });
 
 watch(
-  () => props.parsed,
+  () => parsed,
   (newValue) => {
-    console.log(newValue);
-    meal.name = newValue.meal;
+    Object.assign(ingredient, { ...baseIngredient, name: newValue.value.name });
   },
+  { deep: true },
 );
 </script>
 <template>
-  <form class="box box--tertiary">
+  <form class="box box--tertiary box-modal">
     <h2>Add an Ingredient</h2>
     <div class="form-item">
       <label>Name</label>
-      <input type="text" v-model="meal.name" />
+      <input type="text" v-model="ingredient.name" />
     </div>
     <div class="form-item">
       <label>Name Variations</label>
@@ -39,6 +36,11 @@ watch(
     <div class="form-item">
       <label>Type</label>
       <input type="text" />
+    </div>
+    <div class="form-buttons">
+      <label></label>
+      <button>Cancel</button>
+      <button>Save</button>
     </div>
   </form>
 </template>

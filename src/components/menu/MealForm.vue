@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { PropType, reactive, watch } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import { Meal, ParsedMenuDay, baseMenu } from '@/models/menu.model';
 import BeefIcon from './icons/BeefIcon.vue';
 import BreadIcon from './icons/BreadIcon.vue';
@@ -11,26 +11,24 @@ import PorkIcon from './icons/PorkIcon.vue';
 import PotatoIcon from './icons/PotatoIcon.vue';
 import RiceIcon from './icons/RiceIcon.vue';
 import VegetarianIcon from './icons/VegetarianIcon.vue';
+import WrapIcon from './icons/WrapIcon.vue';
+import { useStore } from 'vuex';
 
-const props = defineProps({
-  parsed: {
-    type: Object as PropType<ParsedMenuDay>,
-    required: true,
-  },
-});
+const store = useStore();
 
-const meal = reactive<Meal>({ ...baseMenu });
+const parsed = computed<ParsedMenuDay>(() => store.state.us.parsedDay);
+const meal = reactive<Meal>({ ...baseMenu, name: parsed.value.meal });
 
 watch(
-  () => props.parsed,
+  () => parsed,
   (newValue) => {
-    console.log(newValue);
-    Object.assign(meal, { ...baseMenu, name: newValue.meal });
+    Object.assign(meal, { ...baseMenu, name: newValue.value.meal });
   },
+  { deep: true },
 );
 </script>
 <template>
-  <form class="box box--tertiary">
+  <form class="box box--tertiary box-modal">
     <h2>Add a Meal</h2>
     <div class="form-item">
       <label>Name</label>
@@ -38,9 +36,13 @@ watch(
     </div>
     <div class="form-item">
       <label>Name Variations</label>
-      <input type="text" />
+      <input type="text" v-model="meal.name_variations" />
     </div>
-    <div>
+    <div class="form-item">
+      <label>Variation of</label>
+      <input type="text" v-model="meal.variation_of" />
+    </div>
+    <div class="form-item">
       <label></label>
       <div>
         <div class="flex">
@@ -136,6 +138,17 @@ watch(
           </button>
         </div>
       </div>
+    </div>
+    <div class="form-item">
+      <label>Ingredients</label>
+      <input type="text" v-model="meal.ingredients" />
+      <input type="text" v-model="meal.ingredients" />
+    </div>
+
+    <div class="form-buttons">
+      <label></label>
+      <button>Cancel</button>
+      <button>Save</button>
     </div>
   </form>
 </template>

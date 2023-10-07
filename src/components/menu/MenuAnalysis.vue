@@ -1,8 +1,16 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { markRaw, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import { Actions } from '@/models/store.model';
-import { ParsedMenuDay, ParsedMenu } from '@/models/menu.model';
+import {
+  ParsedMenuDay,
+  ParsedMenu,
+  ParsedIngredient,
+} from '@/models/menu.model';
+import { MenuMutations } from './menu.store';
+import { ModalMutations } from '../common/modal/modal.store';
+import MealForm from './MealForm.vue';
+import IngredientForm from './IngredientForm.vue';
 
 const store = useStore();
 
@@ -34,7 +42,17 @@ onMounted(async () => {
 });
 
 const selectMeal = (meal: ParsedMenuDay) => {
-  emit('selectMeal', meal);
+  store.commit(ModalMutations.OpenModal, {
+    modal: markRaw(MealForm),
+  });
+  store.commit(MenuMutations.EditMenu, meal);
+};
+
+const selectIngredient = (ingredient: ParsedIngredient) => {
+  store.commit(ModalMutations.OpenModal, {
+    modal: markRaw(IngredientForm),
+  });
+  store.commit(MenuMutations.EditIngredient, ingredient);
 };
 </script>
 <template>
@@ -89,7 +107,13 @@ const selectMeal = (meal: ParsedMenuDay) => {
 
     <h2>Kopen</h2>
     <ul>
-      <li v-for="ing in parsed.ingredients" :key="ing.name">{{ ing.name }}</li>
+      <li
+        v-for="ing in parsed.ingredients"
+        :key="ing.name"
+        @click.prevent="selectIngredient(ing)"
+      >
+        {{ ing.name }}
+      </li>
     </ul>
   </div>
 </template>

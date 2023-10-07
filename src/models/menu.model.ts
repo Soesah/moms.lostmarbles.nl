@@ -54,7 +54,7 @@ export interface Ingredient {
   id: number;
   name: string;
   name_variations: string[];
-  type: string;
+  type?: string;
   notes?: string;
 }
 
@@ -85,7 +85,7 @@ export interface ParsedMenuDay {
   left_over?: boolean;
 }
 
-interface ParsedIngredient {
+export interface ParsedIngredient {
   name: string;
   amount: string;
   notes: string;
@@ -110,4 +110,10 @@ export const baseMenu: Meal = {
   type_vegetarian: false,
   variation_of: '',
   recipe_urls: [],
+};
+
+export const baseIngredient: Ingredient = {
+  id: -1,
+  name: '',
+  name_variations: [],
 };

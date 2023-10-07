@@ -7,16 +7,16 @@
       <input type="text" />
     </div>
     <div class="form-item">
+      <label>Notes</label>
+      <input type="text" />
+    </div>
+    <div class="form-item">
       <label></label>
       <div class="flex">
         <button class="icon-button" title="Out">Out</button>
         <button class="icon-button" title="Left overs">Left overs</button>
         <button class="icon-button" title="Undecided">We'll see</button>
       </div>
-    </div>
-    <div class="form-item">
-      <label>Notes</label>
-      <input type="text" />
     </div>
   </form>
 </template>

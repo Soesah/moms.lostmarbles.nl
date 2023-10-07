@@ -13,6 +13,7 @@ type Meal struct {
 	BaseRice       bool            `json:"base_rice,omitempty"`
 	BasePotatoes   bool            `json:"base_potatoes,omitempty"`
 	BaseBread      bool            `json:"base_bread,omitempty"`
+	BaseWrap       bool            `json:"base_wrap,omitempty"`
 	TypeVegetarian bool            `json:"type_vegetarian,omitempty"`
 	TypeChicken    bool            `json:"type_chicken,omitempty"`
 	TypeBeef       bool            `json:"type_beef,omitempty"`

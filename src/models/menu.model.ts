@@ -33,6 +33,7 @@ export interface Meal {
   base_rice: boolean;
   base_potatoes: boolean;
   base_bread: boolean;
+  base_wrap: boolean;
   type_vegetarian: boolean;
   type_chicken: boolean;
   type_beef: boolean;
@@ -101,6 +102,7 @@ export const baseMenu: Meal = {
   base_noodles: false,
   base_pasta: false,
   base_bread: false,
+  base_wrap: false,
   type_chicken: false,
   type_beef: false,
   type_pork: false,

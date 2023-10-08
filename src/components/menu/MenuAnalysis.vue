@@ -58,11 +58,11 @@ const selectIngredient = (ingredient: ParsedIngredient) => {
   store.commit(MenuMutations.EditIngredient, ingredient);
 };
 
-const matches = (needle: string, haystack: string = ''): boolean => {
+const matches = (haystack: string, needle: string = ''): boolean => {
   const n = needle.toLocaleLowerCase();
   const s = haystack.toLocaleLowerCase();
 
-  return n.startsWith(s) || n.includes(s);
+  return s.startsWith(n) || s.includes(n);
 };
 
 const getIngredient = (name: string): Ingredient | null => {

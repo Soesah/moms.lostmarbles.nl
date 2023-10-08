@@ -72,10 +72,13 @@ export const menuStore: Module<MenuStore, MomsState> = {
       return response.data;
     },
     async [stripNamespace(MenuActions.CreateIngredient)](
-      {}: Context,
+      { dispatch }: Context,
       data: Ingredient,
     ): Promise<Ingredient> {
       const response = await menuService.createIngredient(data);
+
+      // re-fetch ingredients
+      dispatch(stripNamespace(MenuActions.GetIngredients));
       return response.data;
     },
     async [stripNamespace(MenuActions.UpdateIngredient)](

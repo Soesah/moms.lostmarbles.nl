@@ -6,10 +6,11 @@ import "time"
 type Meal struct {
 	ID             int64           `json:"id"`
 	NameNL         string          `json:"name_nl"`
-	NameEN         string          `json:"name_en"`
-	NameID         string          `json:"name_id"`
-	Keywords       []string        `json:"keywords"`
-	Ingredients    []IngredientRef `json:"ingredients"`
+	NameEN         string          `json:"name_en,omitempty"`
+	NameID         string          `json:"name_id,omitempty"`
+	Keywords       []string        `json:"keywords,omitempty"`
+	Culture        string          `json:"culture,omitempty"`
+	Ingredients    []IngredientRef `json:"ingredients,omitempty"`
 	BasePasta      bool            `json:"base_pasta,omitempty"`
 	BaseNoodles    bool            `json:"base_noodles,omitempty"`
 	BaseRice       bool            `json:"base_rice,omitempty"`

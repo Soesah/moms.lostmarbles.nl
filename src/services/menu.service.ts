@@ -25,6 +25,15 @@ export class MenuService {
     };
   }
 
+  public async getIngredients(): Promise<DataResponse<Ingredient[]>> {
+    const response = await this.$http.get(`${this.path}/ingredient`);
+    const status = response.status === STATUS_OK;
+    return {
+      status,
+      data: response.data.data,
+    };
+  }
+
   // ingredient
   public async createIngredient(
     data: Ingredient,

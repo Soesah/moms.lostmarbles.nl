@@ -19,7 +19,7 @@ import NameInput from './form/NameInput.vue';
 const store = useStore();
 
 const parsed = computed<ParsedMenuDay>(() => store.state.us.parsedDay);
-const meal = reactive<Meal>({ ...baseMenu, name: parsed.value.meal });
+const meal = reactive<Meal>({ ...baseMenu, name_nl: parsed.value.meal });
 
 watch(
   () => parsed,

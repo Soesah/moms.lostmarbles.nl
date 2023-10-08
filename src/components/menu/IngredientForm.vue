@@ -17,7 +17,7 @@ const parsed = computed<ParsedIngredient>(
 );
 const ingredient = reactive<Ingredient>({
   ...baseIngredient,
-  name: parsed.value.name,
+  name_nl: parsed.value.name,
 });
 
 watch(

@@ -3,9 +3,9 @@ package models
 type Ingredient struct {
 	ID       int64    `json:"id"`
 	NameNL   string   `json:"name_nl"`
-	NameEN   string   `json:"name_en"`
-	NameID   string   `json:"name_id"`
-	Keywords []string `json:"keywords"`
+	NameEN   string   `json:"name_en,omitempty"`
+	NameID   string   `json:"name_id,omitempty"`
+	Keywords []string `json:"keywords,omitempty"`
 	Type     string   `json:"type"`
 }
 

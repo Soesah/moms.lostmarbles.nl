@@ -5,17 +5,20 @@ import { Ingredient, Meal, Menu } from '@/models/menu.model';
 import { MenuService } from '@/services/menu.service';
 
 export interface MenuStore {
+  ingredients: Ingredient[];
   parsedDay: ParsedMenuDay | null;
   parsedIngredient: ParsedIngredient | null;
 }
 
 export enum MenuMutations {
+  SetIngredients = 'us/SetIngredients',
   EditMenu = 'us/EditMenu',
   EditIngredient = 'us/EditIngredient',
 }
 
 export enum MenuActions {
   AnalyzeMenu = 'us/AnalyzeMenu',
+  GetIngredients = 'us/GetIngredients',
   CreateIngredient = 'us/CreateIngredient',
   UpdateIngredient = 'us/UpdateIngredient',
   RemoveIngredient = 'us/RemoveIngredient',
@@ -37,10 +40,17 @@ export const stripNamespace = (action: MenuMutations | MenuActions): string =>
 export const menuStore: Module<MenuStore, MomsState> = {
   namespaced: true,
   state: {
+    ingredients: [],
     parsedDay: null,
     parsedIngredient: null,
   },
   mutations: {
+    [stripNamespace(MenuMutations.SetIngredients)](
+      state,
+      ingredients: Ingredient[],
+    ) {
+      state.ingredients = ingredients;
+    },
     [stripNamespace(MenuMutations.EditMenu)](state, meal: ParsedMenuDay) {
       state.parsedDay = meal;
     },
@@ -54,6 +64,11 @@ export const menuStore: Module<MenuStore, MomsState> = {
   actions: {
     async [stripNamespace(MenuActions.AnalyzeMenu)]({}: Context) {
       const response = await menuService.analyze();
+      return response.data;
+    },
+    async [stripNamespace(MenuActions.GetIngredients)]({ commit }: Context) {
+      const response = await menuService.getIngredients();
+      commit(stripNamespace(MenuMutations.SetIngredients), response.data);
       return response.data;
     },
     async [stripNamespace(MenuActions.CreateIngredient)](

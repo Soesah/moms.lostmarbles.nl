@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { markRaw, onMounted, ref } from 'vue';
+import { computed, markRaw, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import {
   ParsedMenuDay,
   ParsedMenu,
   ParsedIngredient,
+  Ingredient,
 } from '@/models/menu.model';
 import { MenuActions, MenuMutations } from './menu.store';
 import { ModalMutations } from '../common/modal/modal.store';
@@ -12,6 +13,8 @@ import MealForm from './MealForm.vue';
 import IngredientForm from './IngredientForm.vue';
 
 const store = useStore();
+
+const ingredients = computed<Ingredient[]>(() => store.state.us.ingredients);
 
 const parsed = ref<ParsedMenu>({
   id: -1,
@@ -36,6 +39,7 @@ const emit = defineEmits(['selectMeal']);
 
 onMounted(async () => {
   const d = await store.dispatch(MenuActions.AnalyzeMenu);
+  await store.dispatch(MenuActions.GetIngredients);
 
   parsed.value = d;
 });
@@ -53,6 +57,34 @@ const selectIngredient = (ingredient: ParsedIngredient) => {
   });
   store.commit(MenuMutations.EditIngredient, ingredient);
 };
+
+const matches = (needle: string, haystack: string = ''): boolean => {
+  const n = needle.toLocaleLowerCase();
+  const s = haystack.toLocaleLowerCase();
+
+  return n.startsWith(s) || n.includes(s);
+};
+
+const getIngredient = (name: string): Ingredient | null => {
+  let ing = null;
+
+  for (let index = 0; index < ingredients.value.length; index++) {
+    const item = ingredients.value[index];
+
+    if (
+      matches(name, item.name_nl) ||
+      matches(name, item.name_en) ||
+      matches(name, item.name_id) ||
+      (item.keywords || []).some((v) => matches(name, v))
+    ) {
+      ing = item;
+    }
+  }
+
+  return ing;
+};
+
+const isStored = (name: string): boolean => !!getIngredient(name);
 </script>
 <template>
   <div class="box" v-if="parsed">
@@ -107,7 +139,9 @@ const selectIngredient = (ingredient: ParsedIngredient) => {
     <h2>Kopen</h2>
     <ul class="shopping-list">
       <li v-for="ing in parsed.ingredients" :key="ing.name">
-        <a href="#" @click.prevent="selectIngredient(ing)">{{ ing.name }}</a>
+        <a href="#" @click.prevent="selectIngredient(ing)"
+          >{{ ing.name }} <span v-if="isStored(ing.name)">✔</span></a
+        >
       </li>
     </ul>
   </div>

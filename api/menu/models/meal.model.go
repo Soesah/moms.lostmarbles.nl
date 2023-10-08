@@ -5,8 +5,10 @@ import "time"
 // Meal is a dish that can be cookes with its ingredients. It denotes it base (carbohydrate) and type (protein)
 type Meal struct {
 	ID             int64           `json:"id"`
-	Name           string          `json:"name"`
-	NameVariations []string        `json:"name_variations"`
+	NameNL         string          `json:"name_nl"`
+	NameEN         string          `json:"name_en"`
+	NameID         string          `json:"name_id"`
+	Keywords       []string        `json:"keywords"`
 	Ingredients    []IngredientRef `json:"ingredients"`
 	BasePasta      bool            `json:"base_pasta,omitempty"`
 	BaseNoodles    bool            `json:"base_noodles,omitempty"`

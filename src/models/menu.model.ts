@@ -25,8 +25,10 @@ interface MealRef {
 
 export interface Meal {
   id: number;
-  name: string;
-  name_variations: string[];
+  name_nl: string;
+  name_en?: string;
+  name_id?: string;
+  keywords: string[];
   ingredients: IngredientRef[];
   base_pasta: boolean;
   base_noodles: boolean;
@@ -52,8 +54,10 @@ interface IngredientRef {
 
 export interface Ingredient {
   id: number;
-  name: string;
-  name_variations: string[];
+  name_nl: string;
+  name_en?: string;
+  name_id?: string;
+  keywords: string[];
   type?: string;
   notes?: string;
 }
@@ -94,8 +98,8 @@ export interface ParsedIngredient {
 
 export const baseMenu: Meal = {
   id: -1,
-  name: '',
-  name_variations: [],
+  name_nl: '',
+  keywords: [],
   ingredients: [],
   base_rice: false,
   base_potatoes: false,
@@ -114,6 +118,6 @@ export const baseMenu: Meal = {
 
 export const baseIngredient: Ingredient = {
   id: -1,
-  name: '',
-  name_variations: [],
+  name_nl: '',
+  keywords: [],
 };

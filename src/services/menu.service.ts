@@ -29,7 +29,16 @@ export class MenuService {
   public async createIngredient(
     data: Ingredient,
   ): Promise<DataResponse<Ingredient>> {
-    const response = await this.$http.post(`${this.path}/ingredient`, data);
+    const response = await this.$http.post(`${this.path}/ingredient`, {
+      ...data,
+      keywords: (
+        (Array.isArray(data.keywords) ? data.keywords : [data.keywords]).join(
+          ',',
+        ) || ''
+      )
+        .split(',')
+        .map((str) => str.trim()),
+    });
     const status = response.status === STATUS_OK;
     return {
       status,

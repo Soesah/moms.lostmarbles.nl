@@ -57,7 +57,7 @@ func (c *Controller) GetNewMenuID() int64 {
 		}
 	}
 
-	return newMenuID
+	return newMenuID + 1
 }
 
 // GetNewMealID raises the internal ID and returns a new one
@@ -70,7 +70,7 @@ func (c *Controller) GetNewMealID() int64 {
 		}
 	}
 
-	return newMealID
+	return newMealID + 1
 }
 
 // GetNewIngredientID raises the internal ID and returns a new one
@@ -83,7 +83,7 @@ func (c *Controller) GetNewIngredientID() int64 {
 		}
 	}
 
-	return newIngredientID
+	return newIngredientID + 1
 }
 
 // Store is used to store a category menu

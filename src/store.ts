@@ -4,7 +4,6 @@ import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { RecipeService } from './services/recipe.service';
-import { MenuService } from './services/menu.service';
 // models
 import { MomsState, Actions, Mutations } from './models/store.model';
 import { User } from '@/models/user.model';
@@ -19,7 +18,6 @@ import { Change } from '@/models/changes.model';
 import { MenuItem, MenuGroup } from './models/navigation.model';
 import { createRecipeSpecification } from './specification/recipe.specification';
 import { Auth, AuthLevel, defaultAuth } from '@/models/auth.model';
-import { Ingredient, Meal, Menu } from './models/menu.model';
 // modules
 import { modalStore } from './components/common/modal/modal.store';
 import { menuStore } from './components/menu/menu.store';
@@ -30,7 +28,6 @@ const authService = new AuthService();
 const userService = new UserService();
 const categoryService = new CategoryService();
 const recipeService = new RecipeService();
-const menuService = new MenuService();
 
 type Context = ActionContext<MomsState, MomsState>;
 
@@ -309,55 +306,6 @@ export default createStore<MomsState>({
       setTimeout(() => {
         commit(Mutations.DismissNotification, data.uuid);
       }, data.delay);
-    },
-    async [Actions.AnalyzeMenu]({}: Context) {
-      const response = await menuService.analyze();
-      return response.data;
-    },
-    async [Actions.CreateIngredient](
-      {}: Context,
-      data: Ingredient,
-    ): Promise<Ingredient> {
-      const response = await menuService.createIngredient(data);
-      return response.data;
-    },
-    async [Actions.UpdateIngredient](
-      {}: Context,
-      data: Ingredient,
-    ): Promise<Ingredient> {
-      const response = await menuService.updateIngredient(data);
-      return response.data;
-    },
-    async [Actions.RemoveIngredient](
-      {}: Context,
-      data: Ingredient,
-    ): Promise<boolean> {
-      const response = await menuService.removeIngredient(data);
-      return response.data;
-    },
-    async [Actions.CreateMeal]({}: Context, data: Meal): Promise<Meal> {
-      const response = await menuService.createMeal(data);
-      return response.data;
-    },
-    async [Actions.UpdateMeal]({}: Context, data: Meal): Promise<Meal> {
-      const response = await menuService.updateMeal(data);
-      return response.data;
-    },
-    async [Actions.RemoveMeal]({}: Context, data: Meal): Promise<boolean> {
-      const response = await menuService.removeMeal(data);
-      return response.data;
-    },
-    async [Actions.CreateMenu]({}: Context, data: Menu): Promise<Menu> {
-      const response = await menuService.createMenu(data);
-      return response.data;
-    },
-    async [Actions.UpdateMenu]({}: Context, data: Menu): Promise<Menu> {
-      const response = await menuService.updateMenu(data);
-      return response.data;
-    },
-    async [Actions.RemoveMenu]({}: Context, data: Menu): Promise<boolean> {
-      const response = await menuService.removeMenu(data);
-      return response.data;
     },
   },
   getters: {

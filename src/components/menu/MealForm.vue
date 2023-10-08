@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { computed, reactive, watch } from 'vue';
+import { useStore } from 'vuex';
 import { Meal, ParsedMenuDay, baseMenu } from '@/models/menu.model';
+import { ModalMutations } from '../common/modal/modal.store';
 import BeefIcon from './icons/BeefIcon.vue';
 import BreadIcon from './icons/BreadIcon.vue';
 import ChickenIcon from './icons/ChickenIcon.vue';
@@ -12,7 +14,7 @@ import PotatoIcon from './icons/PotatoIcon.vue';
 import RiceIcon from './icons/RiceIcon.vue';
 import VegetarianIcon from './icons/VegetarianIcon.vue';
 import WrapIcon from './icons/WrapIcon.vue';
-import { useStore } from 'vuex';
+import NameInput from './form/NameInput.vue';
 
 const store = useStore();
 
@@ -26,18 +28,15 @@ watch(
   },
   { deep: true },
 );
+
+const cancel = () => {
+  store.commit(ModalMutations.CloseModal);
+};
 </script>
 <template>
   <form class="box box--tertiary box-modal">
     <h2>Add a Meal</h2>
-    <div class="form-item">
-      <label>Name</label>
-      <input type="text" v-model="meal.name" />
-    </div>
-    <div class="form-item">
-      <label>Name Variations</label>
-      <input type="text" v-model="meal.name_variations" />
-    </div>
+    <NameInput v-model="meal" />
     <div class="form-item">
       <label>Variation of</label>
       <input type="text" v-model="meal.variation_of" />
@@ -147,7 +146,7 @@ watch(
 
     <div class="form-buttons">
       <label></label>
-      <button>Cancel</button>
+      <button type="button" @click="cancel">Cancel</button>
       <button>Save</button>
     </div>
   </form>

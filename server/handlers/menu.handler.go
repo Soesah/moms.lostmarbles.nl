@@ -39,6 +39,18 @@ func UpdateAnalyzed(w http.ResponseWriter, r *http.Request) {
 	httpext.SuccessDataAPI(w, "Ok", m)
 }
 
+// GetIngredients
+func GetIngredients(w http.ResponseWriter, r *http.Request) {
+	ings, err := menu.GetIngredients(r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", ings)
+}
+
 // CreateIngredient
 func CreateIngredient(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)

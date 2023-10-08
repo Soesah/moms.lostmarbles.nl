@@ -78,6 +78,7 @@ func main() {
 			r.Post("/", handlers.CreateMenu)
 			r.Put("/", handlers.UpdateMenu)
 			r.Delete("/id", handlers.RemoveMenu)
+			r.Get("/ingredient", handlers.GetIngredients)
 			r.Post("/ingredient", handlers.CreateIngredient)
 			r.Put("/ingredient", handlers.UpdateIngredient)
 			r.Delete("/ingredient/:id", handlers.RemoveIngredient)

@@ -1,10 +1,12 @@
 package models
 
 type Ingredient struct {
-	ID             int64    `json:"id"`
-	Name           string   `json:"name"`
-	NameVariations []string `json:"name_variations"`
-	Type           string   `json:"type"`
+	ID       int64    `json:"id"`
+	NameNL   string   `json:"name_nl"`
+	NameEN   string   `json:"name_en"`
+	NameID   string   `json:"name_id"`
+	Keywords []string `json:"keywords"`
+	Type     string   `json:"type"`
 }
 
 type IngredientRef struct {

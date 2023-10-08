@@ -161,3 +161,54 @@ button:hover {
     top: 2px;
   }
 }
+
+.field-auto-complete {
+  width: 100%;
+  position: relative;
+
+  input {
+    cursor: pointer;
+
+    &.invisible {
+      opacity: 0;
+      position: absolute;
+      top: -0px;
+    }
+  }
+
+  &&-open input {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .choice-list {
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    list-style-type: none;
+    box-shadow: 2px 2px 4px desaturate(darken(@color-lightgray, 20%), 60%);
+    border: solid 1px desaturate(darken(@color-lightgray, 20%), 20%);
+    background: desaturate(lighten(@color-sand-light, 2%), 20%);
+    border-radius: @border-radius;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+
+    li {
+      padding: @size-medium;
+      border-bottom: desaturate(lighten(@color-sand-light, 2%), 20%);
+      margin-left: 0;
+      cursor: pointer;
+
+      &.choice-focus,
+      &:hover {
+        background: desaturate(darken(@color-sand-light, 5%), 60%);
+      }
+
+      &:before {
+        content: none;
+      }
+    }
+  }
+}

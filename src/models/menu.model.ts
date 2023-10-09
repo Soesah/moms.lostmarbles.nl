@@ -41,8 +41,9 @@ export interface Meal {
   type_beef: boolean;
   type_pork: boolean;
   type_fish: boolean;
-  variation_of: string;
+  variation_of: number;
   recipe_urls: string[];
+  culture: string;
 }
 
 interface IngredientRef {
@@ -112,8 +113,9 @@ export const baseMenu: Meal = {
   type_pork: false,
   type_fish: false,
   type_vegetarian: false,
-  variation_of: '',
+  variation_of: -1,
   recipe_urls: [],
+  culture: '',
 };
 
 export const baseIngredient: Ingredient = {

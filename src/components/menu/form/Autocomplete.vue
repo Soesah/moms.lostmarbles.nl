@@ -3,6 +3,7 @@ import { computed, onMounted, PropType, ref, watch } from 'vue';
 
 export interface Item {
   label: string;
+  search: string;
   value: string | any;
 }
 
@@ -43,7 +44,7 @@ const focusIndex = ref<number>(0);
 const itemsFiltered = computed<Item[]>(() => {
   return props.items.filter(
     (v) =>
-      `${v.label} ${v.value}`
+      `${v.label} ${v.search} ${v.value}`
         .toLowerCase()
         .indexOf(search.value.toLowerCase()) !== -1,
   );

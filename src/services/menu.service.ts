@@ -46,7 +46,8 @@ export class MenuService {
         ) || ''
       )
         .split(',')
-        .map((str) => str.trim()),
+        .map((str) => str.trim())
+        .filter((str) => !!str),
     });
     const status = response.status === STATUS_OK;
     return {

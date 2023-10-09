@@ -9,8 +9,8 @@ import MenuForm from '@/components/menu/MenuForm.vue';
       <MenuAnalysis></MenuAnalysis>
     </section>
     <section class="column">
-      <MealRefForm></MealRefForm>
       <MenuForm></MenuForm>
+      <MealRefForm></MealRefForm>
     </section>
   </main>
 </template>

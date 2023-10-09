@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, reactive, watch } from 'vue';
 import { useStore } from 'vuex';
-import { Meal, ParsedMenuDay, baseMenu } from '@/models/menu.model';
+import { Ingredient, Meal, ParsedMenuDay, baseMenu } from '@/models/menu.model';
 import { ModalMutations } from '../common/modal/modal.store';
 import BeefIcon from './icons/BeefIcon.vue';
 import BreadIcon from './icons/BreadIcon.vue';
@@ -15,11 +15,33 @@ import RiceIcon from './icons/RiceIcon.vue';
 import VegetarianIcon from './icons/VegetarianIcon.vue';
 import WrapIcon from './icons/WrapIcon.vue';
 import NameInput from './form/NameInput.vue';
+import Autocomplete, { Item } from './form/Autocomplete.vue';
+import { MenuActions } from './menu.store';
 
 const store = useStore();
 
 const parsed = computed<ParsedMenuDay>(() => store.state.us.parsedDay);
+const ingredientItems = computed<Item[]>(() =>
+  store.state.us.ingredients.map((ing: Ingredient): Item => {
+    return {
+      label: ing.name_nl,
+      search: `${ing.name_en || ''}, ${ing.name_id || ''}, ${(
+        ing.keywords || []
+      ).join(',')}`,
+      value: ing.id,
+    };
+  }),
+);
 const meal = reactive<Meal>({ ...baseMenu, name_nl: parsed.value.meal });
+
+const addIngredient = () => {
+  meal.ingredients.push({
+    id: -1,
+    amount: '',
+    unit: '',
+    notes: '',
+  });
+};
 
 watch(
   () => parsed,
@@ -32,14 +54,19 @@ watch(
 const cancel = () => {
   store.commit(ModalMutations.CloseModal);
 };
+
+const submit = async () => {
+  await store.dispatch(MenuActions.CreateMeal, { ...meal, variation_of: 0 });
+  cancel();
+};
 </script>
 <template>
-  <form class="box box--tertiary box-modal">
+  <form class="box box--tertiary box-modal" @submit.prevent="submit">
     <h2>Add a Meal</h2>
     <NameInput v-model="meal" />
     <div class="form-item">
       <label>Variation of</label>
-      <input type="text" v-model="meal.variation_of" />
+      <input type="text" v-model.number="meal.variation_of" />
     </div>
     <div class="form-item">
       <label></label>
@@ -140,10 +167,25 @@ const cancel = () => {
     </div>
     <div class="form-item">
       <label>Ingredients</label>
-      <input type="text" v-model="meal.ingredients" />
-      <input type="text" v-model="meal.ingredients" />
+      <ul class="form-items">
+        <li v-for="ing in meal.ingredients" class="form-item form-multiple">
+          <input class="medium right" type="text" v-model="ing.amount" />
+          <input class="small" type="text" v-model="ing.unit" />
+          <Autocomplete
+            v-model="ing.id"
+            :items="ingredientItems"
+            class="large"
+          />
+          <input class="large" type="text" v-model="ing.notes" />
+        </li>
+      </ul>
     </div>
+    <a href="#" @click.prevent="addIngredient()">Add Ingredient</a>
 
+    <div class="form-item">
+      <label>Culture</label>
+      <input class="large" type="text" v-model="meal.culture" />
+    </div>
     <div class="form-buttons">
       <label></label>
       <button type="button" @click="cancel">Cancel</button>

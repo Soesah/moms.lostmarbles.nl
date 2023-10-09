@@ -6,12 +6,12 @@ type Ingredient struct {
 	NameEN   string   `json:"name_en,omitempty"`
 	NameID   string   `json:"name_id,omitempty"`
 	Keywords []string `json:"keywords,omitempty"`
-	Type     string   `json:"type"`
+	Type     string   `json:"type,omitempty"`
 }
 
 type IngredientRef struct {
 	ID     int64  `json:"id"`
-	Amount string `json:"amount"`
-	Unit   string `json:"unit"`
+	Amount string `json:"amount,omitempty"`
+	Unit   string `json:"unit,omitempty"`
 	Notes  string `json:"notes,omitempty"`
 }

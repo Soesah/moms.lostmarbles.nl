@@ -44,6 +44,7 @@ export interface Meal {
   variation_of: number;
   recipe_urls: string[];
   culture: string;
+  has_left_overs: boolean;
 }
 
 interface IngredientRef {
@@ -116,6 +117,7 @@ export const baseMenu: Meal = {
   variation_of: -1,
   recipe_urls: [],
   culture: '',
+  has_left_overs: false,
 };
 
 export const baseIngredient: Ingredient = {

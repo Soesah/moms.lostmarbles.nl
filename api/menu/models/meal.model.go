@@ -28,8 +28,9 @@ type Meal struct {
 }
 
 type MealRef struct {
-	ID        int64     `json:"id,omitempty"` // ID of Meal
 	Date      time.Time `json:"date"`
+	ID        int64     `json:"id,omitempty"`         // ID of Meal
+	OtherIDs  []int64   `json:"other_ids,omitempty"`  // ID of other meal for combination
 	Out       bool      `json:"out,omitempty"`        // Eating out
 	LeftOvers bool      `json:"left_overs,omitempty"` // Eating left overs
 	Notes     string    `json:"notes,omitempty"`

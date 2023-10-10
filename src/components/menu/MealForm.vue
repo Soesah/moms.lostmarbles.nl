@@ -43,10 +43,19 @@ const addIngredient = () => {
   });
 };
 
+const removeIngredinet = (index: number) => {
+  meal.ingredients.splice(index, 1);
+};
+
 watch(
   () => parsed,
   (newValue) => {
-    Object.assign(meal, { ...baseMenu, name: newValue.value.meal });
+    Object.assign(meal, {
+      ...baseMenu,
+      name: newValue.value.meal,
+      recipe_urls: newValue.value.urls,
+      ingredients: [],
+    });
   },
   { deep: true },
 );
@@ -167,24 +176,42 @@ const submit = async () => {
     </div>
     <div class="form-item">
       <label>Ingredients</label>
-      <ul class="form-items">
-        <li v-for="ing in meal.ingredients" class="form-item form-multiple">
-          <input class="medium right" type="text" v-model="ing.amount" />
-          <input class="small" type="text" v-model="ing.unit" />
-          <Autocomplete
-            v-model="ing.id"
-            :items="ingredientItems"
-            class="large"
-          />
-          <input class="large" type="text" v-model="ing.notes" />
-        </li>
-      </ul>
+      <div>
+        <ul class="form-items">
+          <li
+            v-for="(ing, index) in meal.ingredients"
+            class="form-item form-multiple"
+          >
+            <input class="medium right" type="text" v-model="ing.amount" />
+            <input class="small" type="text" v-model="ing.unit" />
+            <Autocomplete
+              v-model="ing.id"
+              :items="ingredientItems"
+              class="large"
+            />
+            <input class="large" type="text" v-model="ing.notes" />
+            <button type="button" @click.prevent="removeIngredinet(index)">
+              x
+            </button>
+          </li>
+        </ul>
+        <p><a href="#" @click.prevent="addIngredient()">Add Ingredient</a></p>
+      </div>
     </div>
-    <a href="#" @click.prevent="addIngredient()">Add Ingredient</a>
 
     <div class="form-item">
       <label>Culture</label>
       <input class="large" type="text" v-model="meal.culture" />
+    </div>
+    <div class="form-item">
+      <label>Has leftovers</label>
+      <input
+        type="checkbox"
+        id="completed"
+        name="completed"
+        :checked="meal.has_left_overs"
+        v-model="meal.has_left_overs"
+      />
     </div>
     <div class="form-buttons">
       <label></label>

@@ -29,9 +29,19 @@ form {
 }
 
 .form-multiple {
+  margin-bottom: 0.2em;
+
   .field-auto-complete,
   input {
-    margin-right: 0.5em;
+    margin-right: 0.2em;
+  }
+
+  .field-auto-complete input {
+    height: 100%;
+  }
+  .field-auto-complete input,
+  input {
+    padding: 0.2em;
 
     &:last-child {
       margin-right: 0;
@@ -205,34 +215,39 @@ button:hover {
     }
   }
 
-  &&-open input {
+  &-open input {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
 
-  .choice-list {
+  .list {
     position: absolute;
-    width: 100%;
-    top: 100%;
+    width: calc(100% - 4px);
+    top: calc(100% -1px);
     left: 0;
     z-index: 10;
+    padding: 0;
+    margin: 0;
     list-style-type: none;
-    box-shadow: 2px 2px 4px @color-lightgray;
-    border: solid 1px @color-lightgray;
-    background: @color-sand-light;
+    box-shadow: 2px 2px 4px rgba(20, 20, 20, 0.5);
+    border: solid 2px black;
+    border-top: none;
+    background: @color-white;
+    color: @color-black;
     border-radius: @border-radius;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
 
     li {
       padding: @size-medium;
-      border-bottom: @color-sand-light;
+      border-bottom: @color-black;
       margin-left: 0;
       cursor: pointer;
+      padding: 0.2em;
 
       &.choice-focus,
       &:hover {
-        background: @color-sand-light;
+        background: @color-lightgray;
       }
 
       &:before {

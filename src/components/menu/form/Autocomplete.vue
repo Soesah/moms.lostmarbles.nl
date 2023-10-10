@@ -51,7 +51,9 @@ const itemsFiltered = computed<Item[]>(() => {
 });
 
 const openClass = computed<string>(() =>
-  open.value ? 'auto-complete-input-open' : '',
+  open.value && search.value && itemsFiltered.value.length
+    ? 'field-auto-complete-open'
+    : '',
 );
 
 const setItem = () => {
@@ -137,7 +139,7 @@ onMounted(() => {
       @keydown.prevent.up="previous"
       @keydown.prevent.down="next"
     />
-    <ul class="clist" v-if="open && itemsFiltered.length && search.length > 1">
+    <ul class="list" v-if="open && itemsFiltered.length && search.length > 1">
       <li
         v-for="(item, index) in itemsFiltered"
         :class="focusClass(index)"

@@ -182,15 +182,19 @@ const submit = async () => {
             v-for="(ing, index) in meal.ingredients"
             class="form-item form-multiple"
           >
-            <input class="medium right" type="text" v-model="ing.amount" />
+            <input class="small right" type="text" v-model="ing.amount" />
             <input class="small" type="text" v-model="ing.unit" />
             <Autocomplete
               v-model="ing.id"
               :items="ingredientItems"
               class="large"
             />
-            <input class="large" type="text" v-model="ing.notes" />
-            <button type="button" @click.prevent="removeIngredinet(index)">
+            <input class="medium" type="text" v-model="ing.notes" />
+            <button
+              type="button"
+              class="small"
+              @click.prevent="removeIngredinet(index)"
+            >
               x
             </button>
           </li>

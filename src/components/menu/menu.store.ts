@@ -1,13 +1,13 @@
 import { ActionContext, Module } from 'vuex';
 import { MomsState } from '@/models/store.model';
-import { ParsedMenuDay, ParsedIngredient } from '@/models/menu.model';
+import { ParsedMenuDay } from '@/models/menu.model';
 import { Ingredient, Meal, Menu } from '@/models/menu.model';
 import { MenuService } from '@/services/menu.service';
 
 export interface MenuStore {
   ingredients: Ingredient[];
   parsedDay: ParsedMenuDay | null;
-  parsedIngredient: ParsedIngredient | null;
+  editIngredient: Ingredient | null;
 }
 
 export enum MenuMutations {
@@ -42,7 +42,7 @@ export const menuStore: Module<MenuStore, MomsState> = {
   state: {
     ingredients: [],
     parsedDay: null,
-    parsedIngredient: null,
+    editIngredient: null,
   },
   mutations: {
     [stripNamespace(MenuMutations.SetIngredients)](
@@ -56,9 +56,9 @@ export const menuStore: Module<MenuStore, MomsState> = {
     },
     [stripNamespace(MenuMutations.EditIngredient)](
       state,
-      ingredient: ParsedIngredient,
+      ingredient: Ingredient,
     ) {
-      state.parsedIngredient = ingredient;
+      state.editIngredient = ingredient;
     },
   },
   actions: {

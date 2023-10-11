@@ -51,18 +51,24 @@ const selectMeal = (meal: ParsedMenuDay) => {
   store.commit(MenuMutations.EditMenu, meal);
 };
 
-const selectIngredient = (ingredient: ParsedIngredient) => {
+const selectIngredient = (
+  ingredient: ParsedIngredient,
+  stored: Ingredient | null,
+) => {
   store.commit(ModalMutations.OpenModal, {
     modal: markRaw(IngredientForm),
   });
-  store.commit(MenuMutations.EditIngredient, ingredient);
+  store.commit(
+    MenuMutations.EditIngredient,
+    stored || { name_nl: ingredient.name },
+  );
 };
 
 const matches = (haystack: string, needle: string = ''): boolean => {
   const n = needle.toLocaleLowerCase();
   const s = haystack.toLocaleLowerCase();
 
-  return s.startsWith(n) || s.includes(n);
+  return !!s && !!n && (s.startsWith(n) || s.includes(n));
 };
 
 const getIngredient = (name: string): Ingredient | null => {
@@ -139,7 +145,9 @@ const isStored = (name: string): boolean => !!getIngredient(name);
     <h2>Kopen</h2>
     <ul class="shopping-list">
       <li v-for="ing in parsed.ingredients" :key="ing.name">
-        <a href="#" @click.prevent="selectIngredient(ing)"
+        <a
+          href="#"
+          @click.prevent="selectIngredient(ing, getIngredient(ing.name))"
           >{{ ing.name }} <span v-if="isStored(ing.name)">✔</span></a
         >
       </li>

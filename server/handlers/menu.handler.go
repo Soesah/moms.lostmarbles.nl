@@ -108,6 +108,18 @@ func RemoveIngredient(w http.ResponseWriter, r *http.Request) {
 	httpext.SuccessAPI(w, "Ok")
 }
 
+// GetMeals
+func GetMeals(w http.ResponseWriter, r *http.Request) {
+	ings, err := menu.GetMeals(r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", ings)
+}
+
 // CreateMeal
 func CreateMeal(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)

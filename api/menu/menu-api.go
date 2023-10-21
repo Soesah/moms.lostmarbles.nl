@@ -119,6 +119,19 @@ func RemoveIngredient(id int64, r *http.Request) error {
 	return nil
 }
 
+func GetMeals(r *http.Request) ([]models.Meal, error) {
+	var meals []models.Meal
+
+	c := Controller{}
+	err := c.Load(r)
+
+	if err != nil {
+		return meals, err
+	}
+
+	return c.Meals, nil
+}
+
 func CreateMeal(data models.Meal, r *http.Request) (models.Meal, error) {
 	var m models.Meal
 

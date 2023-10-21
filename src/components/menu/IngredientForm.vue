@@ -17,7 +17,7 @@ const ingredient = reactive<Ingredient>({
 });
 
 const action = computed<string>(() =>
-  editIngredient.value.id === NEW_ITEM_ID ? 'Add' : 'Edit',
+  ingredient.id === NEW_ITEM_ID ? 'Add' : 'Edit',
 );
 
 watch(

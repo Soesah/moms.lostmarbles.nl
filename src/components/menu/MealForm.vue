@@ -35,7 +35,7 @@ const ingredientItems = computed<Item[]>(() =>
 const meal = reactive<Meal>({ ...baseMeal, ...editMeal.value });
 
 const action = computed<string>(() =>
-  editMeal.value.id === NEW_ITEM_ID ? 'Add' : 'Edit',
+  meal.id === NEW_ITEM_ID ? 'Add' : 'Edit',
 );
 
 const addIngredient = () => {

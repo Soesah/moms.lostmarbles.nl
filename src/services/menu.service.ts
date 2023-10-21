@@ -8,6 +8,13 @@ interface DataResponse<T> {
   data: T;
 }
 
+const getKeyWords = (data: { keywords: string | string[] }): string[] =>
+  (Array.isArray(data.keywords) ? data.keywords : [data.keywords])
+    .join(',')
+    .split(',')
+    .map((str) => str.trim())
+    .filter((str) => !!str);
+
 export class MenuService {
   public $http: AxiosStatic;
   private path: string = '/api/menu';
@@ -49,14 +56,7 @@ export class MenuService {
   ): Promise<DataResponse<Ingredient>> {
     const response = await this.$http.post(`${this.path}/ingredient`, {
       ...data,
-      keywords: (
-        (Array.isArray(data.keywords) ? data.keywords : [data.keywords]).join(
-          ',',
-        ) || ''
-      )
-        .split(',')
-        .map((str) => str.trim())
-        .filter((str) => !!str),
+      keywords: getKeyWords(data),
     });
     const status = response.status === STATUS_OK;
     return {
@@ -68,7 +68,10 @@ export class MenuService {
   public async updateIngredient(
     data: Ingredient,
   ): Promise<DataResponse<Ingredient>> {
-    const response = await this.$http.put(`${this.path}/ingredient`, data);
+    const response = await this.$http.put(`${this.path}/ingredient`, {
+      ...data,
+      keywords: getKeyWords(data),
+    });
     const status = response.status === STATUS_OK;
     return {
       status,
@@ -100,7 +103,10 @@ export class MenuService {
 
   // meal
   public async createMeal(data: Meal): Promise<DataResponse<Meal>> {
-    const response = await this.$http.post(`${this.path}/meal`, data);
+    const response = await this.$http.post(`${this.path}/meal`, {
+      ...data,
+      keywords: getKeyWords(data),
+    });
     const status = response.status === STATUS_OK;
     return {
       status,
@@ -109,7 +115,10 @@ export class MenuService {
   }
 
   public async updateMeal(data: Meal): Promise<DataResponse<Meal>> {
-    const response = await this.$http.put(`${this.path}/meal`, data);
+    const response = await this.$http.put(`${this.path}/meal`, {
+      ...data,
+      keywords: getKeyWords(data),
+    });
     const status = response.status === STATUS_OK;
     return {
       status,

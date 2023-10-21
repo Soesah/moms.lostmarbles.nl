@@ -7,6 +7,7 @@ import {
   ParsedIngredient,
   Ingredient,
   Meal,
+  NEW_ITEM_ID,
 } from '@/models/menu.model';
 import { MenuActions, MenuMutations } from './menu.store';
 import { ModalMutations } from '../common/modal/modal.store';
@@ -75,6 +76,20 @@ const selectIngredient = (ingredient: ParsedIngredient) => {
     MenuMutations.EditIngredient,
     stored || { name_nl: ingredient.name },
   );
+};
+
+const addIngredient = () => {
+  store.commit(ModalMutations.OpenModal, {
+    modal: markRaw(IngredientForm),
+  });
+  store.commit(MenuMutations.EditIngredient, { id: NEW_ITEM_ID, name_nl: '' });
+};
+
+const addMeal = () => {
+  store.commit(ModalMutations.OpenModal, {
+    modal: markRaw(MealForm),
+  });
+  store.commit(MenuMutations.EditMeal, { id: NEW_ITEM_ID, name_nl: '' });
 };
 
 const matches = (haystack: string, needle: string = ''): boolean => {
@@ -162,6 +177,9 @@ const capitalize = (str: string) =>
         &nbsp;<span v-if="isStoredMeal(parsed[day].meal)">✔</span>
       </li>
     </ul>
+    <p>
+      <a href="#" @click.prevent="addMeal()">Add meal</a>
+    </p>
     <h2>Kopen</h2>
     <ul class="shopping-list">
       <li v-for="ing in parsed.ingredients" :key="ing.name">
@@ -170,5 +188,8 @@ const capitalize = (str: string) =>
         >
       </li>
     </ul>
+    <p>
+      <a href="#" @click.prevent="addIngredient()">Add ingredient</a>
+    </p>
   </div>
 </template>

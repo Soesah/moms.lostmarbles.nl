@@ -1,3 +1,5 @@
+export const NEW_ITEM_ID = -1;
+
 export interface Menu {
   id: number;
   date: string;
@@ -98,8 +100,8 @@ export interface ParsedIngredient {
   optional: boolean;
 }
 
-export const baseMenu: Meal = {
-  id: -1,
+export const baseMeal: Meal = {
+  id: NEW_ITEM_ID,
   name_nl: '',
   keywords: [],
   ingredients: [],
@@ -121,7 +123,7 @@ export const baseMenu: Meal = {
 };
 
 export const baseIngredient: Ingredient = {
-  id: -1,
+  id: NEW_ITEM_ID,
   name_nl: '',
   keywords: [],
 };

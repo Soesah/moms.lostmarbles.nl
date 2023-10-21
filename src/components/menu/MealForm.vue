@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, reactive, watch } from 'vue';
 import { useStore } from 'vuex';
-import { Ingredient, Meal, baseMenu } from '@/models/menu.model';
+import { Ingredient, Meal, NEW_ITEM_ID, baseMeal } from '@/models/menu.model';
 import { ModalMutations } from '../common/modal/modal.store';
 import BeefIcon from './icons/BeefIcon.vue';
 import BreadIcon from './icons/BreadIcon.vue';
@@ -20,7 +20,7 @@ import { MenuActions } from './menu.store';
 
 const store = useStore();
 
-const parsed = computed<Meal>(() => store.state.us.parsedDay);
+const editMeal = computed<Meal>(() => store.state.us.editMeal);
 const ingredientItems = computed<Item[]>(() =>
   store.state.us.ingredients.map((ing: Ingredient): Item => {
     return {
@@ -32,7 +32,11 @@ const ingredientItems = computed<Item[]>(() =>
     };
   }),
 );
-const meal = reactive<Meal>({ ...baseMenu, ...parsed.value });
+const meal = reactive<Meal>({ ...baseMeal, ...editMeal.value });
+
+const action = computed<string>(() =>
+  editMeal.value.id === NEW_ITEM_ID ? 'Add' : 'Edit',
+);
 
 const addIngredient = () => {
   meal.ingredients.push({
@@ -48,10 +52,10 @@ const removeIngredinet = (index: number) => {
 };
 
 watch(
-  () => parsed,
+  () => editMeal,
   (newValue) => {
     Object.assign(meal, {
-      ...baseMenu,
+      ...baseMeal,
       ...newValue.value,
     });
   },
@@ -63,13 +67,17 @@ const cancel = () => {
 };
 
 const submit = async () => {
-  await store.dispatch(MenuActions.CreateMeal, { ...meal, variation_of: 0 });
+  if (meal.id !== NEW_ITEM_ID) {
+    await store.dispatch(MenuActions.UpdateMeal, { ...meal, variation_of: 0 });
+  } else {
+    await store.dispatch(MenuActions.CreateMeal, { ...meal, variation_of: 0 });
+  }
   cancel();
 };
 </script>
 <template>
   <form class="box box--tertiary box-modal" @submit.prevent="submit">
-    <h2>Add a Meal</h2>
+    <h2>{{ action }} a Meal</h2>
     <NameInput v-model="meal" />
     <div class="form-item">
       <label>Variation of</label>

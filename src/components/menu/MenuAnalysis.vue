@@ -61,7 +61,7 @@ const selectMeal = (meal: ParsedMenuDay) => {
     modal: markRaw(MealForm),
   });
   store.commit(
-    MenuMutations.EditMenu,
+    MenuMutations.EditMeal,
     stored || { name_nl: meal.meal, recipe_urls: meal.urls },
   );
 };

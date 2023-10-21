@@ -4,16 +4,16 @@ import { Ingredient, Meal, Menu } from '@/models/menu.model';
 import { MenuService } from '@/services/menu.service';
 
 export interface MenuStore {
-  ingredients: Ingredient[];
   meals: Meal[];
-  parsedDay: Meal | null;
+  editMeal: Meal | null;
+  ingredients: Ingredient[];
   editIngredient: Ingredient | null;
 }
 
 export enum MenuMutations {
   SetIngredients = 'us/SetIngredients',
   SetMeals = 'us/SetMeals',
-  EditMenu = 'us/EditMenu',
+  EditMeal = 'us/EditMeal',
   EditIngredient = 'us/EditIngredient',
 }
 
@@ -45,7 +45,7 @@ export const menuStore: Module<MenuStore, MomsState> = {
   state: {
     ingredients: [],
     meals: [],
-    parsedDay: null,
+    editMeal: null,
     editIngredient: null,
   },
   mutations: {
@@ -58,8 +58,8 @@ export const menuStore: Module<MenuStore, MomsState> = {
     [stripNamespace(MenuMutations.SetMeals)](state, meals: Meal[]) {
       state.meals = meals;
     },
-    [stripNamespace(MenuMutations.EditMenu)](state, meal: Meal) {
-      state.parsedDay = meal;
+    [stripNamespace(MenuMutations.EditMeal)](state, meal: Meal) {
+      state.editMeal = meal;
     },
     [stripNamespace(MenuMutations.EditIngredient)](
       state,

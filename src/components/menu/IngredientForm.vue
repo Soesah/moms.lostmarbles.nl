@@ -2,7 +2,7 @@
 import { computed, reactive, watch } from 'vue';
 import { useStore } from 'vuex';
 import { ModalMutations } from '../common/modal/modal.store';
-import { Ingredient, baseIngredient } from '@/models/menu.model';
+import { Ingredient, NEW_ITEM_ID, baseIngredient } from '@/models/menu.model';
 import NameInput from './form/NameInput.vue';
 import { MenuActions } from './menu.store';
 
@@ -17,7 +17,7 @@ const ingredient = reactive<Ingredient>({
 });
 
 const action = computed<string>(() =>
-  editIngredient.value.id === -1 ? 'Add' : 'Edit',
+  editIngredient.value.id === NEW_ITEM_ID ? 'Add' : 'Edit',
 );
 
 watch(
@@ -33,7 +33,11 @@ const cancel = () => {
 };
 
 const submit = async () => {
-  await store.dispatch(MenuActions.CreateIngredient, ingredient);
+  if (ingredient.id !== NEW_ITEM_ID) {
+    await store.dispatch(MenuActions.UpdateIngredient, ingredient);
+  } else {
+    await store.dispatch(MenuActions.CreateIngredient, ingredient);
+  }
   cancel();
 };
 </script>

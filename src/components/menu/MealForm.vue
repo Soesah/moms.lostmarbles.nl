@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, reactive, watch } from 'vue';
 import { useStore } from 'vuex';
-import { Ingredient, Meal, ParsedMenuDay, baseMenu } from '@/models/menu.model';
+import { Ingredient, Meal, baseMenu } from '@/models/menu.model';
 import { ModalMutations } from '../common/modal/modal.store';
 import BeefIcon from './icons/BeefIcon.vue';
 import BreadIcon from './icons/BreadIcon.vue';
@@ -20,7 +20,7 @@ import { MenuActions } from './menu.store';
 
 const store = useStore();
 
-const parsed = computed<ParsedMenuDay>(() => store.state.us.parsedDay);
+const parsed = computed<Meal>(() => store.state.us.parsedDay);
 const ingredientItems = computed<Item[]>(() =>
   store.state.us.ingredients.map((ing: Ingredient): Item => {
     return {
@@ -32,7 +32,7 @@ const ingredientItems = computed<Item[]>(() =>
     };
   }),
 );
-const meal = reactive<Meal>({ ...baseMenu, name_nl: parsed.value.meal });
+const meal = reactive<Meal>({ ...baseMenu, ...parsed.value });
 
 const addIngredient = () => {
   meal.ingredients.push({
@@ -52,9 +52,7 @@ watch(
   (newValue) => {
     Object.assign(meal, {
       ...baseMenu,
-      name: newValue.value.meal,
-      recipe_urls: newValue.value.urls,
-      ingredients: [],
+      ...newValue.value,
     });
   },
   { deep: true },

@@ -1,27 +1,30 @@
 import { ActionContext, Module } from 'vuex';
 import { MomsState } from '@/models/store.model';
-import { ParsedMenuDay } from '@/models/menu.model';
 import { Ingredient, Meal, Menu } from '@/models/menu.model';
 import { MenuService } from '@/services/menu.service';
 
 export interface MenuStore {
   ingredients: Ingredient[];
-  parsedDay: ParsedMenuDay | null;
+  meals: Meal[];
+  parsedDay: Meal | null;
   editIngredient: Ingredient | null;
 }
 
 export enum MenuMutations {
   SetIngredients = 'us/SetIngredients',
+  SetMeals = 'us/SetMeals',
   EditMenu = 'us/EditMenu',
   EditIngredient = 'us/EditIngredient',
 }
 
 export enum MenuActions {
   AnalyzeMenu = 'us/AnalyzeMenu',
+  UpdateAnalyzedMenu = 'us/UpdateAnalyzedMenu',
   GetIngredients = 'us/GetIngredients',
   CreateIngredient = 'us/CreateIngredient',
   UpdateIngredient = 'us/UpdateIngredient',
   RemoveIngredient = 'us/RemoveIngredient',
+  GetMeals = 'us/GetMeals',
   CreateMeal = 'us/CreateMeal',
   UpdateMeal = 'us/UpdateMeal',
   RemoveMeal = 'us/RemoveMeal',
@@ -41,6 +44,7 @@ export const menuStore: Module<MenuStore, MomsState> = {
   namespaced: true,
   state: {
     ingredients: [],
+    meals: [],
     parsedDay: null,
     editIngredient: null,
   },
@@ -51,7 +55,10 @@ export const menuStore: Module<MenuStore, MomsState> = {
     ) {
       state.ingredients = ingredients;
     },
-    [stripNamespace(MenuMutations.EditMenu)](state, meal: ParsedMenuDay) {
+    [stripNamespace(MenuMutations.SetMeals)](state, meals: Meal[]) {
+      state.meals = meals;
+    },
+    [stripNamespace(MenuMutations.EditMenu)](state, meal: Meal) {
       state.parsedDay = meal;
     },
     [stripNamespace(MenuMutations.EditIngredient)](
@@ -64,6 +71,13 @@ export const menuStore: Module<MenuStore, MomsState> = {
   actions: {
     async [stripNamespace(MenuActions.AnalyzeMenu)]({}: Context) {
       const response = await menuService.analyze();
+      return response.data;
+    },
+    async [stripNamespace(MenuActions.UpdateAnalyzedMenu)](
+      {}: Context,
+      id: number,
+    ) {
+      const response = await menuService.analyzed(id);
       return response.data;
     },
     async [stripNamespace(MenuActions.GetIngredients)]({ commit }: Context) {
@@ -93,6 +107,11 @@ export const menuStore: Module<MenuStore, MomsState> = {
       data: Ingredient,
     ): Promise<boolean> {
       const response = await menuService.removeIngredient(data);
+      return response.data;
+    },
+    async [stripNamespace(MenuActions.GetMeals)]({ commit }: Context) {
+      const response = await menuService.getMeals();
+      commit(stripNamespace(MenuMutations.SetMeals), response.data);
       return response.data;
     },
     async [stripNamespace(MenuActions.CreateMeal)](

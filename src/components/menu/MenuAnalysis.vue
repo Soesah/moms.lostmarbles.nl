@@ -6,6 +6,7 @@ import {
   ParsedMenu,
   ParsedIngredient,
   Ingredient,
+  Meal,
 } from '@/models/menu.model';
 import { MenuActions, MenuMutations } from './menu.store';
 import { ModalMutations } from '../common/modal/modal.store';
@@ -15,6 +16,7 @@ import IngredientForm from './IngredientForm.vue';
 const store = useStore();
 
 const ingredients = computed<Ingredient[]>(() => store.state.us.ingredients);
+const meals = computed<Meal[]>(() => store.state.us.meals);
 
 const parsed = ref<ParsedMenu>({
   id: -1,
@@ -39,22 +41,33 @@ const emit = defineEmits(['selectMeal']);
 
 onMounted(async () => {
   const d = await store.dispatch(MenuActions.AnalyzeMenu);
-  await store.dispatch(MenuActions.GetIngredients);
-
   parsed.value = d;
+
+  await store.dispatch(MenuActions.GetIngredients);
+  await store.dispatch(MenuActions.GetMeals);
 });
 
+const updateAnalyzed = async (id: number) => {
+  await store.dispatch(MenuActions.UpdateAnalyzedMenu, id);
+
+  const d = await store.dispatch(MenuActions.AnalyzeMenu);
+  parsed.value = d;
+};
+
 const selectMeal = (meal: ParsedMenuDay) => {
+  const stored = getMeal(meal.meal);
+
   store.commit(ModalMutations.OpenModal, {
     modal: markRaw(MealForm),
   });
-  store.commit(MenuMutations.EditMenu, meal);
+  store.commit(
+    MenuMutations.EditMenu,
+    stored || { name_nl: meal.meal, recipe_urls: meal.urls },
+  );
 };
 
-const selectIngredient = (
-  ingredient: ParsedIngredient,
-  stored: Ingredient | null,
-) => {
+const selectIngredient = (ingredient: ParsedIngredient) => {
+  const stored = getIngredient(ingredient.name);
   store.commit(ModalMutations.OpenModal, {
     modal: markRaw(IngredientForm),
   });
@@ -90,65 +103,70 @@ const getIngredient = (name: string): Ingredient | null => {
   return ing;
 };
 
-const isStored = (name: string): boolean => !!getIngredient(name);
+const getMeal = (name: string): Meal | null => {
+  let meal = null;
+
+  for (let index = 0; index < meals.value.length; index++) {
+    const item = meals.value[index];
+
+    if (
+      matches(name, item.name_nl) ||
+      matches(name, item.name_en) ||
+      matches(name, item.name_id) ||
+      (item.keywords || []).some((v) => matches(name, v))
+    ) {
+      meal = item;
+    }
+  }
+
+  return meal;
+};
+
+const isStoredIngredient = (name: string): boolean => !!getIngredient(name);
+const isStoredMeal = (name: string): boolean => !!getMeal(name);
+
+const days: (
+  | 'saturday'
+  | 'sunday'
+  | 'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+)[] = [
+  'saturday',
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+];
+
+const capitalize = (str: string) =>
+  `${str.substring(0, 1).toUpperCase()}${str.substring(1)}`;
 </script>
 <template>
   <div class="box" v-if="parsed">
     <h1>Analyze {{ parsed.subject }} {{ parsed.year }}</h1>
-
+    <button class="secondary" @click.prevent="updateAnalyzed(parsed.id)">
+      Update
+    </button>
     <h2>Menu</h2>
     <ul class="week-menu">
-      <li>
-        <span>Saturday:</span>
-        <a href="#" @click.prevent="selectMeal(parsed.saturday)">{{
-          parsed.saturday.meal
+      <li v-for="day in days" :key="day">
+        <span>{{ capitalize(day) }}:</span>
+        <a href="#" @click.prevent="selectMeal(parsed[day])">{{
+          parsed[day].meal
         }}</a>
-      </li>
-      <li>
-        <span>Sunday:</span>
-        <a href="#" @click.prevent="selectMeal(parsed.sunday)">{{
-          parsed.sunday.meal
-        }}</a>
-      </li>
-      <li>
-        <span>Monday:</span>
-        <a href="#" @click.prevent="selectMeal(parsed.monday)">{{
-          parsed.monday.meal
-        }}</a>
-      </li>
-      <li>
-        <span>Tuesday:</span>
-        <a href="#" @click.prevent="selectMeal(parsed.tuesday)">{{
-          parsed.tuesday.meal
-        }}</a>
-      </li>
-      <li>
-        <span>Wednesday:</span>
-        <a href="#" @click.prevent="selectMeal(parsed.wednesday)">{{
-          parsed.wednesday.meal
-        }}</a>
-      </li>
-      <li>
-        <span>Thursday:</span>
-        <a href="#" @click.prevent="selectMeal(parsed.thursday)">{{
-          parsed.thursday.meal
-        }}</a>
-      </li>
-      <li>
-        <span>Friday:</span>
-        <a href="#" @click.prevent="selectMeal(parsed.friday)">{{
-          parsed.friday.meal
-        }}</a>
+        &nbsp;<span v-if="isStoredMeal(parsed[day].meal)">✔</span>
       </li>
     </ul>
-
     <h2>Kopen</h2>
     <ul class="shopping-list">
       <li v-for="ing in parsed.ingredients" :key="ing.name">
-        <a
-          href="#"
-          @click.prevent="selectIngredient(ing, getIngredient(ing.name))"
-          >{{ ing.name }} <span v-if="isStored(ing.name)">✔</span></a
+        <a href="#" @click.prevent="selectIngredient(ing)"
+          >{{ ing.name }} <span v-if="isStoredIngredient(ing.name)">✔</span></a
         >
       </li>
     </ul>

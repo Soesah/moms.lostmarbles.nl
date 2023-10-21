@@ -25,6 +25,15 @@ export class MenuService {
     };
   }
 
+  public async analyzed(id: number): Promise<DataResponse<ParsedMenu>> {
+    const response = await this.$http.put(`${this.path}/analyze/${id}`);
+    const status = response.status === STATUS_OK;
+    return {
+      status,
+      data: response.data.data,
+    };
+  }
+
   public async getIngredients(): Promise<DataResponse<Ingredient[]>> {
     const response = await this.$http.get(`${this.path}/ingredient`);
     const status = response.status === STATUS_OK;
@@ -77,6 +86,15 @@ export class MenuService {
     return {
       status,
       data: status,
+    };
+  }
+
+  public async getMeals(): Promise<DataResponse<Meal[]>> {
+    const response = await this.$http.get(`${this.path}/meal`);
+    const status = response.status === STATUS_OK;
+    return {
+      status,
+      data: response.data.data,
     };
   }
 

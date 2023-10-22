@@ -115,10 +115,12 @@ export const menuStore: Module<MenuStore, MomsState> = {
       return response.data;
     },
     async [stripNamespace(MenuActions.CreateMeal)](
-      {}: Context,
+      { dispatch }: Context,
       data: Meal,
     ): Promise<Meal> {
       const response = await menuService.createMeal(data);
+      // re-fetch meals
+      dispatch(stripNamespace(MenuActions.GetMeals));
       return response.data;
     },
     async [stripNamespace(MenuActions.UpdateMeal)](

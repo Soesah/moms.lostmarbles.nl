@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, markRaw, onMounted, ref } from 'vue';
+import { computed, markRaw, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import {
   ParsedMenuDay,
@@ -8,6 +8,8 @@ import {
   Ingredient,
   Meal,
   NEW_ITEM_ID,
+  getIngredient,
+  getMeal,
 } from '@/models/menu.model';
 import { MenuActions, MenuMutations } from './menu.store';
 import { ModalMutations } from '../common/modal/modal.store';
@@ -19,44 +21,22 @@ const store = useStore();
 const ingredients = computed<Ingredient[]>(() => store.state.us.ingredients);
 const meals = computed<Meal[]>(() => store.state.us.meals);
 
-const parsed = ref<ParsedMenu>({
-  id: -1,
-  subject: '',
-  file: '',
-  date: '',
-  year: -1,
-  week: -1,
-  saturday: { meal: '', date: '' },
-  sunday: { meal: '', date: '' },
-  monday: { meal: '', date: '' },
-  tuesday: { meal: '', date: '' },
-  wednesday: { meal: '', date: '' },
-  thursday: { meal: '', date: '' },
-  friday: { meal: '', date: '' },
-  ingredients: [],
-  next_week: '',
-  analyzed: false,
-});
+const parsed = computed<ParsedMenu>(() => store.state.us.parsedMenu);
 
 const emit = defineEmits(['selectMeal']);
 
 onMounted(async () => {
-  const d = await store.dispatch(MenuActions.AnalyzeMenu);
-  parsed.value = d;
-
   await store.dispatch(MenuActions.GetIngredients);
   await store.dispatch(MenuActions.GetMeals);
+  await store.dispatch(MenuActions.AnalyzeMenu);
 });
 
 const updateAnalyzed = async (id: number) => {
   await store.dispatch(MenuActions.UpdateAnalyzedMenu, id);
-
-  const d = await store.dispatch(MenuActions.AnalyzeMenu);
-  parsed.value = d;
 };
 
 const selectMeal = (meal: ParsedMenuDay) => {
-  const stored = getMeal(meal.meal);
+  const stored = getMeal(meal.meal, meals.value);
 
   store.commit(ModalMutations.OpenModal, {
     modal: markRaw(MealForm),
@@ -68,7 +48,7 @@ const selectMeal = (meal: ParsedMenuDay) => {
 };
 
 const selectIngredient = (ingredient: ParsedIngredient) => {
-  const stored = getIngredient(ingredient.name);
+  const stored = getIngredient(ingredient.name, ingredients.value);
   store.commit(ModalMutations.OpenModal, {
     modal: markRaw(IngredientForm),
   });
@@ -92,53 +72,9 @@ const addMeal = () => {
   store.commit(MenuMutations.EditMeal, { id: NEW_ITEM_ID, name_nl: '' });
 };
 
-const matches = (haystack: string, needle: string = ''): boolean => {
-  const n = needle.toLocaleLowerCase();
-  const s = haystack.toLocaleLowerCase();
-
-  return !!s && !!n && (s.startsWith(n) || s.includes(n));
-};
-
-const getIngredient = (name: string): Ingredient | null => {
-  let ing = null;
-
-  for (let index = 0; index < ingredients.value.length; index++) {
-    const item = ingredients.value[index];
-
-    if (
-      matches(name, item.name_nl) ||
-      matches(name, item.name_en) ||
-      matches(name, item.name_id) ||
-      (item.keywords || []).some((v) => matches(name, v))
-    ) {
-      ing = item;
-    }
-  }
-
-  return ing;
-};
-
-const getMeal = (name: string): Meal | null => {
-  let meal = null;
-
-  for (let index = 0; index < meals.value.length; index++) {
-    const item = meals.value[index];
-
-    if (
-      matches(name, item.name_nl) ||
-      matches(name, item.name_en) ||
-      matches(name, item.name_id) ||
-      (item.keywords || []).some((v) => matches(name, v))
-    ) {
-      meal = item;
-    }
-  }
-
-  return meal;
-};
-
-const isStoredIngredient = (name: string): boolean => !!getIngredient(name);
-const isStoredMeal = (name: string): boolean => !!getMeal(name);
+const isStoredIngredient = (name: string): boolean =>
+  !!getIngredient(name, ingredients.value);
+const isStoredMeal = (name: string): boolean => !!getMeal(name, meals.value);
 
 const days: (
   | 'saturday'

@@ -29,9 +29,10 @@ type Meal struct {
 
 type MealRef struct {
 	Date           time.Time `json:"date"`
-	ID             int64     `json:"id,omitempty"`              // ID of Meal
-	CombinationIDs []int64   `json:"combination_ids,omitempty"` // ID of combination Meals
-	Out            bool      `json:"out,omitempty"`             // Eating out
-	LeftOvers      bool      `json:"left_overs,omitempty"`      // Eating left overs
+	MealID         int64     `json:"meal_id,omitempty"`         // ID of Meal
+	CombinationIDs []int64   `json:"combination_ids,omitempty"` // ID of combination or leftover meals
 	Notes          string    `json:"notes,omitempty"`
+	IsOut          bool      `json:"is_out,omitempty"`        // Eating out
+	IsLeftOvers    bool      `json:"is_left_overs,omitempty"` // Eating left overs
+	IsUndecided    bool      `json:"is_undecided,omitempty"`  // Not known yet
 }

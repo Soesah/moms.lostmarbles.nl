@@ -1,3 +1,5 @@
+import { matches } from '@/util/string.util';
+
 export const NEW_ITEM_ID = -1;
 
 export interface Menu {
@@ -5,7 +7,6 @@ export interface Menu {
   date: string;
   year: number;
   week: number;
-  subject: string;
   saturday: MealRef;
   sunday: MealRef;
   monday: MealRef;
@@ -14,15 +15,17 @@ export interface Menu {
   thursday: MealRef;
   friday: MealRef;
   next_week: string;
+  shopping_list: IngredientRef[];
 }
 
-interface MealRef {
-  id: number; // empty when out or leftovers or undecided. See notes
+export interface MealRef {
   date: string;
-  out: boolean;
-  left_overs: boolean;
-  undecided: boolean;
-  notes: string;
+  meal_id?: number;
+  combination_ids?: number[];
+  notes?: string;
+  is_out?: boolean;
+  is_left_overs?: boolean;
+  is_undecided?: boolean;
 }
 
 export interface Meal {
@@ -126,4 +129,82 @@ export const baseIngredient: Ingredient = {
   id: NEW_ITEM_ID,
   name_nl: '',
   keywords: [],
+};
+
+export const getIngredient = (
+  name: string,
+  ingredients: Ingredient[],
+): Ingredient | null => {
+  let ing = null;
+
+  for (let index = 0; index < ingredients.length; index++) {
+    const item = ingredients[index];
+
+    if (
+      matches(name, item.name_nl) ||
+      matches(name, item.name_en) ||
+      matches(name, item.name_id) ||
+      (item.keywords || []).some((v) => matches(name, v))
+    ) {
+      ing = item;
+    }
+  }
+
+  return ing;
+};
+
+export const getMeal = (name: string, meals: Meal[]): Meal | null => {
+  let meal = null;
+
+  for (let index = 0; index < meals.length; index++) {
+    const item = meals[index];
+
+    if (
+      matches(name, item.name_nl) ||
+      matches(name, item.name_en) ||
+      matches(name, item.name_id) ||
+      (item.keywords || []).some((v) => matches(name, v))
+    ) {
+      meal = item;
+    }
+  }
+
+  return meal;
+};
+
+export const createMenu = (parsed: ParsedMenu, meals: Meal[]): Menu => {
+  const saturday = getMeal(parsed.saturday.meal, meals);
+  const sunday = getMeal(parsed.sunday.meal, meals);
+  const monday = getMeal(parsed.monday.meal, meals);
+  const tuesday = getMeal(parsed.tuesday.meal, meals);
+  const wednesday = getMeal(parsed.wednesday.meal, meals);
+  const thursday = getMeal(parsed.thursday.meal, meals);
+  const friday = getMeal(parsed.friday.meal, meals);
+
+  const menu: Menu = {
+    id: -1,
+    date: parsed.date,
+    year: parsed.year,
+    week: parsed.week,
+    saturday: {
+      meal_id: saturday ? saturday.id : -1,
+      date: parsed.saturday.date,
+    },
+    sunday: { meal_id: sunday ? sunday.id : -1, date: parsed.sunday.date },
+    monday: { meal_id: monday ? monday.id : -1, date: parsed.monday.date },
+    tuesday: { meal_id: tuesday ? tuesday.id : -1, date: parsed.tuesday.date },
+    wednesday: {
+      meal_id: wednesday ? wednesday.id : -1,
+      date: parsed.wednesday.date,
+    },
+    thursday: {
+      meal_id: thursday ? thursday.id : -1,
+      date: parsed.thursday.date,
+    },
+    friday: { meal_id: friday ? friday.id : -1, date: parsed.friday.date },
+    next_week: parsed.next_week,
+    shopping_list: [],
+  };
+
+  return menu;
 };

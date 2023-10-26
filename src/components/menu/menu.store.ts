@@ -1,9 +1,17 @@
 import { ActionContext, Module } from 'vuex';
 import { MomsState } from '@/models/store.model';
-import { Ingredient, Meal, Menu } from '@/models/menu.model';
+import {
+  Ingredient,
+  Meal,
+  ParsedMenu,
+  Menu,
+  createMenu,
+} from '@/models/menu.model';
 import { MenuService } from '@/services/menu.service';
 
 export interface MenuStore {
+  parsedMenu: ParsedMenu | null;
+  editMenu: Menu | null;
   meals: Meal[];
   editMeal: Meal | null;
   ingredients: Ingredient[];
@@ -14,6 +22,8 @@ export enum MenuMutations {
   SetIngredients = 'us/SetIngredients',
   SetMeals = 'us/SetMeals',
   EditMeal = 'us/EditMeal',
+  EditMenu = 'us/EditMenu',
+  AnalyzeMenu = 'us/AnalyzeMenu',
   EditIngredient = 'us/EditIngredient',
 }
 
@@ -43,9 +53,11 @@ export const stripNamespace = (action: MenuMutations | MenuActions): string =>
 export const menuStore: Module<MenuStore, MomsState> = {
   namespaced: true,
   state: {
-    ingredients: [],
+    parsedMenu: null,
+    editMenu: null,
     meals: [],
     editMeal: null,
+    ingredients: [],
     editIngredient: null,
   },
   mutations: {
@@ -58,6 +70,12 @@ export const menuStore: Module<MenuStore, MomsState> = {
     [stripNamespace(MenuMutations.SetMeals)](state, meals: Meal[]) {
       state.meals = meals;
     },
+    [stripNamespace(MenuMutations.AnalyzeMenu)](state, menu: ParsedMenu) {
+      state.parsedMenu = menu;
+    },
+    [stripNamespace(MenuMutations.EditMenu)](state, menu: Menu) {
+      state.editMenu = menu;
+    },
     [stripNamespace(MenuMutations.EditMeal)](state, meal: Meal) {
       state.editMeal = meal;
     },
@@ -69,15 +87,29 @@ export const menuStore: Module<MenuStore, MomsState> = {
     },
   },
   actions: {
-    async [stripNamespace(MenuActions.AnalyzeMenu)]({}: Context) {
+    async [stripNamespace(MenuActions.AnalyzeMenu)]({
+      state,
+      commit,
+    }: Context) {
       const response = await menuService.analyze();
+
+      const parsed = response.data;
+
+      commit(stripNamespace(MenuMutations.AnalyzeMenu), parsed);
+
+      commit(
+        stripNamespace(MenuMutations.EditMenu),
+        createMenu(parsed, state.meals),
+      );
+
       return response.data;
     },
     async [stripNamespace(MenuActions.UpdateAnalyzedMenu)](
-      {}: Context,
+      { dispatch }: Context,
       id: number,
     ) {
       const response = await menuService.analyzed(id);
+      await dispatch(MenuActions.AnalyzeMenu);
       return response.data;
     },
     async [stripNamespace(MenuActions.GetIngredients)]({ commit }: Context) {

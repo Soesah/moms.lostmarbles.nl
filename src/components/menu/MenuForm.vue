@@ -28,7 +28,11 @@ const getMealName = (ref: MealRef): string => {
     }
   }
 
-  return meal;
+  if (ref.is_left_overs) {
+    meal = `Left overs (${meal.toLowerCase()})`;
+  }
+
+  return ref.notes ? `${meal} ${ref.notes}` : meal;
 };
 </script>
 <template>

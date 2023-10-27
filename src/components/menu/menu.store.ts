@@ -6,6 +6,7 @@ import {
   ParsedMenu,
   Menu,
   createMenu,
+  MealRef,
 } from '@/models/menu.model';
 import { MenuService } from '@/services/menu.service';
 
@@ -23,6 +24,7 @@ export enum MenuMutations {
   SetMeals = 'us/SetMeals',
   EditMeal = 'us/EditMeal',
   EditMenu = 'us/EditMenu',
+  UpdateMenuDay = 'us/UpdateMenuDay',
   AnalyzeMenu = 'us/AnalyzeMenu',
   EditIngredient = 'us/EditIngredient',
 }
@@ -78,6 +80,15 @@ export const menuStore: Module<MenuStore, MomsState> = {
     },
     [stripNamespace(MenuMutations.EditMeal)](state, meal: Meal) {
       state.editMeal = meal;
+    },
+    [stripNamespace(MenuMutations.UpdateMenuDay)](
+      state: MenuStore,
+      options: { day: string; mealRef: MealRef },
+    ) {
+      state.editMenu = <Menu>{
+        ...state.editMenu,
+        [options.day]: options.mealRef,
+      };
     },
     [stripNamespace(MenuMutations.EditIngredient)](
       state,

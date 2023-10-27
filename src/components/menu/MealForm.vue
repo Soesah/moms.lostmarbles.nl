@@ -226,7 +226,7 @@ const submit = async () => {
     <div class="form-buttons">
       <label></label>
       <button type="button" @click="cancel">Cancel</button>
-      <button>Save</button>
+      <button type="submit">Save</button>
     </div>
   </form>
 </template>

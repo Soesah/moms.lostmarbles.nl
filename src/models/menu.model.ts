@@ -52,11 +52,11 @@ export interface Meal {
   has_left_overs: boolean;
 }
 
-interface IngredientRef {
+export interface IngredientRef {
   id: number; // empty when not a real ingredient? See notes
-  amount: string;
-  unit: string;
-  notes: string;
+  amount?: string;
+  unit?: string;
+  notes?: string;
 }
 
 export interface Ingredient {
@@ -172,7 +172,11 @@ export const getMeal = (name: string, meals: Meal[]): Meal | null => {
   return meal;
 };
 
-export const createMenu = (parsed: ParsedMenu, meals: Meal[]): Menu => {
+export const createMenu = (
+  parsed: ParsedMenu,
+  meals: Meal[],
+  ingredients: Ingredient[],
+): Menu => {
   const saturday = getMeal(parsed.saturday.meal, meals);
   const sunday = getMeal(parsed.sunday.meal, meals);
   const monday = getMeal(parsed.monday.meal, meals);
@@ -203,7 +207,19 @@ export const createMenu = (parsed: ParsedMenu, meals: Meal[]): Menu => {
     },
     friday: { meal_id: friday ? friday.id : -1, date: parsed.friday.date },
     next_week: parsed.next_week,
-    shopping_list: [],
+    shopping_list: <IngredientRef[]>parsed.ingredients
+      .map((ing): IngredientRef | null => {
+        const ingredient = getIngredient(ing.name, ingredients);
+
+        return ingredient
+          ? {
+              id: ingredient.id,
+              amount: ing.amount,
+              notes: ing.notes,
+            }
+          : null;
+      })
+      .filter((n) => !!n),
   };
 
   return menu;

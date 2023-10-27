@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { computed, markRaw } from 'vue';
 import { useStore } from 'vuex';
-import { Meal, MealRef, Menu, getMeal } from '@/models/menu.model';
+import {
+  IngredientRef,
+  Meal,
+  MealRef,
+  Menu,
+  getMeal,
+} from '@/models/menu.model';
 import { ModalMutations } from '../common/modal/modal.store';
 import MealRefForm from './MealRefForm.vue';
 
@@ -9,6 +15,7 @@ const store = useStore();
 
 const editMenu = computed<Menu>(() => store.state.us.editMenu);
 const meals = computed<Meal[]>(() => store.state.us.meals);
+const ingredients = computed<Meal[]>(() => store.state.us.ingredients);
 
 const editDay = (meal: MealRef) => {
   store.commit(ModalMutations.OpenModal, {
@@ -34,12 +41,26 @@ const getMealName = (ref: MealRef): string => {
 
   return ref.notes ? `${meal} ${ref.notes}` : meal;
 };
+
+const getIngredientName = (ref: IngredientRef): string => {
+  let ingredient = '';
+
+  for (let index = 0; index < ingredients.value.length; index++) {
+    const m = ingredients.value[index];
+
+    if (m.id === ref.id) {
+      ingredient = m.name_nl;
+    }
+  }
+
+  return ref.notes ? `${ref.notes} ${ingredient}` : ingredient;
+};
 </script>
 <template>
-  <div class="box">
-    <h2>Menu</h2>
+  <div class="box" v-if="editMenu">
+    <h2>Menu week {{ editMenu.week }} {{ editMenu.year }}</h2>
 
-    <ul class="week-menu" v-if="editMenu">
+    <ul class="week-menu">
       <li>
         <span>Saturday: </span
         ><a href="#" @click.prevent="editDay(editMenu.saturday)">{{
@@ -85,7 +106,9 @@ const getMealName = (ref: MealRef): string => {
     </ul>
     <h3>Shopping</h3>
     <ul class="shopping-list">
-      <li></li>
+      <li v-for="ref in editMenu.shopping_list">
+        {{ getIngredientName(ref) }}
+      </li>
     </ul>
   </div>
 </template>

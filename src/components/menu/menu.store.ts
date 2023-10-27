@@ -110,7 +110,7 @@ export const menuStore: Module<MenuStore, MomsState> = {
 
       commit(
         stripNamespace(MenuMutations.EditMenu),
-        createMenu(parsed, state.meals),
+        createMenu(parsed, state.meals, state.ingredients),
       );
 
       return response.data;

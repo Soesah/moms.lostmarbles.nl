@@ -15,9 +15,13 @@ const props = defineProps({
     type: Array as PropType<Item[]>,
     required: true,
   },
+  focus: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'changed']);
 
 // the selected item, used to show label on blur
 const item = ref<any>(
@@ -28,6 +32,10 @@ const search = ref<string>(
   props.items.find((v) => v.value === props.modelValue)?.label || '',
 );
 
+const input = ref<any>(null);
+const open = ref<boolean>(false);
+const focusIndex = ref<number>(0);
+
 watch(
   props,
   () => {
@@ -37,9 +45,6 @@ watch(
   },
   { deep: true },
 );
-
-const open = ref<boolean>(false);
-const focusIndex = ref<number>(0);
 
 const itemsFiltered = computed<Item[]>(() => {
   return props.items.filter((v) =>
@@ -94,6 +99,8 @@ const chooseItem = (index: number) => {
   const i = itemsFiltered.value[index];
   item.value = i;
   search.value = i.label;
+
+  emit('changed', i);
   update();
   close();
 };
@@ -122,6 +129,9 @@ const previous = () => {
 
 onMounted(() => {
   setItem();
+  if (props.focus) {
+    input.value.focus();
+  }
 });
 </script>
 <template>
@@ -129,6 +139,7 @@ onMounted(() => {
     <input
       class="visible"
       type="text"
+      ref="input"
       v-model="search"
       @focus="open = true"
       @blur="blur"

@@ -43,8 +43,15 @@ const getMealName = (ref: MealRef): string => {
     }
   }
 
+  if (ref.combination_ids) {
+    const other = ref.combination_ids
+      .map((v) => meals.value.find((i) => i.id === v)?.name_nl)
+      .join(', ');
+    meal = meal ? `${meal}, ${other}` : other;
+  }
+
   if (ref.is_left_overs) {
-    meal = `Left overs (${meal.toLowerCase()})`;
+    meal = `Left overs ${meal.toLowerCase()}`;
   }
 
   return ref.notes ? `${meal} ${ref.notes}` : meal;

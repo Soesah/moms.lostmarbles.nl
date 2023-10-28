@@ -4,6 +4,7 @@ import { ModalMutations } from '../common/modal/modal.store';
 import { PropType, computed, reactive } from 'vue';
 import { Meal, MealRef } from '@/models/menu.model';
 import Autocomplete, { Item } from './form/Autocomplete.vue';
+import AutocompleteMultiple from './form/AutocompleteMultiple.vue';
 import { format } from 'date-fns';
 import OutIcon from './icons/OutIcon.vue';
 import LeftoversIcon from './icons/LeftoversIcon.vue';
@@ -20,6 +21,8 @@ const props = defineProps({
 const store = useStore();
 
 const mealRef = reactive<MealRef>({ ...props.data });
+
+const combinationIds = reactive<number[]>([]);
 
 const mealItems = computed<Item[]>(() =>
   store.state.us.meals.map((ing: Meal): Item => {
@@ -60,6 +63,13 @@ const submit = () => {
         v-model="mealRef.meal_id"
         :items="mealItems"
         class="large"
+      />
+    </div>
+    <div class="form-item">
+      <label>Combined with</label>
+      <AutocompleteMultiple
+        v-model="mealRef.combination_ids"
+        :items="mealItems"
       />
     </div>
     <div class="form-item">

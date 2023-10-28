@@ -69,11 +69,15 @@ const getIngredientName = (ref: IngredientRef): string => {
 
   return ref.notes ? `${ref.notes} ${ingredient}` : ingredient;
 };
+
+const updateMenu = async () => {};
 </script>
 <template>
   <div class="box" v-if="editMenu">
-    <h2>Menu week {{ editMenu.week }} {{ editMenu.year }}</h2>
-
+    <h2>Menu week {{ editMenu.week }} - {{ editMenu.year }}</h2>
+    <button class="box-option secondary" @click.prevent="updateMenu()">
+      Save
+    </button>
     <ul class="week-menu">
       <li>
         <span>Saturday: </span

@@ -10,7 +10,6 @@ import MenuForm from '@/components/menu/MenuForm.vue';
     </section>
     <section class="column">
       <MenuForm></MenuForm>
-      <MealRefForm></MealRefForm>
     </section>
   </main>
 </template>

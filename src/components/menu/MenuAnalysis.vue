@@ -99,11 +99,13 @@ const capitalize = (str: string) =>
 </script>
 <template>
   <div class="box" v-if="parsed">
-    <h1>Analyze {{ parsed.subject }} {{ parsed.year }}</h1>
-    <button class="secondary" @click.prevent="updateAnalyzed(parsed.id)">
+    <h1>Analyze {{ parsed.subject }} - {{ parsed.year }}</h1>
+    <button
+      class="box-option secondary"
+      @click.prevent="updateAnalyzed(parsed.id)"
+    >
       Update
     </button>
-    <h2>Menu</h2>
     <ul class="week-menu">
       <li v-for="day in days" :key="day">
         <span>{{ capitalize(day) }}:</span>

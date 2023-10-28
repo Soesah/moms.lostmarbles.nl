@@ -54,7 +54,6 @@ const submit = () => {
     <h2>
       {{ formatDate(props.data.date) }}
     </h2>
-    <p>{{ mealRef }}</p>
     <div class="form-item">
       <label>Meal</label>
       <Autocomplete

@@ -7,6 +7,7 @@ import {
   Menu,
   createMenu,
   MealRef,
+  IngredientRef,
 } from '@/models/menu.model';
 import { MenuService } from '@/services/menu.service';
 
@@ -25,6 +26,7 @@ export enum MenuMutations {
   EditMeal = 'us/EditMeal',
   EditMenu = 'us/EditMenu',
   UpdateMenuDay = 'us/UpdateMenuDay',
+  UpdateMenuShoppingList = 'us/UpdateMenuShoppingList',
   AnalyzeMenu = 'us/AnalyzeMenu',
   EditIngredient = 'us/EditIngredient',
 }
@@ -88,6 +90,17 @@ export const menuStore: Module<MenuStore, MomsState> = {
       state.editMenu = <Menu>{
         ...state.editMenu,
         [options.day]: options.mealRef,
+      };
+    },
+    [stripNamespace(MenuMutations.UpdateMenuShoppingList)](
+      state: MenuStore,
+      options: { index: number; ingredientRef: IngredientRef },
+    ) {
+      const shopping_list = [...(state.editMenu?.shopping_list || [])];
+      shopping_list.splice(options.index, 1, options.ingredientRef);
+      state.editMenu = <Menu>{
+        ...state.editMenu,
+        shopping_list,
       };
     },
     [stripNamespace(MenuMutations.EditIngredient)](

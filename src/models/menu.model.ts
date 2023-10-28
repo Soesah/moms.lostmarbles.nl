@@ -141,10 +141,11 @@ export const getIngredient = (
     const item = ingredients[index];
 
     if (
-      matches(name, item.name_nl) ||
-      matches(name, item.name_en) ||
-      matches(name, item.name_id) ||
-      (item.keywords || []).some((v) => matches(name, v))
+      !ing &&
+      (matches(name, item.name_nl) ||
+        matches(name, item.name_en) ||
+        matches(name, item.name_id) ||
+        (item.keywords || []).some((v) => matches(name, v)))
     ) {
       ing = item;
     }

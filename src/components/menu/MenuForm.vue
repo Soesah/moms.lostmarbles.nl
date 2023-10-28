@@ -10,6 +10,7 @@ import {
 } from '@/models/menu.model';
 import { ModalMutations } from '../common/modal/modal.store';
 import MealRefForm from './MealRefForm.vue';
+import IngredientRefForm from './IngredientRefForm.vue';
 
 const store = useStore();
 
@@ -21,6 +22,13 @@ const editDay = (meal: MealRef) => {
   store.commit(ModalMutations.OpenModal, {
     modal: markRaw(MealRefForm),
     data: meal,
+  });
+};
+
+const editIngredient = (index: number, ref: IngredientRef) => {
+  store.commit(ModalMutations.OpenModal, {
+    modal: markRaw(IngredientRefForm),
+    data: { index, ref },
   });
 };
 
@@ -51,6 +59,12 @@ const getIngredientName = (ref: IngredientRef): string => {
     if (m.id === ref.id) {
       ingredient = m.name_nl;
     }
+  }
+
+  if (ref.unit && ref.amount) {
+    ingredient = `${ref.amount} ${ref.unit} ${ingredient.toLowerCase()}`;
+  } else if (ref.amount) {
+    ingredient = `${ref.amount} ${ingredient.toLowerCase()}`;
   }
 
   return ref.notes ? `${ref.notes} ${ingredient}` : ingredient;
@@ -106,8 +120,10 @@ const getIngredientName = (ref: IngredientRef): string => {
     </ul>
     <h3>Shopping</h3>
     <ul class="shopping-list">
-      <li v-for="ref in editMenu.shopping_list">
-        {{ getIngredientName(ref) }}
+      <li v-for="(ref, index) in editMenu.shopping_list">
+        <a href="#" @click.prevent="editIngredient(index, ref)">{{
+          getIngredientName(ref)
+        }}</a>
       </li>
     </ul>
   </div>

@@ -174,7 +174,7 @@ func emailToMenu(email string, file string, id int) models.ParsedMenu {
 
 	dateRe := regexp.MustCompile(`(Date:\s)(.+)`)
 	subjectRe := regexp.MustCompile(`(Subject:\s)(.+)`)
-	leftOverRe := regexp.MustCompile(`(left\s?overs?)`)
+	leftOverRe := regexp.MustCompile(`([lL]eft\s?[oO]vers?)`)
 	ingredientHeaderRe := regexp.MustCompile(`(Shopping:|Things to buy:|Shopping|Te kopen:|Kopen|Te kopen|Todo|Boodschappen)`)
 	boundaryRe := regexp.MustCompile(`boundary=(?P<boundary>.+)`)
 

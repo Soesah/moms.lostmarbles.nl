@@ -42,6 +42,7 @@ export enum MenuActions {
   CreateMeal = 'us/CreateMeal',
   UpdateMeal = 'us/UpdateMeal',
   RemoveMeal = 'us/RemoveMeal',
+  GetMenu = 'us/GetMenu',
   CreateMenu = 'us/CreateMenu',
   UpdateMenu = 'us/UpdateMenu',
   RemoveMenu = 'us/RemoveMenu',
@@ -191,6 +192,15 @@ export const menuStore: Module<MenuStore, MomsState> = {
       data: Meal,
     ): Promise<boolean> {
       const response = await menuService.removeMeal(data);
+      return response.data;
+    },
+    async [stripNamespace(MenuActions.GetMenu)](
+      { commit }: Context,
+      data: { year: number; week: number },
+    ): Promise<Menu> {
+      const response = await menuService.getMenu(data.year, data.week);
+
+      commit(stripNamespace(MenuMutations.EditMenu), response.data);
       return response.data;
     },
     async [stripNamespace(MenuActions.CreateMenu)](

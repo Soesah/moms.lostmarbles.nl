@@ -142,6 +142,18 @@ export class MenuService {
   }
 
   // menu
+  public async getMenu(
+    year: number,
+    week: number,
+  ): Promise<DataResponse<Menu>> {
+    const response = await this.$http.get(`${this.path}/${year}/${week}`);
+    const status = response.status === STATUS_OK;
+    return {
+      status,
+      data: response.data.data,
+    };
+  }
+
   public async createMenu(data: Menu): Promise<DataResponse<Menu>> {
     const response = await this.$http.post(`${this.path}`, cleanMenu(data));
     const status = response.status === STATUS_OK;

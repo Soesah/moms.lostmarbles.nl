@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import { computed, markRaw } from 'vue';
+import { computed, markRaw, watch } from 'vue';
 import { useStore } from 'vuex';
-import { IngredientRef, Meal, MealRef, Menu } from '@/models/menu.model';
+import {
+  IngredientRef,
+  Meal,
+  MealRef,
+  Menu,
+  NEW_ITEM_ID,
+} from '@/models/menu.model';
 import { ModalMutations } from '../common/modal/modal.store';
 import MealRefForm from './MealRefForm.vue';
 import IngredientRefForm from './IngredientRefForm.vue';
@@ -12,6 +18,15 @@ const store = useStore();
 const editMenu = computed<Menu>(() => store.state.us.editMenu);
 const meals = computed<Meal[]>(() => store.state.us.meals);
 const ingredients = computed<Meal[]>(() => store.state.us.ingredients);
+
+watch(
+  () => editMenu.value,
+  (v) => {
+    if (v.id === NEW_ITEM_ID) {
+      store.dispatch(MenuActions.GetMenu, { year: v.year, week: v.week });
+    }
+  },
+);
 
 const editDay = (meal: MealRef) => {
   store.commit(ModalMutations.OpenModal, {

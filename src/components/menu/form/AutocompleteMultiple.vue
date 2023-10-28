@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { PropType, computed, reactive, ref } from 'vue';
+import { PropType, computed, reactive, ref, watch } from 'vue';
 import Autocomplete, { Item } from './Autocomplete.vue';
 
 const props = defineProps({
@@ -25,7 +25,7 @@ const showInput = ref<boolean>(false);
 
 const addItem = () => {
   value.push(-1);
-  editValue(-1, value.length);
+  editValue(-1, value.length - 1);
 };
 const removeItem = () => {
   value.splice(editableValue.index, 1);

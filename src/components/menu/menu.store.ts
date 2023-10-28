@@ -133,7 +133,7 @@ export const menuStore: Module<MenuStore, MomsState> = {
       id: number,
     ) {
       const response = await menuService.analyzed(id);
-      await dispatch(MenuActions.AnalyzeMenu);
+      await dispatch(stripNamespace(MenuActions.AnalyzeMenu));
       return response.data;
     },
     async [stripNamespace(MenuActions.GetIngredients)]({ commit }: Context) {
@@ -194,10 +194,12 @@ export const menuStore: Module<MenuStore, MomsState> = {
       return response.data;
     },
     async [stripNamespace(MenuActions.CreateMenu)](
-      {}: Context,
+      { commit }: Context,
       data: Menu,
     ): Promise<Menu> {
       const response = await menuService.createMenu(data);
+
+      commit(stripNamespace(MenuMutations.EditMenu), response.data);
       return response.data;
     },
     async [stripNamespace(MenuActions.UpdateMenu)](

@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import { computed, markRaw } from 'vue';
 import { useStore } from 'vuex';
-import {
-  IngredientRef,
-  Meal,
-  MealRef,
-  Menu,
-  getMeal,
-} from '@/models/menu.model';
+import { IngredientRef, Meal, MealRef, Menu } from '@/models/menu.model';
 import { ModalMutations } from '../common/modal/modal.store';
 import MealRefForm from './MealRefForm.vue';
 import IngredientRefForm from './IngredientRefForm.vue';
+import { MenuActions, MenuMutations } from './menu.store';
 
 const store = useStore();
 
@@ -29,6 +24,13 @@ const editIngredient = (index: number, ref: IngredientRef) => {
   store.commit(ModalMutations.OpenModal, {
     modal: markRaw(IngredientRefForm),
     data: { index, ref },
+  });
+};
+
+const addIngredient = () => {
+  store.commit(MenuMutations.UpdateMenuShoppingList, {
+    index: editMenu.value.shopping_list.length,
+    ingredientRef: { id: -1 },
   });
 };
 
@@ -54,7 +56,15 @@ const getMealName = (ref: MealRef): string => {
     meal = `Left overs ${meal.toLowerCase()}`;
   }
 
-  return ref.notes ? `${meal} ${ref.notes}` : meal;
+  if (ref.is_out) {
+    meal = `Eating out ${meal.toLowerCase()}`;
+  }
+
+  if (ref.is_undecided) {
+    meal = `We'll see ${meal.toLowerCase()}`;
+  }
+
+  return ref.notes ? `${meal} ${ref.notes}` : meal || 'unknown';
 };
 
 const getIngredientName = (ref: IngredientRef): string => {
@@ -74,16 +84,18 @@ const getIngredientName = (ref: IngredientRef): string => {
     ingredient = `${ref.amount} ${ingredient.toLowerCase()}`;
   }
 
-  return ref.notes ? `${ref.notes} ${ingredient}` : ingredient;
+  return ref.notes ? `${ingredient} (${ref.notes})` : ingredient || 'unknown';
 };
 
-const updateMenu = async () => {};
+const save = async () => {
+  await store.dispatch(MenuActions.CreateMenu, editMenu.value);
+};
 </script>
 <template>
   <div class="box" v-if="editMenu">
     <h2>Menu week {{ editMenu.week }} - {{ editMenu.year }}</h2>
-    <button class="box-option secondary" @click.prevent="updateMenu()">
-      Save
+    <button class="box-option secondary" @click.prevent="save()">
+      {{ editMenu.id === -1 ? 'Save' : 'Update' }}
     </button>
     <ul class="week-menu">
       <li>
@@ -135,6 +147,9 @@ const updateMenu = async () => {};
         <a href="#" @click.prevent="editIngredient(index, ref)">{{
           getIngredientName(ref)
         }}</a>
+      </li>
+      <li>
+        <a href="#" @click.prevent="addIngredient()">Add item</a>
       </li>
     </ul>
   </div>

@@ -1,4 +1,10 @@
-import { ParsedMenu, Ingredient, Menu, Meal } from '@/models/menu.model';
+import {
+  ParsedMenu,
+  Ingredient,
+  Menu,
+  Meal,
+  cleanMenu,
+} from '@/models/menu.model';
 import axios, { AxiosStatic } from 'axios';
 
 const STATUS_OK = 200;
@@ -137,7 +143,7 @@ export class MenuService {
 
   // menu
   public async createMenu(data: Menu): Promise<DataResponse<Menu>> {
-    const response = await this.$http.post(`${this.path}/meal`, data);
+    const response = await this.$http.post(`${this.path}`, cleanMenu(data));
     const status = response.status === STATUS_OK;
     return {
       status,
@@ -146,7 +152,7 @@ export class MenuService {
   }
 
   public async updateMenu(data: Menu): Promise<DataResponse<Menu>> {
-    const response = await this.$http.put(`${this.path}/meal`, data);
+    const response = await this.$http.put(`${this.path}`, cleanMenu(data));
     const status = response.status === STATUS_OK;
     return {
       status,
@@ -155,7 +161,7 @@ export class MenuService {
   }
 
   public async removeMenu(data: Menu): Promise<DataResponse<boolean>> {
-    const response = await this.$http.delete(`${this.path}/meal/${data.id}`);
+    const response = await this.$http.delete(`${this.path}/${data.id}`);
     const status = response.status === STATUS_OK;
     return {
       status,

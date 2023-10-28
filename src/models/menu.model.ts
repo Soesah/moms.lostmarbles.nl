@@ -193,20 +193,39 @@ export const createMenu = (
     week: parsed.week,
     saturday: {
       meal_id: saturday ? saturday.id : -1,
+      is_left_overs: parsed.saturday.left_over,
       date: parsed.saturday.date,
     },
-    sunday: { meal_id: sunday ? sunday.id : -1, date: parsed.sunday.date },
-    monday: { meal_id: monday ? monday.id : -1, date: parsed.monday.date },
-    tuesday: { meal_id: tuesday ? tuesday.id : -1, date: parsed.tuesday.date },
+    sunday: {
+      meal_id: sunday ? sunday.id : -1,
+      is_left_overs: parsed.sunday.left_over,
+      date: parsed.sunday.date,
+    },
+    monday: {
+      meal_id: monday ? monday.id : -1,
+      is_left_overs: parsed.monday.left_over,
+      date: parsed.monday.date,
+    },
+    tuesday: {
+      meal_id: tuesday ? tuesday.id : -1,
+      is_left_overs: parsed.tuesday.left_over,
+      date: parsed.tuesday.date,
+    },
     wednesday: {
       meal_id: wednesday ? wednesday.id : -1,
+      is_left_overs: parsed.wednesday.left_over,
       date: parsed.wednesday.date,
     },
     thursday: {
       meal_id: thursday ? thursday.id : -1,
+      is_left_overs: parsed.thursday.left_over,
       date: parsed.thursday.date,
     },
-    friday: { meal_id: friday ? friday.id : -1, date: parsed.friday.date },
+    friday: {
+      meal_id: friday ? friday.id : -1,
+      is_left_overs: parsed.friday.left_over,
+      date: parsed.friday.date,
+    },
     next_week: parsed.next_week,
     shopping_list: <IngredientRef[]>parsed.ingredients
       .map((ing): IngredientRef | null => {
@@ -222,6 +241,32 @@ export const createMenu = (
       })
       .filter((n) => !!n),
   };
+
+  return menu;
+};
+
+export const cleanMenu = (menu: Menu): Menu => {
+  if (typeof menu.saturday.meal_id !== 'number') {
+    menu.saturday.meal_id = undefined;
+  }
+  if (typeof menu.sunday.meal_id !== 'number') {
+    menu.sunday.meal_id = undefined;
+  }
+  if (typeof menu.monday.meal_id !== 'number') {
+    menu.monday.meal_id = undefined;
+  }
+  if (typeof menu.tuesday.meal_id !== 'number') {
+    menu.tuesday.meal_id = undefined;
+  }
+  if (typeof menu.wednesday.meal_id !== 'number') {
+    menu.wednesday.meal_id = undefined;
+  }
+  if (typeof menu.thursday.meal_id !== 'number') {
+    menu.thursday.meal_id = undefined;
+  }
+  if (typeof menu.friday.meal_id !== 'number') {
+    menu.friday.meal_id = undefined;
+  }
 
   return menu;
 };

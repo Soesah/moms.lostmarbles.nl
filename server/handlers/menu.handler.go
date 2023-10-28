@@ -177,6 +177,25 @@ func RemoveMeal(w http.ResponseWriter, r *http.Request) {
 	httpext.SuccessAPI(w, "Ok")
 }
 
+// GetMenu
+func GetMenu(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(idParam)
+	yearParam := chi.URLParam(r, "year")
+	year, _ := strconv.Atoi(yearParam)
+	weekParam := chi.URLParam(r, "week")
+	week, _ := strconv.Atoi(weekParam)
+
+	m, err := menu.GetMenu(id, year, week, r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", m)
+}
+
 // CreateMenu
 func CreateMenu(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)

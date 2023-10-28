@@ -227,6 +227,34 @@ func RemoveMeal(id int64, r *http.Request) error {
 	return nil
 }
 
+func GetMenu(id int, year int, week int, r *http.Request) (models.Menu, error) {
+	var m models.Menu
+	c := Controller{}
+	err := c.Load(r)
+
+	if err != nil {
+		return m, err
+	}
+
+	found := false
+
+	for _, men := range c.Menus {
+		if men.ID == int64(id) && id != -1 {
+			m = men
+			found = true
+		} else if men.Year == int64(year) && men.Week == int64(week) {
+			m = men
+			found = true
+		}
+	}
+
+	if !found {
+		return m, errMenuNotFound
+	}
+
+	return m, nil
+}
+
 func CreateMenu(data models.Menu, r *http.Request) (models.Menu, error) {
 
 	c := Controller{}

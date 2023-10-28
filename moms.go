@@ -75,6 +75,8 @@ func main() {
 		r.Route("/menu", func(r chi.Router) {
 			r.Get("/analyze", handlers.GetFirstNotAnalyzed)
 			r.Put("/analyze/{id}", handlers.UpdateAnalyzed)
+			r.Get("/id/{id}", handlers.GetMenu)
+			r.Get("/{year}/{week}", handlers.GetMenu)
 			r.Post("/", handlers.CreateMenu)
 			r.Put("/", handlers.UpdateMenu)
 			r.Delete("/id", handlers.RemoveMenu)

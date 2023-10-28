@@ -228,13 +228,12 @@ func RemoveMeal(id int64, r *http.Request) error {
 }
 
 func CreateMenu(data models.Menu, r *http.Request) (models.Menu, error) {
-	var m models.Menu
 
 	c := Controller{}
 	err := c.Load(r)
 
 	if err != nil {
-		return m, err
+		return data, err
 	}
 
 	data.ID = c.GetNewMenuID()
@@ -243,20 +242,19 @@ func CreateMenu(data models.Menu, r *http.Request) (models.Menu, error) {
 	err = c.Store(r)
 
 	if err != nil {
-		return m, err
+		return data, err
 	}
 
-	return m, nil
+	return data, nil
 }
 
 func UpdateMenu(data models.Menu, r *http.Request) (models.Menu, error) {
-	var m models.Menu
 
 	c := Controller{}
 	err := c.Load(r)
 
 	if err != nil {
-		return m, err
+		return data, err
 	}
 
 	menus := make([]models.Menu, 0)
@@ -272,7 +270,7 @@ func UpdateMenu(data models.Menu, r *http.Request) (models.Menu, error) {
 	}
 
 	if !found {
-		return m, errMenuNotFound
+		return data, errMenuNotFound
 	}
 
 	c.Menus = menus
@@ -280,10 +278,10 @@ func UpdateMenu(data models.Menu, r *http.Request) (models.Menu, error) {
 	err = c.Store(r)
 
 	if err != nil {
-		return m, err
+		return data, err
 	}
 
-	return m, nil
+	return data, nil
 }
 
 func RemoveMenu(id int64, r *http.Request) error {

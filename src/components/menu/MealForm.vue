@@ -16,6 +16,7 @@ import VegetarianIcon from './icons/VegetarianIcon.vue';
 import WrapIcon from './icons/WrapIcon.vue';
 import NameInput from './form/NameInput.vue';
 import Autocomplete, { Item } from './form/Autocomplete.vue';
+import UrlsInput from './form/UrlsInput.vue';
 import { MenuActions } from './menu.store';
 
 const store = useStore();
@@ -201,7 +202,7 @@ const submit = async () => {
               class="small"
               @click.prevent="removeIngredinet(index)"
             >
-              x
+              -
             </button>
           </li>
         </ul>
@@ -212,6 +213,10 @@ const submit = async () => {
     <div class="form-item">
       <label>Culture</label>
       <input class="large" type="text" v-model="meal.culture" />
+    </div>
+    <div class="form-item">
+      <label>Urls</label>
+      <UrlsInput v-model="meal.recipe_urls" />
     </div>
     <div class="form-item">
       <label>Has leftovers</label>

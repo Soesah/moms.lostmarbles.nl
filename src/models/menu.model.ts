@@ -192,37 +192,52 @@ export const createMenu = (
     year: parsed.year,
     week: parsed.week,
     saturday: {
-      meal_id: saturday ? saturday.id : -1,
+      meal_id: saturday && !parsed.saturday.left_over ? saturday.id : undefined,
+      combination_ids:
+        parsed.saturday.left_over && saturday ? [saturday.id] : undefined,
       is_left_overs: parsed.saturday.left_over,
       date: parsed.saturday.date,
     },
     sunday: {
-      meal_id: sunday ? sunday.id : -1,
+      meal_id: sunday && !parsed.sunday.left_over ? sunday.id : undefined,
+      combination_ids:
+        parsed.sunday.left_over && sunday ? [sunday.id] : undefined,
       is_left_overs: parsed.sunday.left_over,
       date: parsed.sunday.date,
     },
     monday: {
-      meal_id: monday ? monday.id : -1,
+      meal_id: monday && !parsed.monday.left_over ? monday.id : undefined,
+      combination_ids:
+        parsed.monday.left_over && monday ? [monday.id] : undefined,
       is_left_overs: parsed.monday.left_over,
       date: parsed.monday.date,
     },
     tuesday: {
-      meal_id: tuesday ? tuesday.id : -1,
+      meal_id: tuesday && !parsed.tuesday.left_over ? tuesday.id : undefined,
+      combination_ids:
+        parsed.tuesday.left_over && tuesday ? [tuesday.id] : undefined,
       is_left_overs: parsed.tuesday.left_over,
       date: parsed.tuesday.date,
     },
     wednesday: {
-      meal_id: wednesday ? wednesday.id : -1,
+      meal_id:
+        wednesday && !parsed.wednesday.left_over ? wednesday.id : undefined,
+      combination_ids:
+        parsed.wednesday.left_over && wednesday ? [wednesday.id] : undefined,
       is_left_overs: parsed.wednesday.left_over,
       date: parsed.wednesday.date,
     },
     thursday: {
-      meal_id: thursday ? thursday.id : -1,
+      meal_id: thursday && !parsed.thursday.left_over ? thursday.id : undefined,
+      combination_ids:
+        parsed.thursday.left_over && thursday ? [thursday.id] : undefined,
       is_left_overs: parsed.thursday.left_over,
       date: parsed.thursday.date,
     },
     friday: {
-      meal_id: friday ? friday.id : -1,
+      meal_id: friday && !parsed.friday.left_over ? friday.id : undefined,
+      combination_ids:
+        parsed.friday.left_over && friday ? [friday.id] : undefined,
       is_left_overs: parsed.friday.left_over,
       date: parsed.friday.date,
     },

@@ -19,7 +19,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'changed']);
 
 // the selected item, used to show label on blur
-const item = ref<string>('');
+const item = ref<string>(props.modelValue);
 
 const input = ref<any>(null);
 const open = ref<boolean>(false);

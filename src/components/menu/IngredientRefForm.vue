@@ -4,8 +4,8 @@ import { ModalMutations } from '../common/modal/modal.store';
 import { PropType, computed, reactive } from 'vue';
 import { Meal, IngredientRef } from '@/models/menu.model';
 import Autocomplete, { Item } from './form/Autocomplete.vue';
-import { format } from 'date-fns';
 import { MenuMutations } from './menu.store';
+import Autosuggest from './form/Autosuggest.vue';
 
 const props = defineProps({
   data: {
@@ -39,6 +39,8 @@ const unitItems: Item[] = [
   { label: 'milliliter', value: 'ml' },
   { label: 'blik', value: 'blik' },
 ];
+
+const notesSuggestions: string[] = ['van Dirk', 'groen', 'klein'];
 
 const cancel = () => {
   store.commit(ModalMutations.CloseModal);
@@ -77,7 +79,7 @@ const submit = () => {
     </div>
     <div class="form-item">
       <label>Notes</label>
-      <input type="text" v-model="ingredientRef.notes" />
+      <Autosuggest v-model="ingredientRef.notes" :items="notesSuggestions" />
     </div>
     <div class="form-buttons">
       <label></label>

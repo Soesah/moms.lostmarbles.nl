@@ -52,6 +52,8 @@ const submit = () => {
 };
 
 const notesSuggestions: string[] = [
+  'met aardappel en groente',
+  'met rijst en groente',
   'met groente',
   'en groente',
   'groente',

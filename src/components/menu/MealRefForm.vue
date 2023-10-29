@@ -3,6 +3,7 @@ import { useStore } from 'vuex';
 import { ModalMutations } from '../common/modal/modal.store';
 import { PropType, computed, reactive } from 'vue';
 import { Meal, MealRef } from '@/models/menu.model';
+import Autosuggest from './form/Autosuggest.vue';
 import Autocomplete, { Item } from './form/Autocomplete.vue';
 import AutocompleteMultiple from './form/AutocompleteMultiple.vue';
 import { format } from 'date-fns';
@@ -21,8 +22,6 @@ const props = defineProps({
 const store = useStore();
 
 const mealRef = reactive<MealRef>({ ...props.data });
-
-const combinationIds = reactive<number[]>([]);
 
 const mealItems = computed<Item[]>(() =>
   store.state.us.meals.map((ing: Meal): Item => {
@@ -51,6 +50,13 @@ const submit = () => {
   store.commit(MenuMutations.UpdateMenuDay, { day, mealRef });
   cancel();
 };
+
+const notesSuggestions: string[] = [
+  'met groente',
+  'en groente',
+  'groente',
+  'met worst',
+];
 </script>
 <template>
   <form class="box box--tertiary" v-if="props.data" @submit.prevent="submit">
@@ -74,7 +80,7 @@ const submit = () => {
     </div>
     <div class="form-item">
       <label>Notes</label>
-      <input type="text" v-model="mealRef.notes" />
+      <Autosuggest v-model="mealRef.notes" :items="notesSuggestions" />
     </div>
     <div class="form-item">
       <label></label>

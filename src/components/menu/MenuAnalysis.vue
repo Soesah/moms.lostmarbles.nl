@@ -100,12 +100,17 @@ const capitalize = (str: string) =>
 <template>
   <div class="box" v-if="parsed">
     <h1>Analyze {{ parsed.subject }} - {{ parsed.year }}</h1>
-    <button
-      class="box-option secondary"
-      @click.prevent="updateAnalyzed(parsed.id)"
-    >
-      Update
-    </button>
+    <div class="box-option">
+      <button class="secondary" @click.prevent="updateAnalyzed(parsed.id)">
+        Update
+      </button>
+      <p>
+        <a href="#" @click.prevent="addMeal()">Add meal</a>
+      </p>
+      <p>
+        <a href="#" @click.prevent="addIngredient()">Add ingredient</a>
+      </p>
+    </div>
     <ul class="week-menu">
       <li v-for="day in days" :key="day">
         <span>{{ capitalize(day) }}:</span>
@@ -115,9 +120,7 @@ const capitalize = (str: string) =>
         &nbsp;<span v-if="isStoredMeal(parsed[day].meal)">✔</span>
       </li>
     </ul>
-    <p>
-      <a href="#" @click.prevent="addMeal()">Add meal</a>
-    </p>
+
     <h2>Kopen</h2>
     <ul class="shopping-list">
       <li v-for="ing in parsed.ingredients" :key="ing.name">
@@ -126,8 +129,5 @@ const capitalize = (str: string) =>
         >
       </li>
     </ul>
-    <p>
-      <a href="#" @click.prevent="addIngredient()">Add ingredient</a>
-    </p>
   </div>
 </template>

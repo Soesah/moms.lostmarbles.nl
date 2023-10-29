@@ -69,6 +69,9 @@ const getMealName = (ref: MealRef): string => {
 
   if (ref.is_left_overs) {
     meal = `Left overs ${meal.toLowerCase()}`;
+    if (ref.meal_id) {
+      meal = `${meal} (?)`;
+    }
   }
 
   if (ref.is_out) {
@@ -79,7 +82,7 @@ const getMealName = (ref: MealRef): string => {
     meal = `We'll see ${meal.toLowerCase()}`;
   }
 
-  return ref.notes ? `${meal} ${ref.notes}` : meal || 'unknown';
+  return ref.notes ? `${meal} ${ref.notes.toLowerCase()}` : meal || 'unknown';
 };
 
 const getIngredientName = (ref: IngredientRef): string => {
@@ -109,9 +112,14 @@ const save = async () => {
 <template>
   <div class="box" v-if="editMenu">
     <h2>Menu week {{ editMenu.week }} - {{ editMenu.year }}</h2>
-    <button class="box-option secondary" @click.prevent="save()">
-      {{ editMenu.id === -1 ? 'Save' : 'Update' }}
-    </button>
+    <div class="box-option">
+      <button class="secondary" @click.prevent="save()">
+        {{ editMenu.id === -1 ? 'Save' : 'Update' }}
+      </button>
+      <p>
+        <a href="#" @click.prevent="addIngredient()">Add item</a>
+      </p>
+    </div>
     <ul class="week-menu">
       <li>
         <span>Saturday: </span
@@ -162,9 +170,6 @@ const save = async () => {
         <a href="#" @click.prevent="editIngredient(index, ref)">{{
           getIngredientName(ref)
         }}</a>
-      </li>
-      <li>
-        <a href="#" @click.prevent="addIngredient()">Add item</a>
       </li>
     </ul>
   </div>

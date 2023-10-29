@@ -61,7 +61,11 @@ const notesSuggestions: string[] = [
 ];
 </script>
 <template>
-  <form class="box box--tertiary" v-if="props.data" @submit.prevent="submit">
+  <form
+    class="box box--tertiary box-modal"
+    v-if="props.data"
+    @submit.prevent="submit"
+  >
     <h2>
       {{ formatDate(props.data.date) }}
     </h2>

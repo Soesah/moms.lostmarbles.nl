@@ -14,6 +14,7 @@ import {
 import { MenuActions, MenuMutations } from './menu.store';
 import { ModalMutations } from '../common/modal/modal.store';
 import MealForm from './MealForm.vue';
+import ChooseMealForm from './ChooseMealForm.vue';
 import IngredientForm from './IngredientForm.vue';
 
 const store = useStore();
@@ -71,6 +72,12 @@ const addMeal = () => {
   });
   store.commit(MenuMutations.EditMeal, { id: NEW_ITEM_ID, name_nl: '' });
 };
+const editMeal = () => {
+  store.commit(ModalMutations.OpenModal, {
+    modal: markRaw(ChooseMealForm),
+  });
+  store.commit(MenuMutations.EditMeal, { id: NEW_ITEM_ID, name_nl: '' });
+};
 
 const isStoredIngredient = (name: string): boolean =>
   !!getIngredient(name, ingredients.value);
@@ -106,6 +113,9 @@ const capitalize = (str: string) =>
       </button>
       <p>
         <a href="#" @click.prevent="addMeal()">Add meal</a>
+      </p>
+      <p>
+        <a href="#" @click.prevent="editMeal()">Edit meal</a>
       </p>
       <p>
         <a href="#" @click.prevent="addIngredient()">Add ingredient</a>

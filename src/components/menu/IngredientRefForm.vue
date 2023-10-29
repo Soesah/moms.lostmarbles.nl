@@ -55,7 +55,11 @@ const submit = () => {
 };
 </script>
 <template>
-  <form class="box box--tertiary" v-if="props.data" @submit.prevent="submit">
+  <form
+    class="box box--tertiary box-modal"
+    v-if="props.data"
+    @submit.prevent="submit"
+  >
     <h2>Choose ingredient</h2>
     <div class="form-item">
       <label>Ingredient</label>

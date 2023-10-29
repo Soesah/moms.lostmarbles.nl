@@ -33,7 +33,8 @@ const removeItem = () => {
   showInput.value = false;
 };
 const getLabel = (v: any) =>
-  props.items.find((i) => i.value === v)?.label || 'choose';
+  props.items.find((i) => i.value === v)?.label ||
+  (showInput.value ? '' : 'choose');
 const editValue = (v: any, index: number) => {
   editableValue.index = index;
   editableValue.value = v;
@@ -49,16 +50,13 @@ const update = (v: any) => {
 </script>
 <template>
   <div class="field-auto-complete-multiple">
-    <div class="fake-input">
-      <span
-        @click.prevent="editValue(item, index)"
-        v-for="(item, index) in value"
-        >{{ getLabel(item) }}
-        <span v-if="index !== value.length - 1">, </span></span
-      >
-      <button @click.prevent="addItem">+</button>
-    </div>
-    <div class="input-area">
+    <div class="fake-input" @click.prevent="addItem">
+      <template v-for="(item, index) in value">
+        <span @click.stop.prevent="editValue(item, index)"
+          >{{ getLabel(item)
+          }}<span v-if="index !== value.length - 1">, </span></span
+        >
+      </template>
       <Autocomplete
         @changed="update"
         v-if="showInput"
@@ -66,7 +64,8 @@ const update = (v: any) => {
         :items="props.items"
         focus
       />
-      <button v-if="showInput" @click.prevent="removeItem">-</button>
+      <button v-if="showInput" @click.stop.prevent="removeItem">-</button>
+      <!-- <button v-else @click.prevent="addItem">+</button> -->
     </div>
   </div>
 </template>

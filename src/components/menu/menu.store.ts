@@ -200,7 +200,9 @@ export const menuStore: Module<MenuStore, MomsState> = {
     ): Promise<Menu> {
       const response = await menuService.getMenu(data.year, data.week);
 
-      commit(stripNamespace(MenuMutations.EditMenu), response.data);
+      if (response.data) {
+        commit(stripNamespace(MenuMutations.EditMenu), response.data);
+      }
       return response.data;
     },
     async [stripNamespace(MenuActions.CreateMenu)](

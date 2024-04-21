@@ -147,10 +147,10 @@ export class MenuService {
     week: number,
   ): Promise<DataResponse<Menu>> {
     const response = await this.$http.get(`${this.path}/${year}/${week}`);
-    const status = response.status === STATUS_OK;
+    const status = response?.status === STATUS_OK;
     return {
       status,
-      data: response.data.data,
+      data: response?.data.data,
     };
   }
 

@@ -16,6 +16,7 @@ import { ModalMutations } from '../common/modal/modal.store';
 import MealForm from './MealForm.vue';
 import ChooseMealForm from './ChooseMealForm.vue';
 import IngredientForm from './IngredientForm.vue';
+import ChooseIngredientForm from './ChooseIngredientForm.vue';
 
 const store = useStore();
 
@@ -65,6 +66,11 @@ const addIngredient = () => {
   });
   store.commit(MenuMutations.EditIngredient, { id: NEW_ITEM_ID, name_nl: '' });
 };
+const editIngredient = () => {
+  store.commit(ModalMutations.OpenModal, {
+    modal: markRaw(ChooseIngredientForm),
+  });
+};
 
 const addMeal = () => {
   store.commit(ModalMutations.OpenModal, {
@@ -76,7 +82,6 @@ const editMeal = () => {
   store.commit(ModalMutations.OpenModal, {
     modal: markRaw(ChooseMealForm),
   });
-  store.commit(MenuMutations.EditMeal, { id: NEW_ITEM_ID, name_nl: '' });
 };
 
 const isStoredIngredient = (name: string): boolean =>
@@ -119,6 +124,9 @@ const capitalize = (str: string) =>
       </p>
       <p>
         <a href="#" @click.prevent="addIngredient()">Add ingredient</a>
+      </p>
+      <p>
+        <a href="#" @click.prevent="editIngredient()">Edit ingredient</a>
       </p>
     </div>
     <ul class="week-menu">

@@ -1,4 +1,4 @@
-import { matches } from '@/util/string.util';
+import { matchScore, matches } from '@/util/string.util';
 
 export const NEW_ITEM_ID = -1;
 
@@ -98,7 +98,8 @@ export interface ParsedMenuDay {
 
 export interface ParsedIngredient {
   name: string;
-  amount: string;
+  amount?: string;
+  unit?: string;
   notes: string;
   optional: boolean;
 }
@@ -135,42 +136,48 @@ export const getIngredient = (
   name: string,
   ingredients: Ingredient[],
 ): Ingredient | null => {
-  let ing = null;
+  const result = ingredients.reduce(
+    (acc: { max: number; item: Ingredient | null }, i: Ingredient) => {
+      const score = matchScore(
+        [i.name_nl, i.name_en || '', i.name_id || '', ...(i.keywords || [])],
+        name,
+      );
 
-  for (let index = 0; index < ingredients.length; index++) {
-    const item = ingredients[index];
+      return score > acc.max
+        ? {
+            item: i,
+            max: score,
+          }
+        : acc;
+    },
+    { max: 0, item: null },
+  );
 
-    if (
-      !ing &&
-      (matches(name, item.name_nl) ||
-        matches(name, item.name_en) ||
-        matches(name, item.name_id) ||
-        (item.keywords || []).some((v) => matches(name, v)))
-    ) {
-      ing = item;
-    }
-  }
-
-  return ing;
+  return result.item;
 };
 
 export const getMeal = (name: string, meals: Meal[]): Meal | null => {
-  let meal = null;
+  name = name.replace(/left\s?overs/gi, '').trim();
+  name = name.replace(/[\(\)]/g, '').trim();
 
-  for (let index = 0; index < meals.length; index++) {
-    const item = meals[index];
+  const result = meals.reduce(
+    (acc: { max: number; item: Meal | null }, i: Meal) => {
+      const score = matchScore(
+        [i.name_nl, i.name_en || '', i.name_id || '', ...(i.keywords || [])],
+        name,
+      );
 
-    if (
-      matches(name, item.name_nl) ||
-      matches(name, item.name_en) ||
-      matches(name, item.name_id) ||
-      (item.keywords || []).some((v) => matches(name, v))
-    ) {
-      meal = item;
-    }
-  }
+      return score > acc.max
+        ? {
+            item: i,
+            max: score,
+          }
+        : acc;
+    },
+    { max: 0, item: null },
+  );
 
-  return meal;
+  return result.item;
 };
 
 export const createMenu = (
@@ -250,6 +257,7 @@ export const createMenu = (
           ? {
               id: ingredient.id,
               amount: ing.amount,
+              unit: ing.unit,
               notes: ing.notes,
             }
           : null;

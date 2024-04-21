@@ -38,6 +38,7 @@ const unitItems: Item[] = [
   { label: 'deciliter', value: 'dl' },
   { label: 'milliliter', value: 'ml' },
   { label: 'blik', value: 'blik' },
+  { label: 'doos', value: 'doos' },
 ];
 
 const notesSuggestions: string[] = ['van Dirk', 'groen', 'klein'];

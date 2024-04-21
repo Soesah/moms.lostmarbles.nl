@@ -49,6 +49,10 @@ const addIngredient = () => {
   });
 };
 
+const removeIngredient = (index: number) => {
+  store.commit(MenuMutations.RemoveMenuShoppingListItem, index);
+};
+
 const getMealName = (ref: MealRef): string => {
   let meal = '';
 
@@ -170,6 +174,7 @@ const save = async () => {
         <a href="#" @click.prevent="editIngredient(index, ref)">{{
           getIngredientName(ref)
         }}</a>
+        <a href="#" @click.prevent="removeIngredient(index)"> ⅹ </a>
       </li>
     </ul>
   </div>

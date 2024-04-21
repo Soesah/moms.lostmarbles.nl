@@ -157,13 +157,18 @@ export const getIngredient = (
 };
 
 export const getMeal = (name: string, meals: Meal[]): Meal | null => {
-  name = name.replace(/left\s?overs/gi, '').trim();
+  name = name.replace(/left\s?overs?/gi, '').trim();
   name = name.replace(/[\(\)]/g, '').trim();
 
   const result = meals.reduce(
     (acc: { max: number; item: Meal | null }, i: Meal) => {
       const score = matchScore(
-        [i.name_nl, i.name_en || '', i.name_id || '', ...(i.keywords || [])],
+        [
+          i.name_nl,
+          i.name_en || '',
+          i.name_id || '',
+          ...(i.keywords || []),
+        ].filter((h) => !!h),
         name,
       );
 

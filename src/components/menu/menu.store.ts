@@ -27,6 +27,7 @@ export enum MenuMutations {
   EditMenu = 'us/EditMenu',
   UpdateMenuDay = 'us/UpdateMenuDay',
   UpdateMenuShoppingList = 'us/UpdateMenuShoppingList',
+  RemoveMenuShoppingListItem = 'us/RemoveMenuShoppingListItem',
   AnalyzeMenu = 'us/AnalyzeMenu',
   EditIngredient = 'us/EditIngredient',
 }
@@ -109,6 +110,17 @@ export const menuStore: Module<MenuStore, MomsState> = {
       ingredient: Ingredient,
     ) {
       state.editIngredient = ingredient;
+    },
+    [stripNamespace(MenuMutations.RemoveMenuShoppingListItem)](
+      state: MenuStore,
+      index: number,
+    ) {
+      const shopping_list = [...(state.editMenu?.shopping_list || [])];
+      shopping_list.splice(index, 1);
+      state.editMenu = <Menu>{
+        ...state.editMenu,
+        shopping_list,
+      };
     },
   },
   actions: {

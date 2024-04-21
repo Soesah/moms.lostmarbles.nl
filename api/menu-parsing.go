@@ -145,7 +145,39 @@ func getUrls(lines ...string) []string {
 	return urls
 }
 
-func parseIngredient(s string) (string, string, bool) {
+func getAmountAndUnit(ing string) (string, string) {
+	amountRe := regexp.MustCompile(`(\d+)`)
+	result := amountRe.FindStringSubmatch(ing)
+
+	amount := ""
+	if len(result) > 1 {
+		amount = result[1]
+	}
+
+	search := strings.ToLower(ing)
+	unitRe := regexp.MustCompile(`\d+\s?(.+)`)
+	result = unitRe.FindStringSubmatch(search)
+
+	unit := ""
+	if len(result) > 0 {
+		res := result[1]
+		if strings.HasPrefix(res, "kg") || strings.HasPrefix(res, "kilo") {
+			unit = "kg"
+		} else if strings.HasPrefix(res, "g") || strings.HasPrefix(res, "gr") || strings.HasPrefix(res, "gram") {
+			unit = "gr"
+		} else if strings.HasPrefix(res, "ml") || strings.HasPrefix(res, "milli") {
+			unit = "ml"
+		} else if strings.HasPrefix(res, "l") {
+			unit = "l"
+		} else if strings.HasPrefix(res, " x") {
+			unit = "x"
+		}
+	}
+
+	return amount, unit
+}
+
+func parseIngredient(s string) (string, string, string, string, bool) {
 	optionalRe := regexp.MustCompile(`\?`)
 	notesReplaceRe := regexp.MustCompile(`\s(\(.+\))`)
 	m := getParams(`(\s+-\s)?(?P<ingredient>.+)`, s)
@@ -159,14 +191,23 @@ func parseIngredient(s string) (string, string, bool) {
 		ingredient = notesReplaceRe.ReplaceAllString(ingredient, "")
 	}
 
-	return ingredient, notes, optionalRe.MatchString(s)
+	amount, unit := getAmountAndUnit(s)
+
+	return ingredient, amount, unit, notes, optionalRe.MatchString(s)
 }
 
 func emailToMenu(email string, file string, id int) models.ParsedMenu {
 
+	var parsed = []int{365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409}
+
 	var menu models.ParsedMenu
 
 	menu.ID = id + 1
+
+	if ContainsInt(menu.ID, parsed) {
+		menu.Analyzed = true
+	}
+
 	menu.File = file
 	menu.Ingredients = make([]models.ParsedIngredient, 0)
 
@@ -345,13 +386,14 @@ func emailToMenu(email string, file string, id int) models.ParsedMenu {
 
 		// ingredients should be at least after Friday
 		if i > ingredientHeaderIndex && i > startBoundaryIndex && i > fridayIndex {
-			ingredient, notes, optional := parseIngredient(line)
+			ingredient, amount, unit, notes, optional := parseIngredient(line)
 
 			if ingredient != "" {
 				menu.Ingredients = append(menu.Ingredients, models.ParsedIngredient{
 					Name:     ingredient,
-					Amount:   "",
+					Amount:   amount,
 					Notes:    notes,
+					Unit:     unit,
 					Optional: optional,
 				})
 			}
@@ -362,6 +404,18 @@ func emailToMenu(email string, file string, id int) models.ParsedMenu {
 }
 
 func Contains(s string, list []string) bool {
+	contains := false
+
+	for i := 0; i < len(list); i++ {
+		if list[i] == s {
+			contains = true
+		}
+	}
+
+	return contains
+}
+
+func ContainsInt(s int, list []int) bool {
 	contains := false
 
 	for i := 0; i < len(list); i++ {

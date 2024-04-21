@@ -12,6 +12,7 @@ type ParsedMenuDay struct {
 type ParsedIngredient struct {
 	Name     string `json:"name,omitempty"`
 	Amount   string `json:"amount,omitempty"`
+	Unit     string `json:"unit,omitempty"`
 	Notes    string `json:"notes,omitempty"`
 	Optional bool   `json:"optional,omitempty"`
 }

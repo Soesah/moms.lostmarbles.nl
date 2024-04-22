@@ -26,7 +26,7 @@ const mealRef = reactive<MealRef>({ ...props.data });
 const mealItems = computed<Item[]>(() =>
   store.state.us.meals.map((ing: Meal): Item => {
     return {
-      label: ing.name_nl,
+      label: ing.name_nl || ing.name_en! || ing.name_id!,
       search: `${ing.name_en || ''}, ${ing.name_id || ''}, ${(
         ing.keywords || []
       ).join(',')}`,

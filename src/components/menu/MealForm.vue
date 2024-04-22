@@ -228,6 +228,16 @@ const submit = async () => {
         v-model="meal.has_left_overs"
       />
     </div>
+    <div class="form-item">
+      <label>Side dish</label>
+      <input
+        type="checkbox"
+        id="completed"
+        name="completed"
+        :checked="meal.side_dish"
+        v-model="meal.side_dish"
+      />
+    </div>
     <div class="form-buttons">
       <label></label>
       <button type="button" @click="cancel">Cancel</button>

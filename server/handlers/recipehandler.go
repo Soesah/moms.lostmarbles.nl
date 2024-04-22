@@ -49,7 +49,7 @@ func AddRecipe(w http.ResponseWriter, r *http.Request) {
 	httpext.SuccessDataAPI(w, "Ok", rec)
 }
 
-func getRecipe(w http.ResponseWriter, r *http.Request) (models.RecipeJSON, error) {
+func getRecipe(_ http.ResponseWriter, r *http.Request) (models.RecipeJSON, error) {
 	var re models.RecipeJSON
 
 	idParam := chi.URLParam(r, "id")

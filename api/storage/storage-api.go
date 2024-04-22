@@ -34,7 +34,7 @@ func PutFile(file string, data []byte, r *http.Request) error {
 
 	if conf.IsDev() {
 		dir, _ := os.Getwd()
-		err := ioutil.WriteFile(strings.Join([]string{dir, "/data/", file, ".json"}, ""), data, 0777)
+		err := os.WriteFile(strings.Join([]string{dir, "/data/", file, ".json"}, ""), data, 0777)
 
 		if err != nil {
 			return err
@@ -79,7 +79,7 @@ func PutXMLFile(file string, data []byte, r *http.Request) error {
 
 	if conf.IsDev() {
 		dir, _ := os.Getwd()
-		err := ioutil.WriteFile(strings.Join([]string{dir, "/data/", file, ".xml"}, ""), data, 0777)
+		err := os.WriteFile(strings.Join([]string{dir, "/data/", file, ".xml"}, ""), data, 0777)
 
 		if err != nil {
 			return err
@@ -167,7 +167,7 @@ func GetFile(file string, r *http.Request) ([]byte, error) {
 
 	if conf.IsDev() {
 		dir, _ := os.Getwd()
-		bytes, err := ioutil.ReadFile(strings.Join([]string{dir, "/data/", file, ".json"}, ""))
+		bytes, err := os.ReadFile(strings.Join([]string{dir, "/data/", file, ".json"}, ""))
 
 		if err != nil {
 			return nil, err

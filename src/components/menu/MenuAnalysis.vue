@@ -148,4 +148,10 @@ const capitalize = (str: string) =>
       </li>
     </ul>
   </div>
+  <div class="box" v-if="parsed">
+    <ul>
+      <li>{{ meals.length }} Meals</li>
+      <li>{{ ingredients.length }} Ingredients</li>
+    </ul>
+  </div>
 </template>

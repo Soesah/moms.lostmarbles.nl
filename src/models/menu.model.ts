@@ -50,6 +50,7 @@ export interface Meal {
   recipe_urls: string[];
   culture: string;
   has_left_overs: boolean;
+  side_dish: boolean;
 }
 
 export interface IngredientRef {
@@ -124,6 +125,7 @@ export const baseMeal: Meal = {
   recipe_urls: [],
   culture: '',
   has_left_overs: false,
+  side_dish: false,
 };
 
 export const baseIngredient: Ingredient = {

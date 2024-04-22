@@ -8,6 +8,7 @@ type Meal struct {
 	NameNL         string          `json:"name_nl"`
 	NameEN         string          `json:"name_en,omitempty"`
 	NameID         string          `json:"name_id,omitempty"`
+	NamePreference string          `json:"name_pref,omitempty"`
 	Keywords       []string        `json:"keywords,omitempty"`
 	Culture        string          `json:"culture,omitempty"`
 	Ingredients    []IngredientRef `json:"ingredients,omitempty"`
@@ -24,6 +25,7 @@ type Meal struct {
 	TypeFish       bool            `json:"type_fish,omitempty"`
 	VariationOf    int64           `json:"variation_of,omitempty"`
 	RecipeURLs     []string        `json:"recipe_urls,omitempty"`
+	SideDish       bool            `json:"side_dish,omitempty"`
 	HasLeftOvers   bool            `json:"has_left_overs,omitempty"`
 }
 

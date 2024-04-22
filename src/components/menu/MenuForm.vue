@@ -60,13 +60,18 @@ const getMealName = (ref: MealRef): string => {
     const m = meals.value[index];
 
     if (m.id === ref.meal_id) {
-      meal = m.name_nl;
+      meal = m.name_nl || m.name_en! || m.name_id!;
     }
   }
 
   if (ref.combination_ids) {
     const other = ref.combination_ids
-      .map((v) => meals.value.find((i) => i.id === v)?.name_nl)
+      .map(
+        (v) =>
+          meals.value.find((i) => i.id === v)?.name_nl ||
+          meals.value.find((i) => i.id === v)?.name_en ||
+          meals.value.find((i) => i.id === v)?.name_id,
+      )
       .join(', ');
     meal = meal ? `${meal}, ${other.toLowerCase()}` : other;
   }

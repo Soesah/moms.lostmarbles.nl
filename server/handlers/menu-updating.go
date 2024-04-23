@@ -67,6 +67,11 @@ func updateDay(day models.MealRef) models.MealRef {
 		day.CombinationIDs = append(day.CombinationIDs, 111)
 		day.Notes = ""
 	}
+	// replace notes about zoete aardappel en groente with a side dish
+	if !containsInt(131, day.CombinationIDs) && (day.Notes == "met zoete aardappel en groente") {
+		day.CombinationIDs = append(day.CombinationIDs, 131)
+		day.Notes = ""
+	}
 
 	return day
 }

@@ -64,7 +64,9 @@ const update = (v: any) => {
         :items="props.items"
         focus
       />
-      <button v-if="showInput" @click.stop.prevent="removeItem">-</button>
+      <button type="button" v-if="showInput" @click.stop.prevent="removeItem">
+        -
+      </button>
       <!-- <button v-else @click.prevent="addItem">+</button> -->
     </div>
   </div>

@@ -33,6 +33,7 @@ export interface Meal {
   name_nl: string;
   name_en?: string;
   name_id?: string;
+  name_pref?: string;
   keywords: string[];
   ingredients: IngredientRef[];
   base_pasta: boolean;
@@ -65,6 +66,7 @@ export interface Ingredient {
   name_nl: string;
   name_en?: string;
   name_id?: string;
+  name_pref?: string;
   keywords: string[];
   type?: string;
   notes?: string;

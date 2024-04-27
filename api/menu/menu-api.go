@@ -132,6 +132,31 @@ func GetMeals(r *http.Request) ([]models.Meal, error) {
 	return c.Meals, nil
 }
 
+func GetMeal(id int64, r *http.Request) (models.Meal, error) {
+	var meal models.Meal
+
+	c := Controller{}
+	err := c.Load(r)
+
+	if err != nil {
+		return meal, errMealNotFound
+	}
+	found := false
+
+	for _, me := range c.Meals {
+		if me.ID == id {
+			meal = me
+			found = true
+		}
+	}
+
+	if !found {
+		return meal, errMealNotFound
+	}
+
+	return meal, nil
+}
+
 func CreateMeal(data models.Meal, r *http.Request) (models.Meal, error) {
 	var m models.Meal
 

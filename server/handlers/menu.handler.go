@@ -196,6 +196,21 @@ func GetMenu(w http.ResponseWriter, r *http.Request) {
 	httpext.SuccessDataAPI(w, "Ok", m)
 }
 
+// GetMenuStatistics
+func GetMealStatistics(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(idParam)
+
+	m, err := menu.GetMealStatistics(int64(id), r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", m)
+}
+
 // CreateMenu
 func CreateMenu(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)

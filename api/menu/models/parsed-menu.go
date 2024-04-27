@@ -36,27 +36,27 @@ type ParsedMenu struct {
 	Analyzed    bool               `json:"analyzed"`
 }
 
-func (m ParsedMenu) IsValid() bool {
-	isValid := true
+func (m ParsedMenu) IsValid() string {
+	isValid := ""
 
 	if m.Date.IsZero() {
-		isValid = false
+		isValid = "No date"
 	}
 
 	if m.Subject == "" {
-		isValid = false
+		isValid = "No subject"
 	}
 
 	if m.Saturday.Date.Weekday() != time.Saturday {
-		isValid = false
+		isValid = "Saturday isn't a Saturday"
 	}
 
 	if m.Saturday.Meal == "" || m.Monday.Meal == "" || m.Tuesday.Meal == "" || m.Wednesday.Meal == "" || m.Thursday.Meal == "" || m.Friday.Meal == "" {
-		isValid = false
+		isValid = "No meal on a day"
 	}
 
 	if m.Saturday.Date.IsZero() || m.Monday.Date.IsZero() || m.Tuesday.Date.IsZero() || m.Wednesday.Date.IsZero() || m.Thursday.Date.IsZero() || m.Friday.Date.IsZero() {
-		isValid = false
+		isValid = "No date on a day"
 	}
 
 	return isValid

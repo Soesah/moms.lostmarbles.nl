@@ -19,6 +19,11 @@ var DateFormat = "Mon, 2 Jan 2006 15:04:05 -0700"
 
 func main() {
 
+	storedData, err := os.ReadFile("./data/menu.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	files, err := filepath.Glob("./menu-emails/**/*.eml")
 	// files, err := filepath.Glob("./menu-emails/2023/Menu week 39.eml")
 
@@ -27,6 +32,7 @@ func main() {
 	}
 
 	var menus []models.ParsedMenu
+	var stored models.MenuData
 
 	for i := 0; i < len(files); i++ {
 		file := files[i]
@@ -37,9 +43,15 @@ func main() {
 			log.Fatal(err)
 		}
 
+		err = json.Unmarshal(storedData, &stored)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		contents := string(bytes)
 
-		data := emailToMenu(contents, file, i)
+		data := emailToMenu(contents, stored, file, i)
 
 		menus = append(menus, data)
 	}
@@ -53,8 +65,8 @@ func main() {
 
 	for i := 0; i < len(menus); i++ {
 		m := menus[i]
-		if !m.IsValid() {
-			log.Printf("%v does not produce a valid menu", m.File)
+		if m.IsValid() != "" {
+			log.Printf("%v does not produce a valid menu (%v)", m.File, m.IsValid())
 		}
 
 	}
@@ -196,17 +208,11 @@ func parseIngredient(s string) (string, string, string, string, bool) {
 	return ingredient, amount, unit, notes, optionalRe.MatchString(s)
 }
 
-func emailToMenu(email string, file string, id int) models.ParsedMenu {
-
-	var parsed = []int{293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433}
+func emailToMenu(email string, stored models.MenuData, file string, id int) models.ParsedMenu {
 
 	var menu models.ParsedMenu
 
 	menu.ID = id + 1
-
-	if ContainsInt(menu.ID, parsed) {
-		menu.Analyzed = true
-	}
 
 	menu.File = file
 	menu.Ingredients = make([]models.ParsedIngredient, 0)
@@ -333,6 +339,10 @@ func emailToMenu(email string, file string, id int) models.ParsedMenu {
 		// set the year and week
 		menu.Year, menu.Week = weekStartDate.ISOWeek()
 
+		if ContainsMenu(menu, stored.Menus) {
+			menu.Analyzed = true
+		}
+
 		// Parse Tuesday
 		weekStartDate = weekStartDate.AddDate(0, 0, 1)
 		tueRe := regexp.MustCompile(`(Dinsdag|Tuesday|Tue)\s?:`)
@@ -420,6 +430,18 @@ func ContainsInt(s int, list []int) bool {
 
 	for i := 0; i < len(list); i++ {
 		if list[i] == s {
+			contains = true
+		}
+	}
+
+	return contains
+}
+
+func ContainsMenu(menu models.ParsedMenu, list []models.Menu) bool {
+	contains := false
+
+	for i := 0; i < len(list); i++ {
+		if list[i].Week == int64(menu.Week) && list[i].Year == int64(menu.Year) {
 			contains = true
 		}
 	}

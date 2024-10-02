@@ -8,7 +8,7 @@ import (
 	"github.com/Soesah/moms.lostmarbles.nl/api/menu"
 	"github.com/Soesah/moms.lostmarbles.nl/api/menu/models"
 	"github.com/Soesah/moms.lostmarbles.nl/server/httpext"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
 // GetFirstNotAnalyzed

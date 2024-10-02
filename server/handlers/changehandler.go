@@ -9,7 +9,7 @@ import (
 	"github.com/Soesah/moms.lostmarbles.nl/api/recipe"
 	"github.com/Soesah/moms.lostmarbles.nl/api/user"
 	"github.com/Soesah/moms.lostmarbles.nl/server/httpext"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
 // Change is a more readable form of Changelog

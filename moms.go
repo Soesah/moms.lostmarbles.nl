@@ -8,8 +8,8 @@ import (
 	"github.com/Soesah/moms.lostmarbles.nl/server/config"
 	"github.com/Soesah/moms.lostmarbles.nl/server/handlers"
 	"github.com/Soesah/moms.lostmarbles.nl/server/middlewares"
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Route("/api", func(r chi.Router) {
-		r.Use(middleware.DefaultCompress)
+		r.Use(middleware.Compress(5))
 		r.Use(middleware.RequestID)
 		r.Use(middleware.RealIP)
 		r.Use(middleware.Logger)

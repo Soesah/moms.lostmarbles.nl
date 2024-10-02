@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
 // ServeDir servies any file of a directory

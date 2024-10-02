@@ -8,7 +8,7 @@ import (
 	"github.com/Soesah/moms.lostmarbles.nl/api/category"
 	"github.com/Soesah/moms.lostmarbles.nl/api/models"
 	"github.com/Soesah/moms.lostmarbles.nl/server/httpext"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
 // GetCategoryList returns a list of categories

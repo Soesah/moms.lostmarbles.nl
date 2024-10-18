@@ -12,7 +12,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "yarn build && gcloud app deploy app.yaml --project moms-lost-marbles -q",
+    "deploy": "yarn build && gcloud app deploy app.yaml --project moms-lost-marbles -q --no-cache",
     "app": "go run moms.go",
     "deploy:cron": "gcloud app deploy cron.yaml --project moms-lost-marbles -q",
     "major": "./bin/deploy.sh major",

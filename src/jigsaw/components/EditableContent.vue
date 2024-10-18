@@ -8,7 +8,7 @@ export default defineComponent({
   name: 'EditableContent',
   computed: {
     ...mapState('jigsaw', {
-      editor: (state) => (state as JigsawState).editor as JigsawEditor,
+      editor: (state: any) => (state as JigsawState).editor as JigsawEditor,
     }),
   },
   render(h: any) {

@@ -23,7 +23,7 @@ const update = async () => {
   store.dispatch(Actions.GetUsers);
 };
 
-watch(recipe, update);
+watch(() => recipe, update);
 
 onMounted(async () => {
   await update();

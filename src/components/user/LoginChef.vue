@@ -34,7 +34,7 @@ const submit = async () => {
       <div class="form-item">
         <label for="focus">Wachtwoord</label>
         <input
-          type="text"
+          type="password"
           v-model="auth.password"
           v-focus="true"
           placeholder="(watchwoord)"

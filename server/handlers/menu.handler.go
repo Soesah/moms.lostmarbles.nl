@@ -51,6 +51,21 @@ func GetIngredients(w http.ResponseWriter, r *http.Request) {
 	httpext.SuccessDataAPI(w, "Ok", ings)
 }
 
+// GetIngredient
+func GetIngredient(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(idParam)
+
+	ings, err := menu.GetIngredient(int64(id), r)
+
+	if err != nil {
+		httpext.AbortAPI(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	httpext.SuccessDataAPI(w, "Ok", ings)
+}
+
 // CreateIngredient
 func CreateIngredient(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)

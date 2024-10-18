@@ -5,7 +5,11 @@ import Home from '@/views/Home.vue';
 import List from '@/views/List.vue';
 import Recipe from '@/views/Recipe.vue';
 import EditRecipe from '@/views/EditRecipe.vue';
+import Menu from '@/views/Menu.vue';
 import AnalyzeMenu from '@/views/AnalyzeMenu.vue';
+import WeekMenu from '@/views/WeekMenu.vue';
+import IngredientInfo from '@/views/IngredientInfo.vue';
+import MealInfo from '@/views/MealInfo.vue';
 import {
   verifyCook,
   verifyChef,
@@ -61,8 +65,24 @@ export default createRouter({
       component: EditRecipe,
     },
     {
+      path: '/menu',
+      component: Menu,
+    },
+    {
       path: '/menu/analyze',
       component: AnalyzeMenu,
+    },
+    {
+      path: '/menu/week/:year/:week',
+      component: WeekMenu,
+    },
+    {
+      path: '/menu/ingredient/:id',
+      component: IngredientInfo,
+    },
+    {
+      path: '/menu/meal/:id',
+      component: MealInfo,
     },
     {
       path: '/admin',

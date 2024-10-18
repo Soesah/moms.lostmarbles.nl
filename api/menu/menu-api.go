@@ -11,6 +11,31 @@ var errIngredientNotFound = errors.New("ingredient not found")
 var errMealNotFound = errors.New("meal not found")
 var errMenuNotFound = errors.New("menu not found")
 
+func GetIngredient(id int64, r *http.Request) (models.Ingredient, error) {
+	var ing models.Ingredient
+
+	c := Controller{}
+	err := c.Load(r)
+
+	if err != nil {
+		return ing, err
+	}
+	found := false
+
+	for _, in := range c.Ingredients {
+		if in.ID == id {
+			ing = in
+			found = true
+		}
+	}
+
+	if !found {
+		return ing, errIngredientNotFound
+	}
+
+	return ing, nil
+}
+
 func GetIngredients(r *http.Request) ([]models.Ingredient, error) {
 	var ings []models.Ingredient
 

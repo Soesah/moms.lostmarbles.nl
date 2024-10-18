@@ -4,6 +4,7 @@ import { MenuItem } from './navigation.model';
 import { Recipe } from './recipe.model';
 import { User } from './user.model';
 import { Notification } from './notification.model';
+import NoSleep from 'nosleep.js';
 
 export interface MomsState {
   auth: Auth;
@@ -18,6 +19,7 @@ export interface MomsState {
   recipe: Recipe | null;
   recipes: Recipe[];
   menu: MenuItem[];
+  noSleep: NoSleep | null;
   editing: boolean;
 }
 
@@ -37,6 +39,7 @@ export enum Mutations {
   SetRecipe = 'SetRecipe',
   SelectCategory = 'SelectCategory',
   SetRedirect = 'SetRedirect',
+  ToggleNoSleep = 'ToggleNoSleep',
 }
 
 export enum Actions {

@@ -23,6 +23,7 @@ import { modalStore } from './components/common/modal/modal.store';
 import { menuStore } from './components/menu/menu.store';
 // utils
 import { UUIDUtil } from './util/uuid.util';
+import NoSleep from 'nosleep.js';
 
 const authService = new AuthService();
 const userService = new UserService();
@@ -48,6 +49,7 @@ export default createStore<MomsState>({
     recipe: null,
     recipes: [],
     searchValue: '',
+    noSleep: null,
     menu: [
       {
         label: 'Uitloggen',
@@ -109,6 +111,12 @@ export default createStore<MomsState>({
       state.notifications = [
         ...state.notifications.filter((n) => n.uuid !== uuid),
       ];
+    },
+    [Mutations.ToggleNoSleep](state: MomsState, toggle: boolean) {
+      if (state.noSleep === null) {
+        state.noSleep = new NoSleep();
+      }
+      toggle ? state.noSleep.enable() : state.noSleep.disable();
     },
   },
   actions: {

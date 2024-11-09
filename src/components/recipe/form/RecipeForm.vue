@@ -61,7 +61,6 @@ const remove = async () => {
     <RecipeField
       label="Aantal porties"
       v-model="updated.servings"
-      type="number"
     ></RecipeField>
     <RecipeFormIngredients
       label="Ingrediënten"

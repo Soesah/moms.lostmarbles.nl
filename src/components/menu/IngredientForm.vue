@@ -11,7 +11,7 @@ const store = useStore();
 const editIngredient = computed<Ingredient>(
   () => store.state.us.editIngredient,
 );
-const ingredient = reactive<Ingredient>({
+let ingredient = reactive<Ingredient>({
   ...baseIngredient,
   ...editIngredient.value,
 });

@@ -124,6 +124,7 @@ func main() {
 	// static
 	r.Group(func(r chi.Router) {
 		r.Use(middlewares.Cache(24 * time.Hour))
+		handlers.ServeDir(r, "/assets/*", http.Dir("./dist/assets"))
 		handlers.ServeDir(r, "/js/*", http.Dir("./dist/js"))
 		handlers.ServeDir(r, "/css/*", http.Dir("./dist/css"))
 		handlers.ServeDir(r, "/fonts/*", http.Dir("./dist/fonts"))
